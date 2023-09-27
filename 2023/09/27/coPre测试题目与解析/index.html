@@ -24,7 +24,7 @@
 <meta property="og:description" content="2206计算机组成Pre课上测试回忆版题目与解析">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-09-27T08:34:09.000Z">
-<meta property="article:modified_time" content="2023-09-27T11:29:36.539Z">
+<meta property="article:modified_time" content="2023-09-27T11:38:02.612Z">
 <meta property="article:author" content="Augenstern aka &#39;Jew1!5!&#39;">
 <meta property="article:tag" content="试题">
 <meta property="article:tag" content="解析">
@@ -340,7 +340,7 @@
 </blockquote>
 <h2 id="解答"><a href="#解答" class="headerlink" title="解答"></a>解答</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs asm">main:<br>	li   $v0, 5<br>	syscall<br>	move $s0, $v0 #n = $v0 = $s0<br>	li   $s1, 0   #max = 0<br>	li   $s2, 0   #sum = 0<br>	li   $t0, 0   #i = 0<br>for_loop:<br>	beq  $t0, $s0, for_loop_end<br>	li   $v0, 5<br>	syscall<br>	move $t1, $v0<br>	add  $s2, $s2, $t1<br>	ble  $s2, $s1, else<br>	if:<br>		move $s1, $s2<br>	else:<br>	addi $t0, $t0, 1<br>	j    for_loop<br><br>for_loop_end:<br>	move $a0, $s1<br>	li   $v0, 1<br>	syscall<br>	li   $v0, 10<br>	syscall<br></code></pre></td></tr></table></figure>
 
-<h1 id="第二题：noDescendSequence"><a href="#第二题：noDescendSequence" class="headerlink" title="第二题：noDescendSequence"></a>第二题：noDescendSequence</h1><h1 id="题干-1"><a href="#题干-1" class="headerlink" title="题干"></a>题干</h1><p>“不下降数”表示一个整数的高位数码不会大于低位数码。例如，$1234$、$1223$是“不下降数”，而$1243$不是“不下降数”。</p>
+<h1 id="第二题：noDescendSequence"><a href="#第二题：noDescendSequence" class="headerlink" title="第二题：noDescendSequence"></a>第二题：noDescendSequence</h1><h2 id="题干-1"><a href="#题干-1" class="headerlink" title="题干"></a>题干</h2><p>“不下降数”表示一个整数的高位数码不会大于低位数码。例如，$1234$、$1223$是“不下降数”，而$1243$不是“不下降数”。</p>
 <p>使用Verilog构建一个判断一个4位16进制数输入是否为“不下降数”的电路。</p>
 <p>端口定义如下：</p>
 <table>
