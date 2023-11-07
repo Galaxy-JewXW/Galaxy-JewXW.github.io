@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>462OJ搭建分享-输出结果评判</title>
+    <link href="/2023/11/07/462OJ%E6%90%AD%E5%BB%BA%E5%88%86%E4%BA%AB-%E8%BE%93%E5%87%BA%E7%BB%93%E6%9E%9C%E8%AF%84%E5%88%A4/"/>
+    <url>/2023/11/07/462OJ%E6%90%AD%E5%BB%BA%E5%88%86%E4%BA%AB-%E8%BE%93%E5%87%BA%E7%BB%93%E6%9E%9C%E8%AF%84%E5%88%A4/</url>
+    
+    <content type="html"><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>有幸和zlr同学、lpf同学合作开发了462OJ1<sup>st</sup>项目。</p><p>作为一款OJ，最重要的功能就是评判用户程序的输出与期望输出是否一致。这当中就涉及到了两个需求：</p><ul><li>生成期望输出</li><li>将期望输出与用户输出进行比较</li></ul><p>这里就简单分享一下项目中，这两个需求是怎么实现的。</p><p><del>与另外两个人的工作相比，这个工作是最简单的</del></p><h1 id="生成期望输出"><a href="#生成期望输出" class="headerlink" title="生成期望输出"></a>生成期望输出</h1><p>项目当中使用了<code>Toby Shi</code>学长的魔改版Mars，通过命令行执行得到期望输出。</p><p>可以利用python的os库实现这一功能。</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs python">command = <span class="hljs-string">&quot;java -jar mars.jar temp.asm mc CompactLargeText coL1 ig&quot;</span> <br><span class="hljs-comment"># test.asm包含随机生成的测试点源码</span><br><span class="hljs-keyword">with</span> os.popen(command) <span class="hljs-keyword">as</span> f:<br>     answer = f.readlines()<br></code></pre></td></tr></table></figure><p>os.popen(command)：这种调用方式是通过管道的方式来实现，函数返回一个file对象，里面的内容是脚本输出的内容，可简单理解为echo输出的内容。</p><p>当然，有时候生成的随机数据点会存在一些问题，此时Mars的输出就会带有<code>Error</code>，此时我们就在answer里捕捉Error即可。</p><p>与此同时，也可以利用Mars生成相应的机器码，供<code>.v</code>文件执行。</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs python">command = <span class="hljs-string">&quot;java -jar mars.jar a mc CompactLargeText dump .text HexText tempcode.txt temp.asm&quot;</span><br>f = os.popen(command)<br>f.close()<br></code></pre></td></tr></table></figure><h1 id="比较输出"><a href="#比较输出" class="headerlink" title="比较输出"></a>比较输出</h1><p>这里用到了python中的<code>difflib</code>库。</p><p><del>我才知道difflib是标准库</del></p><p>difflib可以对比文本之间的差异，并且支持输出可读性比较强的HTML文档，与Linux下的diff命令相似。</p><table><thead><tr><th>用法</th><th>说明</th></tr></thead><tbody><tr><td>splitlines()</td><td>按照行(’\r’, ‘\r\n’, \n’)分隔，返回一个包含各行作为元素的列表，如果参数 keepends 为 False，不包含换行符，如果为 True，则保留换行符</td></tr><tr><td>d.compare(a,b)</td><td>比较两个行序列，并生成delta（一系列行）</td></tr><tr><td>difflib.HtmlDiff()</td><td>可以用于创建一个完整HTML文件，该文件显示具有行间和行内更改突出的文本的逐行比较</td></tr><tr><td>d.make_file(text1,text2)</td><td>比较两个字符串列表并返回一个字符串，该字符串是一个完整的HTML文件，其中包含一个表格，显示逐行差异，突出显示行间和行内更改</td></tr><tr><td>difflib.SequenceMatcher(None, s1, s2).ratio()</td><td>None参数是一个函数，用来去掉不需要比较的字符。<br>s1,s2参数为两个需要计算相似度的字符串。<br>函数返回值是0~1之间的一个浮点数，如果为1则认为完全相等</td></tr></tbody></table><p>最终的文本当中会出现一系列标识符，他们的含义如下。</p><table><thead><tr><th>符号</th><th>说明</th></tr></thead><tbody><tr><td>‘-’</td><td>包含在第一个系列行中，但不包含第二个</td></tr><tr><td>‘+’</td><td>包含在第二个系列行中，但不包含第一个</td></tr><tr><td>’ ’</td><td>两个系列行一致</td></tr><tr><td>‘?’</td><td>存在增量差异</td></tr><tr><td>‘^’</td><td>存在差异字符</td></tr></tbody></table><h2 id="实现文本对比"><a href="#实现文本对比" class="headerlink" title="实现文本对比"></a>实现文本对比</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> difflib<br>text1 = <span class="hljs-string">&#x27;&#x27;&#x27;  1. Beautiful is better than ugly.</span><br><span class="hljs-string">       2. Explicit is better than implicit.</span><br><span class="hljs-string">       3. Simple is better than complex.</span><br><span class="hljs-string">       4. Complex is better than complicated.</span><br><span class="hljs-string">&#x27;&#x27;&#x27;</span>.splitlines(keepends=<span class="hljs-literal">True</span>)<br>text2 = <span class="hljs-string">&#x27;&#x27;&#x27;  1. Beautiful is better than ugly.</span><br><span class="hljs-string">       3.   Simple is better than complex.</span><br><span class="hljs-string">       4. Complicated is better than complex.</span><br><span class="hljs-string">       5. Flat is better than nested.</span><br><span class="hljs-string">     &#x27;&#x27;&#x27;</span>.splitlines(keepends=<span class="hljs-literal">True</span>)<br><br>d = difflib.Differ()<br><span class="hljs-built_in">print</span>(<span class="hljs-string">&#x27;&#x27;</span>.join(<span class="hljs-built_in">list</span>(d.compare(text1,text2))))<br></code></pre></td></tr></table></figure><h2 id="使用html对比"><a href="#使用html对比" class="headerlink" title="使用html对比"></a>使用html对比</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs python"><span class="hljs-keyword">import</span> difflib<br>text1 = <span class="hljs-string">&#x27;&#x27;&#x27;  </span><br><span class="hljs-string">       1. Beautiful is better than gly.</span><br><span class="hljs-string">       2. Explicit is better than implicit.</span><br><span class="hljs-string">       3. Simple is better than complex.</span><br><span class="hljs-string">       4. Complex is better than complicated.</span><br><span class="hljs-string">&#x27;&#x27;&#x27;</span>.splitlines(keepends=<span class="hljs-literal">True</span>)<br>text2 = <span class="hljs-string">&#x27;&#x27;&#x27;  </span><br><span class="hljs-string">       1. Beautiful is better than ugly.</span><br><span class="hljs-string">       3. Simple is better than complex.</span><br><span class="hljs-string">       4. Complicated is beter than complex.</span><br><span class="hljs-string">       5. Flat is better than nested.</span><br><span class="hljs-string">     &#x27;&#x27;&#x27;</span>.splitlines(keepends=<span class="hljs-literal">True</span>)<br><br>d = difflib.HtmlDiff()<br>htmlContent = d.make_file(text1,text2)<br><span class="hljs-comment"># print(htmlContent)</span><br><span class="hljs-keyword">with</span> <span class="hljs-built_in">open</span>(<span class="hljs-string">&#x27;diff.html&#x27;</span>,<span class="hljs-string">&#x27;w&#x27;</span>) <span class="hljs-keyword">as</span> f:<br>    f.write(htmlContent)<br></code></pre></td></tr></table></figure><p>输出的结果为：<br><img src="https://pic.imgdb.cn/item/6549bac6c458853aefaef147.png" alt="输出结果"></p><p><code>difflib</code>库中的内容还有很多，欢迎大家前去探索！</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>计算机组成</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>分享</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>P3 - 单周期CPU设计文档</title>
     <link href="/2023/10/30/P3-%E5%8D%95%E5%91%A8%E6%9C%9FCPU%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3/"/>
     <url>/2023/10/30/P3-%E5%8D%95%E5%91%A8%E6%9C%9FCPU%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3/</url>
@@ -72,9 +97,9 @@
     
     <tags>
       
-      <tag>完结</tag>
-      
       <tag>知识点总结</tag>
+      
+      <tag>完结</tag>
       
     </tags>
     
