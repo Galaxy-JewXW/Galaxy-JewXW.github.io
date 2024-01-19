@@ -1,0 +1,1298 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon-main.png">
+  <link rel="icon" href="/img/icon-main.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Augenstern aka &#39;Jew1!5!&#39;">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="单周期CPU设计 - Logisim实现">
+<meta property="og:type" content="article">
+<meta property="og:title" content="P3 - 单周期CPU设计文档">
+<meta property="og:url" content="https://galaxy-jewxw.github.io/2023/10/30/P3-%E5%8D%95%E5%91%A8%E6%9C%9FCPU%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3/index.html">
+<meta property="og:site_name" content="Jew&#39;s Blog">
+<meta property="og:description" content="单周期CPU设计 - Logisim实现">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://pic.imgdb.cn/item/653fb286c458853aef8839f2.png">
+<meta property="og:image" content="https://pic.imgdb.cn/item/653fb2e7c458853aef8a3714.png">
+<meta property="og:image" content="https://pic.imgdb.cn/item/653fb25bc458853aef877fb7.png">
+<meta property="og:image" content="https://pic.imgdb.cn/item/653fb332c458853aef8bb437.png">
+<meta property="og:image" content="https://pic.imgdb.cn/item/653fb331c458853aef8bb0ee.png">
+<meta property="og:image" content="https://pic.imgdb.cn/item/653fb331c458853aef8bb190.png">
+<meta property="og:image" content="https://pic.imgdb.cn/item/653fb332c458853aef8bb2cd.png">
+<meta property="article:published_time" content="2023-10-30T13:38:37.000Z">
+<meta property="article:modified_time" content="2023-10-30T13:56:24.506Z">
+<meta property="article:author" content="Augenstern aka &#39;Jew1!5!&#39;">
+<meta property="article:tag" content="试题">
+<meta property="article:tag" content="解析">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://pic.imgdb.cn/item/653fb286c458853aef8839f2.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>P3 - 单周期CPU设计文档 | Jew&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"galaxy-jewxw.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":120,"cursorChar":"_","loop":true,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Jew的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner_post.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="P3 - 单周期CPU设计文档"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-10-30 21:38" pubdate>
+          星期一, 十月 30日 2023, 9:38 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          946 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          6 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">P3 - 单周期CPU设计文档</h1>
+            
+              <p class="note note-info">
+                
+                  
+                    本文最后更新于：2023年10月30日 晚上
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <div class="note note-danger">
+            <p><strong>Tips</strong></p><p>课下要求可能会发生变化，文章仅供参考，未必完全正确。</p><p>请勿抄袭！</p>
+          </div>
+
+<h1 id="P3-单周期CPU设计文档"><a href="#P3-单周期CPU设计文档" class="headerlink" title="P3 单周期CPU设计文档"></a>P3 单周期CPU设计文档</h1><h2 id="设计概述"><a href="#设计概述" class="headerlink" title="设计概述"></a>设计概述</h2><ul>
+<li>设计的处理器为32位单周期处理器</li>
+<li>处理器支持的指令集为<code>add, sub, ori, lw, sw, beq, lui, nop，j，jal，jr，lb，sb，lh，sh</code>等</li>
+<li><code>nop</code>为空指令，其机器码为<code>0x00000000</code>，不进行任何有效行为，如修改寄存器等</li>
+<li><code>add, sub</code>按无符号加减法处理，不考虑溢出</li>
+</ul>
+<h2 id="顶层设计"><a href="#顶层设计" class="headerlink" title="顶层设计"></a>顶层设计</h2><p>参考了《数字设计与计算机体系结构》图7-14，在实际设计上略有改动。</p>
+<p><img src="https://pic.imgdb.cn/item/653fb286c458853aef8839f2.png" srcset="/img/loading.gif" lazyload alt="《数字设计与计算机体系结构》图7-14"></p>
+<p>最终实现效果概览如下。</p>
+<p><img src="https://pic.imgdb.cn/item/653fb2e7c458853aef8a3714.png" srcset="/img/loading.gif" lazyload alt="单周期CPU概览图"></p>
+<h2 id="模块定义"><a href="#模块定义" class="headerlink" title="模块定义"></a>模块定义</h2><h3 id="IFU-取指令单元"><a href="#IFU-取指令单元" class="headerlink" title="IFU(取指令单元)"></a>IFU(取指令单元)</h3><p>内部包括 PC（程序计数器）、IM（指令存储器）及相关逻辑。</p>
+<p>PC 用寄存器实现，应具有<strong>异步复位</strong>功能，复位值为起始地址。</p>
+<p><strong>起始地址：0x00003000。</strong></p>
+<p>地址范围：0x00003000 ~ 0x00006FFF。</p>
+<p>IM用ROM实现，容量为4096 × 32bit。</p>
+<p>IM实际地址宽度仅为12位，需要使用恰当的方法将PC中储存的地址同IM联系起来。</p>
+<div class="note note-success">
+            <p>PC的处理方法：</p><ul><li>PC的变化范围为0x00003000 ~ 0x00006FFF，考虑使用PC<sup>‘</sup> &#x3D; PC - 0x00003000，则PC<sup>‘</sup>的范围为0x00000000-0x00003FFF，不仅保证PC和PC<sup>‘</sup>在数值上一一对应，而且在设计处理时更加方便。</li><li>注意，输出是需要输出PC的值，而不是PC<sup>‘</sup>。</li><li>IM的实际地址宽度为12位，而PC的有效位数（可能发生变化的位数）为低14位。因为ROM是按字寻址，在从IM读取指令时只需要用PC[13:2]作为地址，就可以正确读取数据。</li></ul>
+          </div>
+
+<h4 id="端口定义"><a href="#端口定义" class="headerlink" title="端口定义"></a>端口定义</h4><table>
+    <caption>表2-1-1 IFU模块端口定义</caption>
+    <tr>
+        <td>信号名</td>
+        <td>方向</td>
+        <td>描述</td>
+    </tr>
+    <tr>
+        <td>clk</td>
+        <td>I</td>
+        <td>时钟信号</td>
+    </tr>
+    <tr>
+        <td>reset</td>
+        <td>I</td>
+        <td><strong>异步</strong>复位信号，将PC置0</td>
+    </tr>
+    <tr>
+        <td>offset[15:0]</td>
+        <td>I</td>
+        <td>
+            beq等branch指令的偏移量，即Instr[15:0]
+        </td>
+    </tr>
+    <tr>
+        <td>imm[25:0]</td>
+        <td>I</td>
+        <td>j指令和jal指令中的立即数，即Instr[25:0]</td>
+    </tr>
+    <tr>
+        <td>PCsel[2:0]</td>
+        <td>I</td>
+        <td>指定更新PC的方式</td>
+    </tr>
+    <tr>
+        <td>Instr[31:0]</td>
+        <td>O</td>
+        <td>输出IM中PC地址上的指令</td>
+    </tr>
+    <tr>
+        <td>PC</td>
+        <td>O</td>
+        <td>输出当前PC的值</td>
+    </tr>
+    <tr>
+        <td>PC+4</td>
+        <td>O</td>
+        <td>输出PC+4的值</td>
+    </tr>
+</table>
+
+<h4 id="功能定义"><a href="#功能定义" class="headerlink" title="功能定义"></a>功能定义</h4><table>
+    <caption> 表2-1-2 IFU模块功能定义 </caption>
+    <tr>
+        <td>序号</td>
+        <td>功能</td>
+        <td>描述</td>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td>异步复位</td>
+        <td>reset置1时，将PC置为0x00003000</td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>更新下一个PC的值</td>
+        <td>
+            时钟上升沿来临时，更新PC的值<br>
+            PCsel为2'b00时，PC <- PC + 4<br>
+            PCsel为2'b01时，PC <- PC + 4 + sign_extend(offset||0<sup>2</sup>)<br>
+            PCsel为2'b10时，PC <- PC[31:28]||imm||0<sup>2</sup><br>
+            PCsel为2'b11时，PC <- PC[31:28]||imm||0<sup>2</sup>; GPR[31] <- PC + 4
+        </td>
+    </tr> 
+</table>
+
+<h3 id="GRF-寄存器文件"><a href="#GRF-寄存器文件" class="headerlink" title="GRF(寄存器文件)"></a>GRF(寄存器文件)</h3><p>使用<strong>具有写使能功能</strong>的寄存器实现，寄存器总数为<strong>32个</strong>，具有<strong>异步复位</strong>功能。</p>
+<p>其中，<strong>0号寄存器</strong>($zero)的值始终保持为0。其他的寄存器<strong>初始值(复位后)均为0</strong>，无需专门设置。</p>
+<h4 id="端口定义-1"><a href="#端口定义-1" class="headerlink" title="端口定义"></a>端口定义</h4><table>
+    <caption>表2-2-1 GRF模块端口定义</caption>
+    <tr>
+        <td> 信号名 </td>
+        <td> 方向 </td>
+        <td> 描述 </td>
+    </tr>
+    <tr>
+        <td> clk </td>
+        <td> I </td>
+        <td> 时钟信号 </td>
+    </tr>
+    <tr>
+        <td> reset </td>
+        <td> I </td>
+        <td> <strong>异步</strong>复位信号，将32个寄存器中的值全部清零<br>1:复位<br>0:无效</td>
+    </tr>
+    <tr>
+        <td> WE </td>
+        <td> I </td>
+        <td> 写使能信号<br>1:可向GRF中写入数据<br>0:不能向GRF中写入数据</td>
+    </tr>
+    <tr>
+        <td> A1[4:0] </td>
+        <td> I </td>
+        <td> 5位地址输入信号，指定32个寄存器中的一个，将其中存储的数据读出到RD1</td>
+    </tr>
+    <tr>
+        <td> A2[4:0] </td>
+        <td> I </td>
+        <td> 5位地址输入信号，指定32个寄存器中的一个，将其中存储的数据读出到RD2</td>
+    </tr>
+    <tr>
+        <td> A3[4:0] </td>
+        <td> I </td>
+        <td> 5位地址输入信号，指定32个寄存器中的一个将WD中的数据写入</td>
+    </tr>
+    <tr>
+        <td> WD[31:0] </td>
+        <td> I </td>
+        <td> 32位数据输入信号</td>
+    </tr>
+    <tr>
+        <td> RD1[31:0] </td>
+        <td> O </td>
+        <td> 输出A1指定的寄存器中的32位数据</td>
+    </tr>
+    <tr>
+        <td> RD2[31:0] </td>
+        <td> O </td>
+        <td> 输出A2指定的寄存器中的32位数据</td>
+    </tr>
+</table>
+
+<h4 id="功能定义-1"><a href="#功能定义-1" class="headerlink" title="功能定义"></a>功能定义</h4><table>
+    <caption>表2-2-2 GRF模块功能定义</caption>
+    <tr>
+        <td>序号</td>
+        <td>功能</td>
+        <td>描述</td>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td>异步复位</td>
+        <td>reset信号置1时，所有寄存器存储的数值清零，其行为与logisim自带部件register的reset接口完全相同</td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>读数据</td>
+        <td>读出A1，A2地址对应寄存器中所存储的数据到对应的RD1，RD2</td>
+    </tr>
+    <tr>
+        <td>3</td>
+        <td>写数据</td>
+        <td>当<strong>WE有效且时钟上升沿来临</strong>时，将WD写入A3所对应的寄存器中</td>
+    </tr>
+</table>
+
+<h3 id="ALU-算术逻辑单元"><a href="#ALU-算术逻辑单元" class="headerlink" title="ALU(算术逻辑单元)"></a>ALU(算术逻辑单元)</h3><p>提供 32 位加、减、或运算及大小比较功能。</p>
+<p>加减法按无符号处理（不考虑溢出）。</p>
+<h4 id="端口定义-2"><a href="#端口定义-2" class="headerlink" title="端口定义"></a>端口定义</h4><table>
+    <caption>表2-3-1 ALU模块端口定义</caption>
+    <tr>
+        <td>信号名</td>
+        <td>方向</td>
+        <td>描述</td>
+    </tr>
+    <tr>
+        <td>A[31:0]</td>
+        <td>I</td>
+        <td>第一个32位计算数</td>
+    </tr>
+    <tr>
+        <td>B[31:0]</td>
+        <td>I</td>
+        <td>第二个32位计算数</td>
+    </tr>
+    <tr>
+        <td>ALUop[2:0]</td>
+        <td>I</td>
+        <td>指定ALU进行的计算</td>
+    </tr>
+    <tr>
+        <td>res[31:0]</td>
+        <td>O</td>
+        <td>运算结果</td>
+    </tr>
+    <tr>
+        <td>comp[2:0]</td>
+        <td>O</td>
+        <td>
+            输出A与B的大小关系
+        </td>
+    </tr>
+</table>
+
+
+
+<h4 id="功能定义-2"><a href="#功能定义-2" class="headerlink" title="功能定义"></a>功能定义</h4><table>
+    <caption>表2-3-2 ALU模块功能定义</caption>
+    <tr>
+        <td>序号</td>
+        <td>功能</td>
+        <td>描述</td>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td>比较大小</td>
+        <td>
+            A > B时，comp=2'b00<br>
+            A = B时，comp=2'b01<br>
+            A < B时，comp=2'b10<br>
+        </td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>加运算</td>
+        <td>ALUop = 3'b000时，res = A + B，不考虑溢出</td>
+    </tr>
+    <tr>
+        <td>3</td>
+        <td>减运算</td>
+        <td>
+            ALUop = 3'b001时，res = A - B，不考虑溢出
+        </td>
+    </tr>
+    <tr>
+        <td>4</td>
+        <td>或运算</td>
+        <td>ALUop = 3'b010时，res = A | B</td>
+    </tr>
+    <tr>
+        <td>5</td>
+        <td>B置高16位</td>
+        <td>ALUop = 3'b011时，res = B || 10<sup>16</sup></td>
+    </tr>
+</table>
+
+
+<blockquote>
+<p>多余的ALUop为扩展指令预留。</p>
+</blockquote>
+<h3 id="DM-数据存储器"><a href="#DM-数据存储器" class="headerlink" title="DM(数据存储器)"></a>DM(数据存储器)</h3><p>使用RAM实现，容量为3072 × 32bit，应具有<strong>异步复位</strong>功能，复位值为0x00000000。</p>
+<p><strong>起始地址：0x00000000</strong>。</p>
+<p>地址范围：0x00000000 ~ 0x00002FFF。</p>
+<p>RAM 应使用<strong>双端口模式</strong>，即设置 RAM 的 <strong>Data Interface</strong> 属性为 <strong>Separate load and store ports</strong>。</p>
+<h4 id="端口定义-3"><a href="#端口定义-3" class="headerlink" title="端口定义"></a>端口定义</h4><table>
+    <caption>表2-4-1 DM模块端口定义</caption>
+    <tr>
+        <td>信号名</td>
+        <td>方向</td>
+        <td>描述</td>
+    </tr>
+    <tr>
+        <td>clk</td>
+        <td>I</td>
+        <td>时钟信号</td>
+    </tr>
+    <tr>
+        <td>reset</td>
+        <td>I</td>
+        <td><strong>异步</strong>复位信号，将DM内的RAM重置为0</td>
+    </tr>
+    <tr>
+        <td>WE</td>
+        <td>I</td>
+        <td>写使能信号，WE为1时，允许写入数据；WE为0时，禁止写入</td>
+    </tr>
+    <tr>
+        <td>DMop[1:0]</td>
+        <td>I</td>
+        <td>指定DM进行的读/写操作类型</td>
+    </tr>
+    <tr>
+        <td>A[31:0]</td>
+        <td>I</td>
+        <td>需要进行读/写操作的地址</td>
+    </tr>
+    <tr>
+        <td>WD[31:0]</td>
+        <td>I</td>
+        <td>写入RAM的32位输入数据</td>
+    </tr>
+    <tr>
+        <td>RD[31:0]</td>
+        <td>O</td>
+        <td>从RAM读出的32位输出数据</td>
+    </tr>
+</table>
+
+
+<h4 id="功能定义-3"><a href="#功能定义-3" class="headerlink" title="功能定义"></a>功能定义</h4><table>
+    <caption>表2-4-2 DM模块功能定义</caption>
+    <tr>
+        <td>序号</td>
+        <td>功能</td>
+        <td>描述</td>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td>异步复位</td>
+        <td>reset置1时，异步重置RAM内存为0</td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>写数据</td>
+        <td>
+            当<strong>WE有效且时钟上升沿到来</strong>时，将WD中的数据写入A对应的RAM地址中
+            <br>DMop为2'b00时，执行lw指令
+            <br>DMop为2'b01时，执行lh指令
+            <br>DMop为2'b10时，执行lb指令
+        </td>
+    </tr>
+    <tr>
+        <td>3</td>
+        <td>读数据</td>
+        <td>
+            读取A对应的RAM地址中存储的数据到RD
+            <br>DMop为2'b00时，执行sw指令
+            <br>DMop为2'b01时，执行sh指令
+            <br>DMop为2'b10时，执行sb指令
+        </td>
+    </tr>
+</table>
+
+
+<blockquote>
+<p>与处理IFU中地址的方法相同，使用A[13:2]即可从DM的RAM中正确读取数据。</p>
+</blockquote>
+<h3 id="EXT-扩展单元"><a href="#EXT-扩展单元" class="headerlink" title="EXT(扩展单元)"></a>EXT(扩展单元)</h3><p>使用Logisim内置的Bit Extender。</p>
+<h4 id="端口定义-4"><a href="#端口定义-4" class="headerlink" title="端口定义"></a>端口定义</h4><table>
+    <caption> 表2-5-1 EXT模块端口定义 </caption>
+    <tr>
+        <td>信号名</td>
+        <td>方向</td>
+        <td>描述</td>
+    </tr>
+    <tr>
+        <td>num[15:0]</td>W
+        <td>I</td>
+        <td>需要扩展的16位立即数</td>
+    </tr>
+    <tr>
+        <td>sel</td>
+        <td>I</td>
+        <td>指定进行扩展的方式</td>
+    </tr>
+    <tr>
+        <td>result[31:0]</td>
+        <td>O</td>
+        <td>扩展完成的32位数</td>
+    </tr>
+</table>
+
+<h4 id="功能定义-4"><a href="#功能定义-4" class="headerlink" title="功能定义"></a>功能定义</h4><table>
+    <caption>表2-5-2 EXT模块功能定义</caption>
+    <tr>
+        <td>sel</td>
+        <td>功能</td>
+        <td>描述</td>
+    </tr>
+    <tr>
+        <td>1'b0</td>
+        <td>零扩展</td>
+        <td>result = zero_extend(num)</td>
+    </tr><tr>
+        <td>1'b1</td>
+        <td>符号扩展</td>
+        <td>result = sign_extend(num)</td>
+    </tr>
+</table>
+
+<h3 id="Controller-控制器"><a href="#Controller-控制器" class="headerlink" title="Controller(控制器)"></a>Controller(控制器)</h3><p>使用与或门阵列构造控制信号。</p>
+<p>和逻辑的功能是<strong>识别</strong>，将输入的机器码识别为相应的指令；或逻辑的功能是<strong>生成</strong>，根据输入的指令的不同，产生不同的控制信号。</p>
+<h4 id="端口定义-5"><a href="#端口定义-5" class="headerlink" title="端口定义"></a>端口定义</h4><table>
+    <caption>表2-6-1 Controller模块端口定义</caption>
+    <tr>
+        <td>信号名</td>
+        <td>方向</td>
+        <td>描述</td>
+    </tr>
+    <tr>
+        <td>op[5:0]</td>
+        <td>I</td>
+        <td>32位指令Instr[31:26]</td>
+    </tr>
+    <tr>
+        <td>comp[1:0]</td>
+        <td>I</td>
+        <td>ALU中两运算数的大小，决定是否执行branch指令</td>
+    </tr>
+    <tr>
+        <td>funct[5:0]</td>
+        <td>I</td>
+        <td>32位指令Instr[5:0]</td>
+    </tr>
+    <tr>
+        <td>RegDst[1:0]</td>
+        <td>O</td>
+        <td>
+            指定数据写入GRF的寄存器序号<br>
+            RegDst为2'b00时，序号为Instr[20:16]，对应I型指令的rt<br>
+            RegDst为2'b01时，序号为Instr[15:11]，对应R型指令的rd<br>
+            RegDst为2'b10时，序号为31，即<strong>$ra</strong>的序号，用于jal指令
+        </td>
+    </tr>
+    <tr>
+        <td>ALUSrc</td>
+        <td>O</td>
+        <td>
+            指定ALU第二个运算数是否是立即数<br>
+            ALUSrc为0时，运算数来自GRF<br>
+            ALUSrc为1时，运算数为立即数
+        </td>
+    </tr>
+    <tr>
+        <td>MemToReg[1:0]</td>
+        <td>O</td>
+        <td>
+            指定写入GRF的数据的来源<br>
+            MemToReg为2'b00时，数据为ALU的输出res<br>
+            MemToReg为2'b01时，数据为DM的输出RD<br>
+            MemToReg为2'b10时，数据为PC + 4，用于jal指令将PC + 4写入$ra的操作
+        </td>
+    </tr>
+    <tr>
+        <td>RegWrite</td>
+        <td>O</td>
+        <td>是否可向GRF中写入数据</td>
+    </tr>
+    <tr>
+        <td>MemWrite</td>
+        <td>O</td>
+        <td>是否可向DM中写入数据</td>
+    </tr>
+    <tr>
+        <td>PCsel[1:0]</td>
+        <td>O</td>
+        <td>指定更新PC的方式</td>
+    </tr>
+    <tr>
+        <td>Extop</td>
+        <td>O</td>
+        <td>
+            指定EXT进行立即数扩展的方式<br>
+            ExtOp为0时，EXT进行零扩展<br>
+            ExtOp为1时，EXT进行符号扩展<br>
+        </td>
+    </tr>
+    <tr>
+        <td>DMop[1:0]</td>
+        <td>O</td>
+        <td>指定操作DM的方式</td>
+    </tr>
+    <tr>
+        <td>ALUop[2:0]</td>
+        <td>O</td>
+        <td>指定ALU进行的计算</td>
+    </tr>
+</table>
+
+
+<h4 id="功能定义-5"><a href="#功能定义-5" class="headerlink" title="功能定义"></a>功能定义</h4><table>
+    <caption>表2-6-2 Controller模块功能定义</caption>
+    <tr>
+        <td>序号</td>
+        <td>功能</td>
+        <td>描述</td>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td>生成控制信号</td>
+        <td>生成控制信号</td>
+    </tr>
+</table>
+
+<h2 id="重要机制实现方法"><a href="#重要机制实现方法" class="headerlink" title="重要机制实现方法"></a>重要机制实现方法</h2><h3 id="生成控制信号"><a href="#生成控制信号" class="headerlink" title="生成控制信号"></a>生成控制信号</h3><p><img src="https://pic.imgdb.cn/item/653fb25bc458853aef877fb7.png" srcset="/img/loading.gif" lazyload alt="控制信号真值表"></p>
+<h3 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h3><p><img src="https://pic.imgdb.cn/item/653fb332c458853aef8bb437.png" srcset="/img/loading.gif" lazyload alt="程序计数器细节"></p>
+<h3 id="DM中对读写半字-字节的处理"><a href="#DM中对读写半字-字节的处理" class="headerlink" title="DM中对读写半字&#x2F;字节的处理"></a>DM中对读写半字&#x2F;字节的处理</h3><p><img src="https://pic.imgdb.cn/item/653fb331c458853aef8bb0ee.png" srcset="/img/loading.gif" lazyload alt="DM总览"></p>
+<p><img src="https://pic.imgdb.cn/item/653fb331c458853aef8bb190.png" srcset="/img/loading.gif" lazyload alt="写字/半字/字节"></p>
+<p><img src="https://pic.imgdb.cn/item/653fb332c458853aef8bb2cd.png" srcset="/img/loading.gif" lazyload alt="读字/半字/字节"></p>
+<h2 id="测试方案"><a href="#测试方案" class="headerlink" title="测试方案"></a>测试方案</h2><h3 id="测试代码1"><a href="#测试代码1" class="headerlink" title="测试代码1"></a>测试代码1</h3><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-keyword">ori </span>$<span class="hljs-built_in">t0</span>,$<span class="hljs-number">0</span>,<span class="hljs-number">156</span><br><span class="hljs-keyword">ori </span>$<span class="hljs-built_in">t2</span>,$<span class="hljs-number">0</span>,<span class="hljs-number">135</span><br><span class="hljs-keyword">ori </span>$<span class="hljs-built_in">a3</span>,$<span class="hljs-built_in">a3</span>,<span class="hljs-number">1035</span><br><span class="hljs-keyword">lui </span>$<span class="hljs-built_in">a1</span>,<span class="hljs-number">101</span><br><span class="hljs-keyword">ori </span>$<span class="hljs-built_in">a1</span>,$<span class="hljs-number">0</span>,<span class="hljs-number">2211</span><br><span class="hljs-keyword">nop</span><br><span class="hljs-keyword"></span><span class="hljs-symbol">loop:</span><br><span class="hljs-keyword">beq </span>$<span class="hljs-built_in">t3</span>,$<span class="hljs-built_in">t2</span>,end<br><span class="hljs-keyword">ori </span>$<span class="hljs-built_in">t4</span>,<span class="hljs-number">8</span><br><span class="hljs-keyword">lui </span>$<span class="hljs-built_in">s6</span>,<span class="hljs-number">170</span><br><span class="hljs-keyword">add </span>$<span class="hljs-built_in">t3</span>,$<span class="hljs-built_in">t3</span>,$<span class="hljs-built_in">t4</span><br><span class="hljs-keyword">add </span>$<span class="hljs-built_in">t3</span>,$<span class="hljs-built_in">t2</span>,$<span class="hljs-number">0</span><br><span class="hljs-keyword">lw </span>$<span class="hljs-built_in">s0</span>,<span class="hljs-number">4</span>($<span class="hljs-built_in">t1</span>)<br><span class="hljs-symbol">out:</span><br><span class="hljs-keyword">add </span>$<span class="hljs-built_in">t2</span>,$<span class="hljs-built_in">t2</span>,$<span class="hljs-built_in">t1</span><br><span class="hljs-keyword">sub </span>$<span class="hljs-built_in">t3</span>,$<span class="hljs-built_in">t2</span>,$<span class="hljs-number">0</span><br><span class="hljs-keyword">beq </span>$<span class="hljs-built_in">t3</span>,$<span class="hljs-built_in">t2</span>,loop<br><span class="hljs-symbol">end:</span><br><span class="hljs-keyword">lui </span>$<span class="hljs-built_in">v0</span>,<span class="hljs-number">11111</span><br></code></pre></td></tr></table></figure>
+
+<p>导出为</p>
+<figure class="highlight dns"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs dns">v2.<span class="hljs-number">0</span> raw<br><span class="hljs-number">3408009</span>c<br><span class="hljs-number">340a0087</span><br><span class="hljs-number">34</span>e7040b<br><span class="hljs-number">3c050065</span><br><span class="hljs-number">340508a3</span><br><span class="hljs-number">00000000</span><br><span class="hljs-number">116a0008</span><br><span class="hljs-number">358c0008</span><br><span class="hljs-number">3</span>c1600aa<br><span class="hljs-number">016c5820</span><br><span class="hljs-number">01405820</span><br><span class="hljs-number">8d300004</span><br><span class="hljs-number">01495020</span><br><span class="hljs-number">01405822</span><br><span class="hljs-number">116</span>afff7<br><span class="hljs-number">3c022b67</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="测试代码2"><a href="#测试代码2" class="headerlink" title="测试代码2"></a>测试代码2</h3><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-keyword">ori </span>$<span class="hljs-built_in">t0</span>, $<span class="hljs-number">0</span>, <span class="hljs-number">1</span><br><span class="hljs-keyword">ori </span>$<span class="hljs-built_in">s0</span>, $<span class="hljs-number">0</span>, <span class="hljs-number">4</span><br><span class="hljs-keyword">ori </span>$<span class="hljs-built_in">s1</span>, $<span class="hljs-number">0</span>, <span class="hljs-number">1</span><br><span class="hljs-keyword">ori </span>$<span class="hljs-built_in">s2</span>, $<span class="hljs-number">0</span>, <span class="hljs-number">8</span><br><span class="hljs-keyword">lui </span>$<span class="hljs-built_in">s3</span>, <span class="hljs-number">123</span><br><span class="hljs-symbol"></span><br><span class="hljs-symbol">l1:</span><br>	<span class="hljs-keyword">beq </span>$<span class="hljs-built_in">t0</span>, $<span class="hljs-built_in">s0</span>, l1e<br>	<span class="hljs-keyword">add </span>$<span class="hljs-built_in">t0</span>, $<span class="hljs-built_in">t0</span>, $<span class="hljs-built_in">t0</span><br>	<span class="hljs-keyword">j </span>  l1<br><span class="hljs-symbol"></span><br><span class="hljs-symbol">l1e:</span><br>	<span class="hljs-keyword">jal </span>sum<br>	<span class="hljs-keyword">ori </span>$<span class="hljs-built_in">t0</span>, $<span class="hljs-number">0</span>, <span class="hljs-number">1</span><br>	<span class="hljs-keyword">j </span>  l2<br><span class="hljs-symbol">	</span><br><span class="hljs-symbol">sum:</span><br>	<span class="hljs-keyword">add </span>$<span class="hljs-built_in">a1</span>, $<span class="hljs-number">0</span>, $<span class="hljs-built_in">s0</span><br>	<span class="hljs-keyword">add </span>$<span class="hljs-built_in">a2</span>, $<span class="hljs-number">0</span>, $<span class="hljs-built_in">s2</span><br>	<span class="hljs-keyword">sub </span>$<span class="hljs-built_in">v0</span>, $<span class="hljs-built_in">a1</span>, $<span class="hljs-built_in">a2</span><br>	<span class="hljs-keyword">jr </span> $<span class="hljs-built_in">ra</span><br><span class="hljs-symbol"></span><br><span class="hljs-symbol">l2:</span><br>	<span class="hljs-keyword">ori </span>$<span class="hljs-built_in">v0</span>, $<span class="hljs-number">0</span>, <span class="hljs-number">10</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="测试代码3"><a href="#测试代码3" class="headerlink" title="测试代码3"></a>测试代码3</h3><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-keyword">lui </span>$<span class="hljs-built_in">s0</span>, <span class="hljs-number">0xf123</span><br><span class="hljs-keyword">ori </span>$<span class="hljs-built_in">s0</span>, $<span class="hljs-built_in">s0</span>, <span class="hljs-number">0x3f21</span><br><span class="hljs-keyword">lui </span>$<span class="hljs-built_in">s1</span>, <span class="hljs-number">0x4567</span><br><span class="hljs-keyword">ori </span>$<span class="hljs-built_in">s1</span>, $<span class="hljs-built_in">s1</span>, <span class="hljs-number">0x7465</span><br><span class="hljs-keyword">lui </span>$<span class="hljs-built_in">s2</span>, <span class="hljs-number">0x89ab</span><br><span class="hljs-keyword">ori </span>$<span class="hljs-built_in">s2</span>, $<span class="hljs-built_in">s2</span>, <span class="hljs-number">0xb89a</span><br><span class="hljs-keyword">lui </span>$<span class="hljs-built_in">s3</span>, <span class="hljs-number">0xcdef</span><br><span class="hljs-keyword">ori </span>$<span class="hljs-built_in">s3</span>, $<span class="hljs-built_in">s3</span>, <span class="hljs-number">0xcfed</span><br><br><span class="hljs-keyword">ori </span>$<span class="hljs-built_in">t0</span>, $<span class="hljs-number">0</span>, <span class="hljs-number">4</span><br><span class="hljs-keyword">sw </span>$<span class="hljs-built_in">s0</span>, <span class="hljs-number">0</span>($<span class="hljs-number">0</span>)<br><span class="hljs-keyword">sw </span>$<span class="hljs-built_in">s1</span>, <span class="hljs-number">0</span>($<span class="hljs-built_in">t0</span>)<br><span class="hljs-keyword">sw </span>$<span class="hljs-built_in">s2</span>, <span class="hljs-number">4</span>($<span class="hljs-built_in">t0</span>)<br><br><span class="hljs-keyword">add </span>$<span class="hljs-built_in">t0</span>, $<span class="hljs-built_in">t0</span>, $<span class="hljs-built_in">t0</span><br><span class="hljs-keyword">lw </span>$<span class="hljs-built_in">t9</span>, <span class="hljs-number">0</span>($<span class="hljs-built_in">t0</span>)<br><span class="hljs-keyword">lw </span>$<span class="hljs-built_in">t8</span>, -<span class="hljs-number">4</span>($<span class="hljs-built_in">t0</span>)<br><br><span class="hljs-keyword">ori </span>$<span class="hljs-built_in">t0</span>, $<span class="hljs-number">0</span>, <span class="hljs-number">20</span><br><span class="hljs-keyword">sw </span>$<span class="hljs-built_in">s3</span>, -<span class="hljs-number">8</span>($<span class="hljs-built_in">t0</span>)<br><br><span class="hljs-keyword">ori </span>$<span class="hljs-built_in">t0</span>, $<span class="hljs-number">0</span>, <span class="hljs-number">19</span><br><span class="hljs-keyword">sh </span>$<span class="hljs-built_in">s1</span>, -<span class="hljs-number">1</span>($<span class="hljs-built_in">t0</span>)<br><span class="hljs-keyword">sh </span>$<span class="hljs-built_in">s2</span>, <span class="hljs-number">1</span>($<span class="hljs-built_in">t0</span>)<br><br><span class="hljs-keyword">ori </span>$<span class="hljs-built_in">t0</span>, $<span class="hljs-number">0</span>, <span class="hljs-number">25</span><br><span class="hljs-keyword">sb </span>$<span class="hljs-built_in">s3</span>, -<span class="hljs-number">1</span>($<span class="hljs-built_in">t0</span>)<br><span class="hljs-keyword">sb </span>$<span class="hljs-built_in">s1</span>, <span class="hljs-number">0</span>($<span class="hljs-built_in">t0</span>)<br><span class="hljs-keyword">sb </span>$<span class="hljs-built_in">s2</span>, <span class="hljs-number">1</span>($<span class="hljs-built_in">t0</span>)<br><span class="hljs-keyword">sb </span>$<span class="hljs-built_in">s0</span>, <span class="hljs-number">2</span>($<span class="hljs-built_in">t0</span>)<br><br><span class="hljs-keyword">ori </span>$<span class="hljs-built_in">t0</span>, $<span class="hljs-number">0</span>, <span class="hljs-number">2</span><br><span class="hljs-keyword">lb </span>$<span class="hljs-built_in">t1</span>, -<span class="hljs-number">2</span>($<span class="hljs-built_in">t0</span>)<br><span class="hljs-keyword">lb </span>$<span class="hljs-built_in">t3</span>, -<span class="hljs-number">1</span>($<span class="hljs-built_in">t0</span>)<br><span class="hljs-keyword">lb </span>$<span class="hljs-built_in">t1</span>, <span class="hljs-number">0</span>($<span class="hljs-built_in">t0</span>)<br><span class="hljs-keyword">lb </span>$<span class="hljs-built_in">t2</span>, <span class="hljs-number">1</span>($<span class="hljs-built_in">t0</span>)<br><br><span class="hljs-keyword">ori </span>$<span class="hljs-built_in">t0</span>, $<span class="hljs-number">0</span>, <span class="hljs-number">19</span><br><span class="hljs-keyword">lh </span>$<span class="hljs-built_in">t2</span>, -<span class="hljs-number">1</span>($<span class="hljs-built_in">t0</span>)<br><span class="hljs-keyword">lh </span>$<span class="hljs-built_in">t5</span>, <span class="hljs-number">1</span>($<span class="hljs-built_in">t0</span>)<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="思考题"><a href="#思考题" class="headerlink" title="思考题"></a>思考题</h2><ol>
+<li>上面我们介绍了通过 FSM 理解单周期 CPU 的基本方法。请大家指出单周期 CPU 所用到的模块中，哪些发挥状态存储功能，哪些发挥状态转移功能。</li>
+</ol>
+<p>状态存储：GRF、DM</p>
+<p>状态转移：IFU、ALU、EXT、Controller</p>
+<ol start="2">
+<li>现在我们的模块中 IM 使用 ROM， DM 使用 RAM， GRF 使用 Register，这种做法合理吗？请给出分析，若有改进意见也请一并给出。</li>
+</ol>
+<p>我认为是合理的。</p>
+<p>IM只需要被读取，而ROM是只读的，下次打开文件时内存依然存在，且运行过程中不会被篡改；</p>
+<p>DM需要支持读、写功能，一个时钟周期内只会进行读、写的其中一种操作。RAM即可支持读写操作，又在占用空间上优于寄存器文件。</p>
+<p>GRF需要支持读、写功能，且与ALU直接相连，对读、写速度要求较高，故使用寄存器文件。</p>
+<ol start="3">
+<li>在上述提示的模块之外，你是否在实际实现时设计了其他的模块？如果是的话，请给出介绍和设计的思路。</li>
+</ol>
+<p>并未设计新的模块。</p>
+<p>4.事实上，实现 <code>nop</code> 空指令，我们并不需要将它加入控制信号真值表，为什么？</p>
+<p>Controller采用与或门阵列实现，读入nop指令时所有的控制信号均保持在低电平，只进行了PC &lt;- PC + 4，而不会产生其他任何操作。</p>
+<ol start="5">
+<li>阅读 Pre 的 <a target="_blank" rel="noopener" href="http://cscore.buaa.edu.cn/tutorial/mips/mips-6/mips6-1/">“MIPS 指令集及汇编语言”</a> 一节中给出的测试样例，评价其强度（可从各个指令的覆盖情况，单一指令各种行为的覆盖情况等方面分析），并指出具体的不足之处。</li>
+</ol>
+<p>我认为该样例覆盖了该CPU中支持的所有指令，且先由最基本的可独立判断正误的指令进行验证，之后再对更高层的指令的结果正误进行验证，能对CPU的设计起到较为准确的反馈。</p>
+<p>可以考虑加入一些32位数、16位无符号数的边界情况，多增加一些目标寄存器为<code>$0</code>的指令，达到更好的测试效果。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/" class="category-chain-item">计算机组成</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E8%AF%95%E9%A2%98/" class="print-no-link">#试题</a>
+      
+        <a href="/tags/%E8%A7%A3%E6%9E%90/" class="print-no-link">#解析</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>P3 - 单周期CPU设计文档</div>
+      <div>https://galaxy-jewxw.github.io/2023/10/30/P3-单周期CPU设计文档/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Augenstern aka 'Jew1!5!'</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年10月30日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/11/06/P4-%E5%8D%95%E5%91%A8%E6%9C%9FCPU%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3/" title="P4 - 单周期CPU设计文档">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">P4 - 单周期CPU设计文档</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/10/21/%E9%80%92%E5%BD%92%E8%B0%83%E7%94%A8%E6%B1%87%E7%BC%96%E4%BB%A3%E7%A0%81%E7%BF%BB%E8%AF%91%E7%9A%84%E4%B8%80%E4%BA%9B%E5%BF%83%E5%BE%97/" title="递归调用汇编代码翻译的一些心得">
+                        <span class="hidden-mobile">递归调用汇编代码翻译的一些心得</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+      Powered by <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> | <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
