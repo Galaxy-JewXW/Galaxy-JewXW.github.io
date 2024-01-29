@@ -16,15 +16,15 @@
   <meta name="author" content="Traumtänzer aka &#39;Jew1!5!&#39;">
   <meta name="keywords" content="">
   
-    <meta name="description" content="该死 好难！">
+    <meta name="description" content="代码再精简！">
 <meta property="og:type" content="article">
-<meta property="og:title" content="尺取法及应用 - POJ 3061">
-<meta property="og:url" content="https://galaxy-jewxw.github.io/2024/01/29/%E5%B0%BA%E5%8F%96%E6%B3%95%E4%B8%8E%E5%BA%94%E7%94%A8%20-%20POJ3061/index.html">
+<meta property="og:title" content="双指针的一个应用场景">
+<meta property="og:url" content="https://galaxy-jewxw.github.io/2024/01/30/%E5%8F%8C%E6%8C%87%E9%92%88%E7%9A%84%E4%B8%80%E4%B8%AA%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF/index.html">
 <meta property="og:site_name" content="Jew&#39;s Blog">
-<meta property="og:description" content="该死 好难！">
+<meta property="og:description" content="代码再精简！">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-01-29T10:02:16.000Z">
-<meta property="article:modified_time" content="2024-01-29T10:15:47.679Z">
+<meta property="article:published_time" content="2024-01-29T16:24:11.000Z">
+<meta property="article:modified_time" content="2024-01-29T16:31:38.818Z">
 <meta property="article:author" content="Traumtänzer aka &#39;Jew1!5!&#39;">
 <meta property="article:tag" content="总结">
 <meta name="twitter:card" content="summary_large_image">
@@ -33,7 +33,7 @@
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>尺取法及应用 - POJ 3061 | Jew&#39;s Blog</title>
+  <title>双指针的一个应用场景 | Jew&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -211,7 +211,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="尺取法及应用 - POJ 3061"></span>
+            <span id="subtitle" data-typed-text="双指针的一个应用场景"></span>
           
         </div>
 
@@ -222,8 +222,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-01-29 18:02" pubdate>
-          星期一, 一月 29日 2024, 6:02 晚上
+        <time datetime="2024-01-30 00:24" pubdate>
+          星期二, 一月 30日 2024, 12:24 凌晨
         </time>
       </span>
     
@@ -234,7 +234,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.1k 字
+          1.9k 字
         
       </span>
     
@@ -245,7 +245,7 @@
         
         
         
-          6 分钟
+          11 分钟
         
       </span>
     
@@ -290,12 +290,12 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">尺取法及应用 - POJ 3061</h1>
+            <h1 id="seo-header">双指针的一个应用场景</h1>
             
               <p class="note note-info">
                 
                   
-                    本文最后更新于：2024年1月29日 晚上
+                    本文最后更新于：2024年1月30日 凌晨
                   
                 
               </p>
@@ -303,25 +303,28 @@
             
               <div class="markdown-body">
                 
-                <h1 id="尺取法及其应用-POJ-3061"><a href="#尺取法及其应用-POJ-3061" class="headerlink" title="尺取法及其应用 - POJ 3061"></a>尺取法及其应用 - POJ 3061</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p><strong>返回推进区间的开头和结尾，求满足条件的最小区间的方法称为尺取法。</strong>，顾名思义，就是像一把尺子（固定某一条件），不断向右（左）移动，不断更新所求答案。一般用来求满足条件的最小区间。</p>
-<p>主要实现方法为：</p>
-<ol>
-<li>初始化左右端点</li>
-<li>不断扩大右端点，直至满足条件</li>
-<li>如果直至终点也无法满足条件，则终止，否则更新结果</li>
-<li>扩大左端点（右移1），跳回步骤2</li>
-</ol>
-<p>这种方法只有一个疑问点，就是R不往回移动，其结果一定是对的吗？</p>
-<p>考虑一下，L一直向右移动，R其实没必要向左动了。R只有在不满足条件的时候才向右，否则停在原位。</p>
-<p>此时凭L的移动，已经能找出所有可行的区间了。</p>
-<h2 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h2><p>例题链接：<a target="_blank" rel="noopener" href="http://poj.org/problem?id=3061">http://poj.org/problem?id=3061</a></p>
-<p>找到最短的序列长度，使得序列元素和大于S。</p>
-<p>在这道题中，序列都是正数，如果一个区间其和大于等于S，那么不需要在向后推进右端点了，因为其和也肯定大于等于S但长度更长。</p>
-<p>所以，<strong>当区间和小于S时右端点向右移动，和大于等于S时，左端点向右移动以进一步找到最短的区间</strong>。</p>
-<p>如果右端点移动到区间末尾其和还不大于等于S，结束区间的枚举。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><span class="hljs-type">const</span> <span class="hljs-type">int</span> maxn=<span class="hljs-number">1e5</span>+<span class="hljs-number">100</span>;<br><span class="hljs-type">int</span> t,n,s;<br><span class="hljs-type">int</span> a[maxn];<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    ios::<span class="hljs-built_in">sync_with_stdio</span>(<span class="hljs-literal">false</span>);  <span class="hljs-comment">//加速流</span><br>    cin&gt;&gt;t;<br>    <span class="hljs-keyword">while</span>(t--)<br>    &#123;<br>        cin&gt;&gt;n&gt;&gt;s;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>; i&lt;n; i++)<br>            cin&gt;&gt;a[i];<br>        <span class="hljs-type">int</span> l=<span class="hljs-number">0</span>,r=<span class="hljs-number">0</span>,ans=n+<span class="hljs-number">1</span>;   <span class="hljs-comment">//l，r:左右端点  ans初始值设为n+1</span><br>        <span class="hljs-type">int</span> sum=<span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">while</span>(<span class="hljs-literal">true</span>)<br>        &#123;<br>            <span class="hljs-keyword">while</span>(r&lt;n&amp;&amp;sum&lt;s)<br>                sum+=a[r++];<br>            <span class="hljs-keyword">if</span>(sum&lt;s)         <span class="hljs-comment">//如果所有数的和都小于s，直接跳出循环</span><br>                <span class="hljs-keyword">break</span>;<br>            ans=<span class="hljs-built_in">min</span>(ans,r-l); <span class="hljs-comment">//此时r一定小于n</span><br>            sum-=a[l++];      <span class="hljs-comment">//去掉最左端点，继续前进</span><br>        &#125;<br>        <span class="hljs-keyword">if</span>(ans==n+<span class="hljs-number">1</span>)<br>            cout&lt;&lt;<span class="hljs-number">0</span>&lt;&lt;endl;<br>        <span class="hljs-keyword">else</span><br>            cout&lt;&lt;ans&lt;&lt;endl;<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+                <h1 id="Leetcode上的一个双指针题的解法与简化"><a href="#Leetcode上的一个双指针题的解法与简化" class="headerlink" title="Leetcode上的一个双指针题的解法与简化"></a>Leetcode上的一个双指针题的解法与简化</h1><h2 id="题目：80-删除有序数组中的重复项-II"><a href="#题目：80-删除有序数组中的重复项-II" class="headerlink" title="题目：80. 删除有序数组中的重复项 II"></a>题目：80. 删除有序数组中的重复项 II</h2><p>题目链接：<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/remove-duplicates-from-sorted-array-ii/description/">https://leetcode.cn/problems/remove-duplicates-from-sorted-array-ii/description/</a></p>
+<p>给你一个有序数组 <code>nums</code> ，请你**<a target="_blank" rel="noopener" href="http://baike.baidu.com/item/%E5%8E%9F%E5%9C%B0%E7%AE%97%E6%B3%95"> 原地</a>** 删除重复出现的元素，使得出现次数超过两次的元素<strong>只出现两次</strong> ，返回删除后数组的新长度。</p>
+<p>不要使用额外的数组空间，你必须在 <strong><a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%8E%9F%E5%9C%B0%E7%AE%97%E6%B3%95">原地 </a>修改输入数组</strong> 并在使用 O(1) 额外空间的条件下完成。</p>
+<h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>读完题目之后，我们应该注意到：nums数组是有序的！这意味着：相同元素必然连续。</p>
+<p>我们可以设置快慢两个指针：fast和slow，运用for循环进行遍历，判断哪些元素应该保留，哪些应该剔除。</p>
+<p>具体而言，slow指针表示处理出的数组的长度，fast指针表示已经检查过的数组的长度。即nums[fast]表示待检查的第一个元素，nums[slow − 1]为上一个应该被保留的元素所移动到的指定位置。</p>
+<p>因为本题要求相同元素最多出现两次，所以我们需要检查上上个应该被保留的元素nums[slow − 2]是否和当前待检查元素nums[fast]相同。当且仅当nums[slow − 2] &#x3D;&#x3D; nums[fast]时，当前待检查元素nums[fast]不应该被保留（因为此时必然有nums[slow − 2] &#x3D;&#x3D; nums[slow − 1] &#x3D;&#x3D; nums[fast]）。</p>
+<p>最后，slow即为处理好的数组的长度。</p>
+<p>特别地，数组的前两个数必然可以被保留，因此对于长度不超过2的数组，我们无需进行任何处理，对于长度超过2的数组，我们直接将双指针的初始值设为2即可。</p>
+<p>于是便有了这样的解答：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">removeDuplicates</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span> </span>&#123;<br>        <span class="hljs-type">int</span> n = nums.<span class="hljs-built_in">size</span>();<br>        <span class="hljs-keyword">if</span> (n &lt;= <span class="hljs-number">2</span>) &#123; <span class="hljs-comment">// 特殊判断，如果nums长度小于2，直接输出长度n即可</span><br>            <span class="hljs-keyword">return</span> n;<br>        &#125;<br>        <span class="hljs-type">int</span> slow = <span class="hljs-number">2</span>, fast = <span class="hljs-number">2</span>; <span class="hljs-comment">// 因为上面已经做过特殊判别，所以这里快慢指针从2开始</span><br>        <span class="hljs-keyword">while</span> (fast &lt; n) &#123;<br>            <span class="hljs-keyword">if</span> (nums[slow - <span class="hljs-number">2</span>] != nums[fast]) &#123; <span class="hljs-comment">// 因为题目要求最多两个数相同，所以这么判断</span><br>            <span class="hljs-comment">// 如果nums[slow - 2] == nums[fast]，代表已经有两个数相等，此时nums[fast]</span><br>            <span class="hljs-comment">// 对应的数值不能放进结果之中。反之，如果nums[slow - 2] != nums[fast]，</span><br>            <span class="hljs-comment">// 那么nums[fast]可以放进nums[slow]中，并且slow++，记录结果的长度。</span><br>                nums[slow] = nums[fast]; <br>                slow++;<br>            &#125;<br>            fast++; <span class="hljs-comment">// 不管怎么样，快指针都是要向前遍历各个元素的</span><br>        &#125;<br>        <span class="hljs-keyword">return</span> slow; <span class="hljs-comment">// 返回结果的长度，即slow</span><br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
 
-<p>网上说还可以结合前缀和来思考解法。</p>
+<h2 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h2><p>基于上面显式的双指针法，我们可以进一步抽象简化。</p>
+<p>首先应该考虑，我们使用双指针的目的是什么？其实是方便指向我们要使用的数字。所以指针对应的数值才是主角。</p>
+<p>在下面的题解中，我们应该尽量少使用指针，让数值自己出来比较：</p>
+<p>联想到C++的for循环语法：for (int num : nums)，可以让num自身当右指针；</p>
+<p>可以再令一个i代表左指针。</p>
+<p>结合上面的思想，我们可以得到下面的代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">removeDuplicates</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span> </span>&#123;<br>        <span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; <span class="hljs-comment">// 左指针初始化</span><br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> num : nums) &#123; <span class="hljs-comment">// num当右指针</span><br>            <span class="hljs-keyword">if</span> (i &lt; <span class="hljs-number">2</span> || nums[i - <span class="hljs-number">2</span>] &lt; num) &#123; <span class="hljs-comment">// i &lt; 2是特殊判断，nums[i - 2] &lt; num</span><br>            <span class="hljs-comment">// 是因为题目要求相同元素不能超过两个。之所以可以用小于号判断，是因为数组是有序的</span><br>                nums[i] = num; <span class="hljs-comment">// 相当于上面官方解法的nums[slow] = nums[fast];</span><br>                i++; <span class="hljs-comment">// 相当于上面官方解法的slow++;，即左指针移动</span><br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> i; <span class="hljs-comment">// 输出长度，即相当于上面题解的slow</span><br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<h2 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h2><p>如果每个元素最多出现K次，你要怎么修改上面的代码？</p>
+<p>很简单，改成<code>if (i &lt; k || nums[i - k] &lt; num)</code>就好了！</p>
 
                 
               </div>
@@ -367,8 +370,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>尺取法及应用 - POJ 3061</div>
-      <div>https://galaxy-jewxw.github.io/2024/01/29/尺取法与应用 - POJ3061/</div>
+      <div>双指针的一个应用场景</div>
+      <div>https://galaxy-jewxw.github.io/2024/01/30/双指针的一个应用场景/</div>
     </div>
     <div class="license-meta">
       
@@ -380,7 +383,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年1月29日</div>
+          <div>2024年1月30日</div>
         </div>
       
       
@@ -412,18 +415,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/01/30/%E5%8F%8C%E6%8C%87%E9%92%88%E7%9A%84%E4%B8%80%E4%B8%AA%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF/" title="双指针的一个应用场景">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">双指针的一个应用场景</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/01/16/%E7%AC%AC1%E7%AB%A0%20%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E6%A6%82%E8%A7%88/" title="第1章 超标量处理器概览">
-                        <span class="hidden-mobile">第1章 超标量处理器概览</span>
+                      <a href="/2024/01/29/%E5%B0%BA%E5%8F%96%E6%B3%95%E4%B8%8E%E5%BA%94%E7%94%A8%20-%20POJ3061/" title="尺取法及应用 - POJ 3061">
+                        <span class="hidden-mobile">尺取法及应用 - POJ 3061</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
