@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>尺取法及应用 - POJ 3061</title>
+    <link href="/2024/01/29/%E5%B0%BA%E5%8F%96%E6%B3%95%E4%B8%8E%E5%BA%94%E7%94%A8%20-%20POJ3061/"/>
+    <url>/2024/01/29/%E5%B0%BA%E5%8F%96%E6%B3%95%E4%B8%8E%E5%BA%94%E7%94%A8%20-%20POJ3061/</url>
+    
+    <content type="html"><![CDATA[<h1 id="尺取法及其应用-POJ-3061"><a href="#尺取法及其应用-POJ-3061" class="headerlink" title="尺取法及其应用 - POJ 3061"></a>尺取法及其应用 - POJ 3061</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p><strong>返回推进区间的开头和结尾，求满足条件的最小区间的方法称为尺取法。</strong>，顾名思义，就是像一把尺子（固定某一条件），不断向右（左）移动，不断更新所求答案。一般用来求满足条件的最小区间。</p><p>主要实现方法为：</p><ol><li>初始化左右端点</li><li>不断扩大右端点，直至满足条件</li><li>如果直至终点也无法满足条件，则终止，否则更新结果</li><li>扩大左端点（右移1），跳回步骤2</li></ol><p>这种方法只有一个疑问点，就是R不往回移动，其结果一定是对的吗？</p><p>考虑一下，L一直向右移动，R其实没必要向左动了。R只有在不满足条件的时候才向右，否则停在原位。</p><p>此时凭L的移动，已经能找出所有可行的区间了。</p><h2 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h2><p>例题链接：<a href="http://poj.org/problem?id=3061">http://poj.org/problem?id=3061</a></p><p>找到最短的序列长度，使得序列元素和大于S。</p><p>在这道题中，序列都是正数，如果一个区间其和大于等于S，那么不需要在向后推进右端点了，因为其和也肯定大于等于S但长度更长。</p><p>所以，<strong>当区间和小于S时右端点向右移动，和大于等于S时，左端点向右移动以进一步找到最短的区间</strong>。</p><p>如果右端点移动到区间末尾其和还不大于等于S，结束区间的枚举。</p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span><span class="hljs-string">&lt;bits/stdc++.h&gt;</span></span><br><span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> std;<br><span class="hljs-type">const</span> <span class="hljs-type">int</span> maxn=<span class="hljs-number">1e5</span>+<span class="hljs-number">100</span>;<br><span class="hljs-type">int</span> t,n,s;<br><span class="hljs-type">int</span> a[maxn];<br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span></span><br><span class="hljs-function"></span>&#123;<br>    ios::<span class="hljs-built_in">sync_with_stdio</span>(<span class="hljs-literal">false</span>);  <span class="hljs-comment">//加速流</span><br>    cin&gt;&gt;t;<br>    <span class="hljs-keyword">while</span>(t--)<br>    &#123;<br>        cin&gt;&gt;n&gt;&gt;s;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>; i&lt;n; i++)<br>            cin&gt;&gt;a[i];<br>        <span class="hljs-type">int</span> l=<span class="hljs-number">0</span>,r=<span class="hljs-number">0</span>,ans=n+<span class="hljs-number">1</span>;   <span class="hljs-comment">//l，r:左右端点  ans初始值设为n+1</span><br>        <span class="hljs-type">int</span> sum=<span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">while</span>(<span class="hljs-literal">true</span>)<br>        &#123;<br>            <span class="hljs-keyword">while</span>(r&lt;n&amp;&amp;sum&lt;s)<br>                sum+=a[r++];<br>            <span class="hljs-keyword">if</span>(sum&lt;s)         <span class="hljs-comment">//如果所有数的和都小于s，直接跳出循环</span><br>                <span class="hljs-keyword">break</span>;<br>            ans=<span class="hljs-built_in">min</span>(ans,r-l); <span class="hljs-comment">//此时r一定小于n</span><br>            sum-=a[l++];      <span class="hljs-comment">//去掉最左端点，继续前进</span><br>        &#125;<br>        <span class="hljs-keyword">if</span>(ans==n+<span class="hljs-number">1</span>)<br>            cout&lt;&lt;<span class="hljs-number">0</span>&lt;&lt;endl;<br>        <span class="hljs-keyword">else</span><br>            cout&lt;&lt;ans&lt;&lt;endl;<br>    &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure><p>网上说还可以结合前缀和来思考解法。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>算法竞赛</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>总结</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>第1章 超标量处理器概览</title>
     <link href="/2024/01/16/%E7%AC%AC1%E7%AB%A0%20%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E6%A6%82%E8%A7%88/"/>
     <url>/2024/01/16/%E7%AC%AC1%E7%AB%A0%20%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E6%A6%82%E8%A7%88/</url>
@@ -205,7 +230,7 @@
     
     <tags>
       
-      <tag>知识点总结</tag>
+      <tag>总结</tag>
       
     </tags>
     
@@ -223,7 +248,7 @@
     
     <categories>
       
-      <category>面向对象程序设计先导</category>
+      <category>面向对象程序设计</category>
       
     </categories>
     
@@ -231,8 +256,6 @@
     <tags>
       
       <tag>知识点总结</tag>
-      
-      <tag>完结</tag>
       
     </tags>
     
@@ -260,8 +283,6 @@
       <tag>试题</tag>
       
       <tag>解析</tag>
-      
-      <tag>完结</tag>
       
     </tags>
     
