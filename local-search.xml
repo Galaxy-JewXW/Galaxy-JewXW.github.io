@@ -5,6 +5,31 @@
   
   <entry>
     <title>双指针的一个应用</title>
+    <link href="/2024/02/17/%E5%8E%9F%E5%9C%B0%E5%93%88%E5%B8%8C/"/>
+    <url>/2024/02/17/%E5%8E%9F%E5%9C%B0%E5%93%88%E5%B8%8C/</url>
+    
+    <content type="html"><![CDATA[<h1 id="两道“原地”哈希题"><a href="#两道“原地”哈希题" class="headerlink" title="两道“原地”哈希题"></a>两道“原地”哈希题</h1><h2 id="442-数组中重复的数据"><a href="#442-数组中重复的数据" class="headerlink" title="442. 数组中重复的数据"></a>442. 数组中重复的数据</h2><p>题目链接：<a href="https://leetcode.cn/problems/find-all-duplicates-in-an-array/">442. 数组中重复的数据</a></p><p>给你一个长度为 <code>n</code> 的整数数组 <code>nums</code> ，其中 <code>nums</code> 的所有整数都在范围 <code>[1, n]</code> 内，且每个整数出现 <strong>一次</strong> 或 <strong>两次</strong> 。请你找出所有出现 <strong>两次</strong> 的整数，并以数组形式返回。</p><p>你必须设计并实现一个时间复杂度为 <code>O(n)</code> 且仅使用常量额外空间的算法解决此问题。</p><h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>由题目可知数组 nums 中的 n 个数都在 [1, n] 的范围内，因为是数字的个数和位置个数应该一一对应如果有数字出现了两次，就意味着 [1,n] 中有数字没有出现过。</p><p>解题突破口就是，将每一个数放在对应的位置。如果位置和值不相等，就是出现两次的数。</p><p>由于数组的下标范围是 [0, n-1]，我们需要将数 i 放在数组中下标为 i-1 的位置。如果 nums[i] 恰好出现了一次，那么将 nums[i] 放在数组中下标为 nums[i]−1 的位置即可； 如果 nums[i] 出现了两次，那么我们希望其中的一个 nums[i] 放在数组下标中为 nums[i]−1 的位置，另一个 nums[i] 放置在任意「不冲突」的位置 x。</p><p><img src="https://pic.imgdb.cn/item/65d05b919f345e8d03533744.jpg"></p><h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><ul><li>遍历数组；<ul><li>当遍历到位置 i 时，看 nums[i] 和 nums[i]−1，是否相同；</li><li>如果相同这开始从下一个数字开始比较；</li><li>如果不同则应该把 nums[i]−1 放在对应的位置上，因此我们交换 num[i] 和 nums[nums[i]−1] 即可，直到待交换的两个元素相等为止；</li></ul></li><li>遍历数组，找到数组中下标和值不一样的数字就是 重复出现两次的数 加入到resul 中即可；</li><li>返回结果 result。</li></ul><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">findDuplicates</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span> </span>&#123;<br>        vector&lt;<span class="hljs-type">int</span>&gt; result;<br>        <span class="hljs-comment">/* 原地啊交换数组 */</span><br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; nums.<span class="hljs-built_in">size</span>(); i++)<br>            <span class="hljs-keyword">while</span> (nums[i] != nums[nums[i] - <span class="hljs-number">1</span>])<br>                <span class="hljs-built_in">swap</span>(nums[i], nums[nums[i] - <span class="hljs-number">1</span>]);<br>        <span class="hljs-comment">/* 找到数组中下标和值不一样的数字就是 重复出现两次的数 */</span><br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; nums.<span class="hljs-built_in">size</span>(); ++i)<br>            <span class="hljs-keyword">if</span> (nums[i] - <span class="hljs-number">1</span> != i) result.<span class="hljs-built_in">emplace_back</span>(nums[i]);<br>        <span class="hljs-keyword">return</span> result;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure><h2 id="41-缺失的第一个正数"><a href="#41-缺失的第一个正数" class="headerlink" title="41. 缺失的第一个正数"></a>41. 缺失的第一个正数</h2><p>题目链接：<a href="https://leetcode.cn/problems/first-missing-positive/">41. 缺失的第一个正数</a></p><p>给你一个未排序的整数数组 <code>nums</code> ，请你找出其中没有出现的最小的正整数。</p><p>请你实现时间复杂度为 <code>O(n)</code> 并且只使用常数级别额外空间的解决方案。</p><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">firstMissingPositive</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span> </span>&#123;<br>        <span class="hljs-type">int</span> n = nums.<span class="hljs-built_in">size</span>();<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; n; i++) &#123;<br>            <span class="hljs-keyword">while</span> (nums[i] &gt;= <span class="hljs-number">1</span> &amp;&amp; nums[i] &lt;= n &amp;&amp; nums[i] != nums[nums[i] - <span class="hljs-number">1</span>]) &#123;<br>                <span class="hljs-built_in">swap</span>(nums[i], nums[nums[i] - <span class="hljs-number">1</span>]);<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; n; i++) &#123;<br>            <span class="hljs-keyword">if</span> (nums[i] != i + <span class="hljs-number">1</span>)<br>                <span class="hljs-keyword">return</span> i + <span class="hljs-number">1</span>;<br>        &#125;<br>        <span class="hljs-keyword">return</span> n + <span class="hljs-number">1</span>;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>]]></content>
+    
+    
+    <categories>
+      
+      <category>leetcode</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>刷题</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>双指针的一个应用</title>
     <link href="/2024/01/30/%E5%8F%8C%E6%8C%87%E9%92%88%E7%9A%84%E4%B8%80%E4%B8%AA%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF/"/>
     <url>/2024/01/30/%E5%8F%8C%E6%8C%87%E9%92%88%E7%9A%84%E4%B8%80%E4%B8%AA%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF/</url>
     
@@ -13,14 +38,14 @@
     
     <categories>
       
-      <category>算法竞赛</category>
+      <category>leetcode</category>
       
     </categories>
     
     
     <tags>
       
-      <tag>总结</tag>
+      <tag>刷题</tag>
       
     </tags>
     
