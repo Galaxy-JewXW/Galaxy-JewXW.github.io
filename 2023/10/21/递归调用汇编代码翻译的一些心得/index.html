@@ -1,325 +1,312 @@
+
+
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
 
 <head>
-  <meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="x5-fullscreen" content="true">
-<meta name="full-screen" content="yes">
-<meta name="theme-color" content="#317EFB" />
-<meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
-<meta name="description" content="如何合理翻译一个递归函数调用？">
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon-main.png">
+  <link rel="icon" href="/img/icon-main.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Traumtänzer aka &#39;Jew1!5!&#39;">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="如何合理翻译一个递归函数调用？">
 <meta property="og:type" content="article">
 <meta property="og:title" content="递归调用汇编代码翻译的一些心得">
 <meta property="og:url" content="https://galaxy-jewxw.github.io/2023/10/21/%E9%80%92%E5%BD%92%E8%B0%83%E7%94%A8%E6%B1%87%E7%BC%96%E4%BB%A3%E7%A0%81%E7%BF%BB%E8%AF%91%E7%9A%84%E4%B8%80%E4%BA%9B%E5%BF%83%E5%BE%97/index.html">
 <meta property="og:site_name" content="Jew&#39;s Blog">
 <meta property="og:description" content="如何合理翻译一个递归函数调用？">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://galaxy-jewxw.github.io/img/404.jpg">
-<meta property="og:image" content="https://galaxy-jewxw.github.io/img/404.jpg">
+<meta property="og:image" content="https://pic.imgdb.cn/item/6533b63bc458853aef395a40.png">
+<meta property="og:image" content="https://pic.imgdb.cn/item/6533cfecc458853aefa04018.png">
 <meta property="article:published_time" content="2023-10-21T11:08:42.000Z">
 <meta property="article:modified_time" content="2024-01-29T10:08:05.998Z">
 <meta property="article:author" content="Traumtänzer aka &#39;Jew1!5!&#39;">
 <meta property="article:tag" content="总结">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://galaxy-jewxw.github.io/img/404.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://pic.imgdb.cn/item/6533b63bc458853aef395a40.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+  <title>递归调用汇编代码翻译的一些心得 | Jew&#39;s Blog</title>
 
-
-<title >递归调用汇编代码翻译的一些心得</title>
-
-<!-- Favicon -->
-
-    <link href='/img/favicon.svg?v=2.1.10' rel='icon' type='image/png' sizes='16x16' ></link>
-
-
-    <link href='/img/favicon.svg?v=2.1.10' rel='icon' type='image/png' sizes='32x32' ></link>
-
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
 
 
-<!-- Plugin -->
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
 
 
 
 
-    
-<link rel="stylesheet" href="/css/plugins/bootstrap.row.css">
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"galaxy-jewxw.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":120,"cursorChar":"_","loop":true,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
 
-    
-<link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.css">
-
-    
-    
-
-
-
-
-<!-- Icon -->
-
-    
-<link rel="stylesheet" href="/css/plugins/font-awesome.min.css">
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
 
 
-
-
-<!-- Variable -->
-<script>window.ASYNC_CONFIG = {"hostname":"galaxy-jewxw.github.io","author":"Traumtänzer aka 'Jew1!5!'","root":"/","typed_text":null,"theme_version":"2.1.10","theme":{"switch":true,"default":"style-light"},"favicon":{"logo":"/img/favicon.svg","icon16":"/img/favicon.svg","icon32":"/img/favicon.svg","appleTouchIcon":null,"webmanifest":null,"visibilitychange":false,"hidden":"/failure.ico","showText":"(/≧▽≦/)咦！又好了！","hideText":"(●—●)喔哟，崩溃啦！"},"i18n":{"placeholder":"搜索文章...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）","author":"本文作者：","copyright_link":"本文链接：","copyright_license_title":"版权声明：","copyright_license_content":"本博客所有文章除特别声明外，均默认采用 undefined 许可协议。","copy_success":"复制成功","copy_failure":"复制失败","open_read_mode":"进入阅读模式","exit_read_mode":"退出阅读模式","notice_outdate_message":"距离上次更新已经 undefined 天了, 文章内容可能已经过时。","sticky":"置顶","just":"刚刚","min":"分钟前","hour":"小时前","day":"天前","month":"个月前"},"swup":false,"plugin":{"flickr_justified_gallery":"https://unpkg.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"far fa-sun","moon":"far fa-moon","play":"fas fa-play","email":"far fa-envelope","next":"fas fa-arrow-right","calendar":"far fa-calendar-alt","clock":"far fa-clock","user":"far fa-user","back_top":"fas fa-arrow-up","close":"fas fa-times","search":"fas fa-search","reward":"fas fa-hand-holding-usd","user_tag":"fas fa-user-alt","toc_tag":"fas fa-th-list","read":"fas fa-book-reader","arrows":"fas fa-arrows-alt-h","double_arrows":"fas fa-angle-double-down","copy":"fas fa-copy"},"icontype":"font","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"default","height_limit":false},"toc":{"post_title":true},"live_time":{"start_time":"","prefix":"博客已萌萌哒运行 undefined 天"}};</script>
-<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2024-01-29 18:08:05"};</script>
-
-<!-- Theme mode css -->
-<link data-swup-theme rel="stylesheet" href="/css/index.css?v=2.1.10" id="trm-switch-style">
-<script>
-    let defaultMode = ASYNC_CONFIG.theme.default !=='auto' ?  ASYNC_CONFIG.theme.default : (window.matchMedia("(prefers-color-scheme: light)").matches ? 'style-light' : 'style-dark')
-    let catchMode = localStorage.getItem('theme-mode') || defaultMode;
-    let type = catchMode === 'style-dark' ? 'add' : 'remove';
-    document.documentElement.classList[type]('dark')
-</script>
-
-<!-- CDN -->
-
-
-    
-    
-
-
-
-<!-- Site Analytics -->
- 
+  
 <meta name="generator" content="Hexo 6.3.0"></head>
 
+
 <body>
+  
 
-  <!-- app wrapper -->
-  <div class="trm-app-frame">
+  <header>
+    
 
-    <!-- page preloader -->
-    <div class="trm-preloader">
-    <div class="trm-holder">
-        <div class="preloader">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
-    </div>
-</div>
-    <!-- page preloader end -->
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Jew的博客</strong>
+    </a>
 
-    <!-- change mode preloader -->
-    <div class="trm-mode-swich-animation-frame">
-    <div class="trm-mode-swich-animation">
-        <i class="i-sun"><i class="iconfont far fa-sun"></i></i>
-        <div class="trm-horizon"></div>
-        <i class="i-moon"><i class="iconfont far fa-moon"></i></i>
-    </div>
-</div>
-    <!-- change mode preloader end -->
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
 
-      <!-- scroll container -->
-      <div id="trm-dynamic-content" class="trm-swup-animation">
-        <div id="trm-scroll-container" class="trm-scroll-container" style="opacity: 0">
-            <!-- top bar -->
-            <header class="trm-top-bar">
-	<div class="container">
-		<div class="trm-left-side">
-			<!-- logo -->
-<a href="/" class="trm-logo-frame trm-anima-link">
-    
-        <img alt="logo" src="/img/favicon.svg">
-    
-    
-        <div class="trm-logo-text">
-            Async<span>Theme</span>
-        </div>
-    
-</a>
-<!-- logo end -->
-		</div>
-		<div class="trm-right-side">
-			<!-- menu -->
-<div class="trm-menu">
-    <nav>
-        <ul>
-            
-            <li class="menu-item-has-children ">
-                <a  href="/" target="">
-                    首页
-                </a>
-                
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
             </li>
-            
-            <li class="menu-item-has-children ">
-                <a  href="/archives/" target="">
-                    归档
-                </a>
-                
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
             </li>
-            
-        </ul>
-    </nav>
-</div>
-<!-- menu end -->
-			
-    <!-- mode switcher place -->
-    <div class="trm-mode-switcher-place">
-        <div class="trm-mode-switcher">
-            <i class="iconfont far fa-sun"></i>
-            <input class="tgl tgl-light" id="trm-swich" type="checkbox">
-            <label class="trm-swich" for="trm-swich"></label>
-            <i class="iconfont far fa-moon"></i>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner_post.jpg') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="递归调用汇编代码翻译的一些心得"></span>
+          
         </div>
-    </div>
-    <!-- mode switcher place end -->
-
-			
-		</div>
-		<div class="trm-menu-btn">
-			<span></span>
-		</div>
-	</div>
-</header>
-            <!-- top bar end -->
-
-            <!-- body -->
-            
-<div class="trm-content-start">
-    <!-- banner -->
-    <div class="trm-banner">
-    
-    <!-- banner cover -->
-    <img style="object-position:top;object-fit:cover;" alt="banner" class="trm-banner-cover" src="/img/banner.png">
-    <!-- banner cover end -->
-    
-
-    <!-- banner content -->
-    <div class="trm-banner-content trm-overlay">
-        <div class="container">
-            <div class="row">
-                
-                <div class="col-lg-4"></div>
-                
-                <div class="col-lg-8">
-
-                    <!-- banner title -->
-                    <div class="trm-banner-text ">
-                        <div class="trm-label trm-mb-20">
-                            NEWS LETTER
-                        </div>
-                        <h1 class="trm-mb-30 trm-hsmb-font">
-                            递归调用汇编代码翻译的一些心得
-                        </h1>
-
-                        
-                            <ul class="trm-breadcrumbs trm-label">
-                                <li>
-                                    <a href="/" class="trm-anima-link">Home</a>
-                                </li>
-                                <li>
-                                    <span>
-                                        2023
-                                    </span>
-                                </li>
-                            </ul>
-                        
-                    </div>
-                    <!-- banner title end -->
-
-                    <!-- scroll hint -->
-                    <span id="scroll-triger" class="trm-scroll-hint-frame">
-                        <div class="trm-scroll-hint"></div>
-                        <span class="trm-label">Scroll down</span>
-                    </span>
-                    <!-- scroll hint end -->
-
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- banner content end -->
-</div>
-    <!-- banner end -->
-    <div class="container">
-        <div class="row">
-            
-                <div class="trm-page-sidebar col-lg-4 hidden-sm">
-                    <!-- main card -->
-                    <div class="trm-main-card-frame trm-sidebar">
-    <div class="trm-main-card"> 
-        <!-- card header -->
-<div class="trm-mc-header">
-    <div class="trm-avatar-frame trm-mb-20">
-        <img alt="Avatar" class="trm-avatar" src="/img/avatar.jpg">
-    </div>
-    <h5 class="trm-name trm-mb-15">
-        ThemeAsync
-    </h5>
-    
-</div>
-<!-- card header end -->
-        <!-- sidebar social -->
-
-<div class="trm-divider trm-mb-40 trm-mt-40"></div>
-<div class="trm-social">
-    
-        <a href="https://github.com" title="Github" rel="nofollow" target="_blank">
-            <i class="iconfont fab fa-github"></i>
-        </a>
-    
-</div>
-
-<!-- sidebar social end -->
-        <!-- info -->
-<div class="trm-divider trm-mb-40 trm-mt-40"></div>
-<ul class="trm-table trm-mb-20">
-    
-        <li>
-            <div class="trm-label">
-                地址:
-            </div>
-            <div class="trm-label trm-label-light">
-                Mars
-            </div>
-        </li>
-    
-</ul>
-<!-- info end -->
 
         
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-10-21 19:08" pubdate>
+          星期六, 十月 21日 2023, 7:08 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          9.7k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          54 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
     </div>
+  </div>
 </div>
-                    <!-- main card end -->
-                </div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">递归调用汇编代码翻译的一些心得</h1>
             
-            <div class="trm-page-content col-lg-8">
-                <div id="trm-content" class="trm-content">
-                    <div class="trm-post-info row hidden-sm">
-    <div class="col-sm-4">
-        <div class="trm-card trm-label trm-label-light text-center">
-            <i class="iconfont far fa-calendar-alt trm-icon"></i><br>
-            10/21
-        </div>
-    </div>
-    <div class="col-sm-4">
-        <div class="trm-card trm-label trm-label-light text-center">
-            <i class="iconfont far fa-clock trm-icon"></i><br>
-            19:08
-        </div>
-    </div>
-    <div class="col-sm-4">
-        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
-            <i class="iconfont far fa-user trm-icon"></i><br>
-            Traumtänzer aka &#39;Jew1!5!&#39;
-        </div>
-    </div>
-</div>
-<div class="trm-card ">
-    <article id="article-container" class="trm-publication">
-    <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>教程 <a target="_blank" rel="noopener" href="http://cscore.buaa.edu.cn/tutorial/mips/mips-5/mips5-11/#_6">函数调用 - 计算机组成教程 (buaa.edu.cn)</a> 中曾介绍过如何将带有递归函数调用的c语言代码翻译成汇编指令。P2课下也涉及了部分需要应用递归的题目，在此总结一下我完成此类汇编翻译的一些心得。</p>
+              <p class="note note-info">
+                
+                  
+                    本文最后更新于：2024年1月29日 晚上
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>教程 <a target="_blank" rel="noopener" href="http://cscore.buaa.edu.cn/tutorial/mips/mips-5/mips5-11/#_6">函数调用 - 计算机组成教程 (buaa.edu.cn)</a> 中曾介绍过如何将带有递归函数调用的c语言代码翻译成汇编指令。P2课下也涉及了部分需要应用递归的题目，在此总结一下我完成此类汇编翻译的一些心得。</p>
 <p>我们在此就以 <a target="_blank" rel="noopener" href="http://cscore.buaa.edu.cn/#/problem?ProblemId=36&PieId=1121">P2_L0_full_1 - 系统能力课程实验平台 (buaa.edu.cn)</a> 当作例题，简要介绍一下设计思路。</p>
 <h1 id="例题1：全排列生成"><a href="#例题1：全排列生成" class="headerlink" title="例题1：全排列生成"></a>例题1：全排列生成</h1><h2 id="题干"><a href="#题干" class="headerlink" title="题干"></a>题干</h2><p>题目编号 1121-36</p>
 <h3 id="题目要求"><a href="#题目要求" class="headerlink" title="题目要求"></a>题目要求</h3><p>实现满足下面功能的汇编程序：</p>
@@ -333,13 +320,13 @@
 <li><p>每组数据最多执行500,000条指令。</p>
 </li>
 <li><p>请使用syscall结束指令</p>
-<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">li   $<span class="built_in">v0</span>, <span class="number">10</span></span><br><span class="line"><span class="keyword">syscall</span></span><br></pre></td></tr></table></figure></li>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm">li   $<span class="hljs-built_in">v0</span>, <span class="hljs-number">10</span><br><span class="hljs-keyword">syscall</span><br></code></pre></td></tr></table></figure></li>
 </ol>
 <h3 id="输入格式"><a href="#输入格式" class="headerlink" title="输入格式"></a>输入格式</h3><p>只输入一行，输入一个整数n **(0 &lt; n &lt;&#x3D; 6)**。</p>
 <h3 id="输出格式"><a href="#输出格式" class="headerlink" title="输出格式"></a>输出格式</h3><p>按照字典序输出n!行数组，每行输出n个数字，数字之间以空格隔开，每行最后一个数字后可以有空格。</p>
-<h3 id="输入样例"><a href="#输入样例" class="headerlink" title="输入样例"></a>输入样例</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">4</span><br></pre></td></tr></table></figure>
+<h3 id="输入样例"><a href="#输入样例" class="headerlink" title="输入样例"></a>输入样例</h3><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs">4<br></code></pre></td></tr></table></figure>
 
-<h3 id="输出样例"><a href="#输出样例" class="headerlink" title="输出样例"></a>输出样例</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">1 2 3 4</span><br><span class="line">1 2 4 3</span><br><span class="line">1 3 2 4</span><br><span class="line">1 3 4 2</span><br><span class="line">1 4 2 3</span><br><span class="line">1 4 3 2</span><br><span class="line">2 1 3 4</span><br><span class="line">2 1 4 3</span><br><span class="line">2 3 1 4</span><br><span class="line">2 3 4 1</span><br><span class="line">2 4 1 3</span><br><span class="line">2 4 3 1</span><br><span class="line">3 1 2 4</span><br><span class="line">3 1 4 2</span><br><span class="line">3 2 1 4</span><br><span class="line">3 2 4 1</span><br><span class="line">3 4 1 2</span><br><span class="line">3 4 2 1</span><br><span class="line">4 1 2 3</span><br><span class="line">4 1 3 2</span><br><span class="line">4 2 1 3</span><br><span class="line">4 2 3 1</span><br><span class="line">4 3 1 2</span><br><span class="line">4 3 2 1</span><br></pre></td></tr></table></figure>
+<h3 id="输出样例"><a href="#输出样例" class="headerlink" title="输出样例"></a>输出样例</h3><figure class="highlight basic"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs basic"><span class="hljs-symbol">1 </span><span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span><br><span class="hljs-symbol">1 </span><span class="hljs-number">2</span> <span class="hljs-number">4</span> <span class="hljs-number">3</span><br><span class="hljs-symbol">1 </span><span class="hljs-number">3</span> <span class="hljs-number">2</span> <span class="hljs-number">4</span><br><span class="hljs-symbol">1 </span><span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">2</span><br><span class="hljs-symbol">1 </span><span class="hljs-number">4</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span><br><span class="hljs-symbol">1 </span><span class="hljs-number">4</span> <span class="hljs-number">3</span> <span class="hljs-number">2</span><br><span class="hljs-symbol">2 </span><span class="hljs-number">1</span> <span class="hljs-number">3</span> <span class="hljs-number">4</span><br><span class="hljs-symbol">2 </span><span class="hljs-number">1</span> <span class="hljs-number">4</span> <span class="hljs-number">3</span><br><span class="hljs-symbol">2 </span><span class="hljs-number">3</span> <span class="hljs-number">1</span> <span class="hljs-number">4</span><br><span class="hljs-symbol">2 </span><span class="hljs-number">3</span> <span class="hljs-number">4</span> <span class="hljs-number">1</span><br><span class="hljs-symbol">2 </span><span class="hljs-number">4</span> <span class="hljs-number">1</span> <span class="hljs-number">3</span><br><span class="hljs-symbol">2 </span><span class="hljs-number">4</span> <span class="hljs-number">3</span> <span class="hljs-number">1</span><br><span class="hljs-symbol">3 </span><span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">4</span><br><span class="hljs-symbol">3 </span><span class="hljs-number">1</span> <span class="hljs-number">4</span> <span class="hljs-number">2</span><br><span class="hljs-symbol">3 </span><span class="hljs-number">2</span> <span class="hljs-number">1</span> <span class="hljs-number">4</span><br><span class="hljs-symbol">3 </span><span class="hljs-number">2</span> <span class="hljs-number">4</span> <span class="hljs-number">1</span><br><span class="hljs-symbol">3 </span><span class="hljs-number">4</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span><br><span class="hljs-symbol">3 </span><span class="hljs-number">4</span> <span class="hljs-number">2</span> <span class="hljs-number">1</span><br><span class="hljs-symbol">4 </span><span class="hljs-number">1</span> <span class="hljs-number">2</span> <span class="hljs-number">3</span><br><span class="hljs-symbol">4 </span><span class="hljs-number">1</span> <span class="hljs-number">3</span> <span class="hljs-number">2</span><br><span class="hljs-symbol">4 </span><span class="hljs-number">2</span> <span class="hljs-number">1</span> <span class="hljs-number">3</span><br><span class="hljs-symbol">4 </span><span class="hljs-number">2</span> <span class="hljs-number">3</span> <span class="hljs-number">1</span><br><span class="hljs-symbol">4 </span><span class="hljs-number">3</span> <span class="hljs-number">1</span> <span class="hljs-number">2</span><br><span class="hljs-symbol">4 </span><span class="hljs-number">3</span> <span class="hljs-number">2</span> <span class="hljs-number">1</span><br></code></pre></td></tr></table></figure>
 
 <h3 id="提交要求"><a href="#提交要求" class="headerlink" title="提交要求"></a>提交要求</h3><ol>
 <li><strong>请勿使用</strong> <code>.globl main</code></li>
@@ -350,30 +337,30 @@
 <h2 id="解答步骤"><a href="#解答步骤" class="headerlink" title="解答步骤"></a>解答步骤</h2><p>在此分享一下我完成汇编代码的一些思路步骤。</p>
 <h3 id="第一步：完成符合要求的C语言代码"><a href="#第一步：完成符合要求的C语言代码" class="headerlink" title="第一步：完成符合要求的C语言代码"></a>第一步：完成符合要求的C语言代码</h3><p>C语言的代码与汇编指令具有很高的相似性，如果有一份正确的C语言代码，汇编编程题就相当于一个“翻译题”。</p>
 <p>全排列问题的C语言代码如下：（如果对此有疑问的话，可以去网上搜索一下全排列的相关讲解，在此不展开说明）</p>
-<p><img src="https://pic.imgdb.cn/item/6533b63bc458853aef395a40.png" alt="全排列问题的C语言解答" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<p><img src="https://pic.imgdb.cn/item/6533b63bc458853aef395a40.png" srcset="/img/loading.gif" lazyload alt="全排列问题的C语言解答"></p>
 <h3 id="第二步：一些必要的macro"><a href="#第二步：一些必要的macro" class="headerlink" title="第二步：一些必要的macro"></a>第二步：一些必要的macro</h3><p>使用宏可有效提高代码的复用性，提高代码的可读性。</p>
 <p>我比较习惯用的macro有：</p>
 <ul>
 <li><p>取array[i]的值到%d</p>
-<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">.macro</span> getNum(%d,%i)</span><br><span class="line">	<span class="keyword">sll </span>%d,%i,<span class="number">2</span></span><br><span class="line">	<span class="keyword">lw </span>%d,array(%d)</span><br><span class="line">.end_macro</span><br></pre></td></tr></table></figure>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-meta">.macro</span> getNum(%d,%i)<br>	<span class="hljs-keyword">sll </span>%d,%i,<span class="hljs-number">2</span><br>	<span class="hljs-keyword">lw </span>%d,array(%d)<br>.end_macro<br></code></pre></td></tr></table></figure>
 </li>
 <li><p>取array[i] [j]的值到%d，矩阵的<strong>列数</strong>为%n</p>
-<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">.macro</span> getNum(%d,%i,%<span class="keyword">j,%n)</span></span><br><span class="line"><span class="keyword"></span>	<span class="keyword">mul </span>%d,%i,%n</span><br><span class="line">	<span class="keyword">add </span>%d,%d,%<span class="keyword">j</span></span><br><span class="line"><span class="keyword"></span>	<span class="keyword">sll </span>%d,%d,<span class="number">2</span></span><br><span class="line">	<span class="keyword">lw </span>%d,array(%d)</span><br><span class="line">.end_macro</span><br></pre></td></tr></table></figure>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-meta">.macro</span> getNum(%d,%i,%<span class="hljs-keyword">j,%n)</span><br><span class="hljs-keyword"></span>	<span class="hljs-keyword">mul </span>%d,%i,%n<br>	<span class="hljs-keyword">add </span>%d,%d,%<span class="hljs-keyword">j</span><br><span class="hljs-keyword"></span>	<span class="hljs-keyword">sll </span>%d,%d,<span class="hljs-number">2</span><br>	<span class="hljs-keyword">lw </span>%d,array(%d)<br>.end_macro<br></code></pre></td></tr></table></figure>
 </li>
 <li><p>将字压入栈</p>
-<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">.macro</span> push(%src)</span><br><span class="line">	<span class="keyword">sw </span>  %src, <span class="number">0</span>($<span class="built_in">sp</span>)</span><br><span class="line">	<span class="keyword">subi </span>$<span class="built_in">sp</span>, $<span class="built_in">sp</span>, <span class="number">4</span></span><br><span class="line">.end_macro</span><br></pre></td></tr></table></figure>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-meta">.macro</span> push(%src)<br>	<span class="hljs-keyword">sw </span>  %src, <span class="hljs-number">0</span>($<span class="hljs-built_in">sp</span>)<br>	<span class="hljs-keyword">subi </span>$<span class="hljs-built_in">sp</span>, $<span class="hljs-built_in">sp</span>, <span class="hljs-number">4</span><br>.end_macro<br></code></pre></td></tr></table></figure>
 
 <p>相对应的弹出栈</p>
-<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">.macro</span> pop(%des)</span><br><span class="line">	<span class="keyword">addi </span>$<span class="built_in">sp</span>, $<span class="built_in">sp</span>, <span class="number">4</span></span><br><span class="line">	<span class="keyword">lw </span>  %des, <span class="number">0</span>($<span class="built_in">sp</span>)</span><br><span class="line">.end_macro</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-meta">.macro</span> pop(%des)<br>	<span class="hljs-keyword">addi </span>$<span class="hljs-built_in">sp</span>, $<span class="hljs-built_in">sp</span>, <span class="hljs-number">4</span><br>	<span class="hljs-keyword">lw </span>  %des, <span class="hljs-number">0</span>($<span class="hljs-built_in">sp</span>)<br>.end_macro<br></code></pre></td></tr></table></figure></li>
 </ul>
 <h3 id="第三步：合理规划寄存器"><a href="#第三步：合理规划寄存器" class="headerlink" title="第三步：合理规划寄存器"></a>第三步：合理规划寄存器</h3><p><code>s0</code>-<code>s7</code>是留给“需要保存的变量”，如常量，全局变量等；<code>t0</code>-<code>t9</code>是留给“临时变量”，如循环时常用的i、j、k变量等。对于一般的题目，我使用<code>s0</code>来保存n的值，<code>t0</code>留给循环变量i，<code>t9</code>留给计算出来的临时地址。</p>
 <p>当然，如何分配主要还是看自己写的顺不顺手，只要自己有一套可操作的规则即可。</p>
 <h3 id="第四步：完成代码"><a href="#第四步：完成代码" class="headerlink" title="第四步：完成代码"></a>第四步：完成代码</h3><p>我们在此先给出完整的汇编代码。如果对递归调用之外的地方存在疑问，可以再去阅读额外的讲解。</p>
-<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">.data</span></span><br><span class="line"><span class="symbol">	array:</span> <span class="meta">.space</span> <span class="number">32</span></span><br><span class="line"><span class="symbol">	symbol:</span> <span class="meta">.space</span> <span class="number">32</span></span><br><span class="line"><span class="symbol">	blank:</span> .asciiz <span class="string">&quot; &quot;</span></span><br><span class="line"><span class="symbol">	next_line:</span> .asciiz <span class="string">&quot;\n&quot;</span></span><br><span class="line">	</span><br><span class="line"><span class="meta">.macro</span> push(%src)</span><br><span class="line">	<span class="keyword">sw </span>  %src, <span class="number">0</span>($<span class="built_in">sp</span>)</span><br><span class="line">	<span class="keyword">subi </span>$<span class="built_in">sp</span>, $<span class="built_in">sp</span>, <span class="number">4</span></span><br><span class="line">.end_macro</span><br><span class="line"></span><br><span class="line"><span class="meta">.macro</span> pop(%des)</span><br><span class="line">	<span class="keyword">addi </span>$<span class="built_in">sp</span>, $<span class="built_in">sp</span>, <span class="number">4</span></span><br><span class="line">	<span class="keyword">lw </span>  %des, <span class="number">0</span>($<span class="built_in">sp</span>)</span><br><span class="line">.end_macro</span><br><span class="line"></span><br><span class="line"><span class="meta">.text</span></span><br><span class="line"><span class="symbol">main:</span></span><br><span class="line">	li   $<span class="built_in">v0</span>, <span class="number">5</span></span><br><span class="line">	li   $<span class="built_in">s1</span>, <span class="number">1</span></span><br><span class="line">	li   $<span class="built_in">t9</span>, <span class="number">0</span></span><br><span class="line">	<span class="keyword">syscall</span></span><br><span class="line"><span class="keyword"></span>	<span class="keyword">move </span>$<span class="built_in">s0</span>, $<span class="built_in">v0</span></span><br><span class="line"><span class="symbol">	init_loop:</span></span><br><span class="line">		<span class="keyword">sll </span> $<span class="built_in">t8</span>, $<span class="built_in">t9</span>, <span class="number">2</span></span><br><span class="line">		<span class="keyword">sw </span>  $<span class="number">0</span>, symbol($<span class="built_in">t8</span>)</span><br><span class="line">		<span class="keyword">addi </span>$<span class="built_in">t9</span>, $<span class="built_in">t9</span>, <span class="number">1</span></span><br><span class="line">		<span class="keyword">blt </span> $<span class="built_in">t9</span>, $<span class="built_in">s0</span>, init_loop</span><br><span class="line">	li   $<span class="built_in">t0</span>, <span class="number">0</span> <span class="comment"># index</span></span><br><span class="line">	<span class="keyword">jal </span> FullArray</span><br><span class="line">	li   $<span class="built_in">v0</span>, <span class="number">10</span></span><br><span class="line">	<span class="keyword">syscall</span></span><br><span class="line"><span class="keyword"></span><span class="symbol"></span></span><br><span class="line"><span class="symbol">FullArray:</span></span><br><span class="line">	<span class="keyword">blt </span> $<span class="built_in">t0</span>, $<span class="built_in">s0</span>, search</span><br><span class="line"><span class="symbol">	print:</span></span><br><span class="line">		li   $<span class="built_in">t9</span>, <span class="number">0</span></span><br><span class="line"><span class="symbol">		print_loop:</span></span><br><span class="line">			<span class="keyword">sll </span> $<span class="built_in">t8</span>, $<span class="built_in">t9</span>, <span class="number">2</span></span><br><span class="line">			<span class="keyword">lw </span>  $<span class="built_in">a0</span>, array($<span class="built_in">t8</span>)</span><br><span class="line">			li   $<span class="built_in">v0</span>, <span class="number">1</span></span><br><span class="line">			<span class="keyword">syscall</span></span><br><span class="line"><span class="keyword"></span>			li   $<span class="built_in">v0</span>, <span class="number">4</span></span><br><span class="line">			la   $<span class="built_in">a0</span>, <span class="keyword">blank</span></span><br><span class="line"><span class="keyword"></span>			<span class="keyword">syscall</span></span><br><span class="line"><span class="keyword"></span>			<span class="keyword">addi </span>$<span class="built_in">t9</span>, $<span class="built_in">t9</span>, <span class="number">1</span></span><br><span class="line">			<span class="keyword">blt </span> $<span class="built_in">t9</span>, $<span class="built_in">s0</span>, print_loop</span><br><span class="line"><span class="symbol">		print_end:</span></span><br><span class="line">			li   $<span class="built_in">v0</span>, <span class="number">4</span></span><br><span class="line">			la   $<span class="built_in">a0</span>, next_line</span><br><span class="line">			<span class="keyword">syscall</span></span><br><span class="line"><span class="keyword"></span>			<span class="keyword">jr </span>  $<span class="built_in">ra</span></span><br><span class="line"><span class="symbol">			</span></span><br><span class="line"><span class="symbol">	search:</span></span><br><span class="line">		li   $<span class="built_in">t1</span>, <span class="number">0</span> <span class="comment"># i</span></span><br><span class="line"><span class="symbol">		loop:</span></span><br><span class="line">			<span class="keyword">sll </span> $<span class="built_in">t9</span>, $<span class="built_in">t1</span>, <span class="number">2</span></span><br><span class="line">			<span class="keyword">lw </span>  $<span class="built_in">t8</span>, symbol($<span class="built_in">t9</span>)</span><br><span class="line">			<span class="keyword">bne </span> $<span class="built_in">t8</span>, $<span class="number">0</span>, Else</span><br><span class="line"><span class="symbol">			If:</span></span><br><span class="line">				<span class="keyword">addi </span>$<span class="built_in">t2</span>, $<span class="built_in">t1</span>, <span class="number">1</span></span><br><span class="line">				<span class="keyword">sll </span> $<span class="built_in">t9</span>, $<span class="built_in">t0</span>, <span class="number">2</span></span><br><span class="line">				<span class="keyword">sw </span>  $<span class="built_in">t2</span>, array($<span class="built_in">t9</span>)</span><br><span class="line">				<span class="keyword">sll </span> $<span class="built_in">t9</span>, $<span class="built_in">t1</span>, <span class="number">2</span></span><br><span class="line">				<span class="keyword">sw </span>  $<span class="built_in">s1</span>, symbol($<span class="built_in">t9</span>)</span><br><span class="line">				</span><br><span class="line">				push($<span class="built_in">ra</span>)</span><br><span class="line">				push($<span class="built_in">t0</span>)</span><br><span class="line">				push($<span class="built_in">t1</span>)</span><br><span class="line">				</span><br><span class="line">				<span class="keyword">addi </span>$<span class="built_in">t0</span>, $<span class="built_in">t0</span>, <span class="number">1</span></span><br><span class="line">				<span class="keyword">jal </span> FullArray</span><br><span class="line">				</span><br><span class="line">				pop($<span class="built_in">t1</span>)</span><br><span class="line">				pop($<span class="built_in">t0</span>)</span><br><span class="line">				pop($<span class="built_in">ra</span>)</span><br><span class="line">				</span><br><span class="line">				<span class="keyword">sll </span> $<span class="built_in">t9</span>, $<span class="built_in">t1</span>, <span class="number">2</span></span><br><span class="line">				<span class="keyword">sw </span>  $<span class="number">0</span>, symbol($<span class="built_in">t9</span>)</span><br><span class="line"><span class="symbol">			</span></span><br><span class="line"><span class="symbol">			Else:</span></span><br><span class="line">				<span class="keyword">addi </span>$<span class="built_in">t1</span>, $<span class="built_in">t1</span>, <span class="number">1</span></span><br><span class="line">				<span class="keyword">blt </span> $<span class="built_in">t1</span>, $<span class="built_in">s0</span>, loop</span><br><span class="line"><span class="symbol">		loop_end:</span></span><br><span class="line">		<span class="keyword">jr </span>  $<span class="built_in">ra</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-meta">.data</span><br><span class="hljs-symbol">	array:</span> <span class="hljs-meta">.space</span> <span class="hljs-number">32</span><br><span class="hljs-symbol">	symbol:</span> <span class="hljs-meta">.space</span> <span class="hljs-number">32</span><br><span class="hljs-symbol">	blank:</span> .asciiz <span class="hljs-string">&quot; &quot;</span><br><span class="hljs-symbol">	next_line:</span> .asciiz <span class="hljs-string">&quot;\n&quot;</span><br>	<br><span class="hljs-meta">.macro</span> push(%src)<br>	<span class="hljs-keyword">sw </span>  %src, <span class="hljs-number">0</span>($<span class="hljs-built_in">sp</span>)<br>	<span class="hljs-keyword">subi </span>$<span class="hljs-built_in">sp</span>, $<span class="hljs-built_in">sp</span>, <span class="hljs-number">4</span><br>.end_macro<br><br><span class="hljs-meta">.macro</span> pop(%des)<br>	<span class="hljs-keyword">addi </span>$<span class="hljs-built_in">sp</span>, $<span class="hljs-built_in">sp</span>, <span class="hljs-number">4</span><br>	<span class="hljs-keyword">lw </span>  %des, <span class="hljs-number">0</span>($<span class="hljs-built_in">sp</span>)<br>.end_macro<br><br><span class="hljs-meta">.text</span><br><span class="hljs-symbol">main:</span><br>	li   $<span class="hljs-built_in">v0</span>, <span class="hljs-number">5</span><br>	li   $<span class="hljs-built_in">s1</span>, <span class="hljs-number">1</span><br>	li   $<span class="hljs-built_in">t9</span>, <span class="hljs-number">0</span><br>	<span class="hljs-keyword">syscall</span><br><span class="hljs-keyword"></span>	<span class="hljs-keyword">move </span>$<span class="hljs-built_in">s0</span>, $<span class="hljs-built_in">v0</span><br><span class="hljs-symbol">	init_loop:</span><br>		<span class="hljs-keyword">sll </span> $<span class="hljs-built_in">t8</span>, $<span class="hljs-built_in">t9</span>, <span class="hljs-number">2</span><br>		<span class="hljs-keyword">sw </span>  $<span class="hljs-number">0</span>, symbol($<span class="hljs-built_in">t8</span>)<br>		<span class="hljs-keyword">addi </span>$<span class="hljs-built_in">t9</span>, $<span class="hljs-built_in">t9</span>, <span class="hljs-number">1</span><br>		<span class="hljs-keyword">blt </span> $<span class="hljs-built_in">t9</span>, $<span class="hljs-built_in">s0</span>, init_loop<br>	li   $<span class="hljs-built_in">t0</span>, <span class="hljs-number">0</span> <span class="hljs-comment"># index</span><br>	<span class="hljs-keyword">jal </span> FullArray<br>	li   $<span class="hljs-built_in">v0</span>, <span class="hljs-number">10</span><br>	<span class="hljs-keyword">syscall</span><br><span class="hljs-keyword"></span><span class="hljs-symbol"></span><br><span class="hljs-symbol">FullArray:</span><br>	<span class="hljs-keyword">blt </span> $<span class="hljs-built_in">t0</span>, $<span class="hljs-built_in">s0</span>, search<br><span class="hljs-symbol">	print:</span><br>		li   $<span class="hljs-built_in">t9</span>, <span class="hljs-number">0</span><br><span class="hljs-symbol">		print_loop:</span><br>			<span class="hljs-keyword">sll </span> $<span class="hljs-built_in">t8</span>, $<span class="hljs-built_in">t9</span>, <span class="hljs-number">2</span><br>			<span class="hljs-keyword">lw </span>  $<span class="hljs-built_in">a0</span>, array($<span class="hljs-built_in">t8</span>)<br>			li   $<span class="hljs-built_in">v0</span>, <span class="hljs-number">1</span><br>			<span class="hljs-keyword">syscall</span><br><span class="hljs-keyword"></span>			li   $<span class="hljs-built_in">v0</span>, <span class="hljs-number">4</span><br>			la   $<span class="hljs-built_in">a0</span>, <span class="hljs-keyword">blank</span><br><span class="hljs-keyword"></span>			<span class="hljs-keyword">syscall</span><br><span class="hljs-keyword"></span>			<span class="hljs-keyword">addi </span>$<span class="hljs-built_in">t9</span>, $<span class="hljs-built_in">t9</span>, <span class="hljs-number">1</span><br>			<span class="hljs-keyword">blt </span> $<span class="hljs-built_in">t9</span>, $<span class="hljs-built_in">s0</span>, print_loop<br><span class="hljs-symbol">		print_end:</span><br>			li   $<span class="hljs-built_in">v0</span>, <span class="hljs-number">4</span><br>			la   $<span class="hljs-built_in">a0</span>, next_line<br>			<span class="hljs-keyword">syscall</span><br><span class="hljs-keyword"></span>			<span class="hljs-keyword">jr </span>  $<span class="hljs-built_in">ra</span><br><span class="hljs-symbol">			</span><br><span class="hljs-symbol">	search:</span><br>		li   $<span class="hljs-built_in">t1</span>, <span class="hljs-number">0</span> <span class="hljs-comment"># i</span><br><span class="hljs-symbol">		loop:</span><br>			<span class="hljs-keyword">sll </span> $<span class="hljs-built_in">t9</span>, $<span class="hljs-built_in">t1</span>, <span class="hljs-number">2</span><br>			<span class="hljs-keyword">lw </span>  $<span class="hljs-built_in">t8</span>, symbol($<span class="hljs-built_in">t9</span>)<br>			<span class="hljs-keyword">bne </span> $<span class="hljs-built_in">t8</span>, $<span class="hljs-number">0</span>, Else<br><span class="hljs-symbol">			If:</span><br>				<span class="hljs-keyword">addi </span>$<span class="hljs-built_in">t2</span>, $<span class="hljs-built_in">t1</span>, <span class="hljs-number">1</span><br>				<span class="hljs-keyword">sll </span> $<span class="hljs-built_in">t9</span>, $<span class="hljs-built_in">t0</span>, <span class="hljs-number">2</span><br>				<span class="hljs-keyword">sw </span>  $<span class="hljs-built_in">t2</span>, array($<span class="hljs-built_in">t9</span>)<br>				<span class="hljs-keyword">sll </span> $<span class="hljs-built_in">t9</span>, $<span class="hljs-built_in">t1</span>, <span class="hljs-number">2</span><br>				<span class="hljs-keyword">sw </span>  $<span class="hljs-built_in">s1</span>, symbol($<span class="hljs-built_in">t9</span>)<br>				<br>				push($<span class="hljs-built_in">ra</span>)<br>				push($<span class="hljs-built_in">t0</span>)<br>				push($<span class="hljs-built_in">t1</span>)<br>				<br>				<span class="hljs-keyword">addi </span>$<span class="hljs-built_in">t0</span>, $<span class="hljs-built_in">t0</span>, <span class="hljs-number">1</span><br>				<span class="hljs-keyword">jal </span> FullArray<br>				<br>				pop($<span class="hljs-built_in">t1</span>)<br>				pop($<span class="hljs-built_in">t0</span>)<br>				pop($<span class="hljs-built_in">ra</span>)<br>				<br>				<span class="hljs-keyword">sll </span> $<span class="hljs-built_in">t9</span>, $<span class="hljs-built_in">t1</span>, <span class="hljs-number">2</span><br>				<span class="hljs-keyword">sw </span>  $<span class="hljs-number">0</span>, symbol($<span class="hljs-built_in">t9</span>)<br><span class="hljs-symbol">			</span><br><span class="hljs-symbol">			Else:</span><br>				<span class="hljs-keyword">addi </span>$<span class="hljs-built_in">t1</span>, $<span class="hljs-built_in">t1</span>, <span class="hljs-number">1</span><br>				<span class="hljs-keyword">blt </span> $<span class="hljs-built_in">t1</span>, $<span class="hljs-built_in">s0</span>, loop<br><span class="hljs-symbol">		loop_end:</span><br>		<span class="hljs-keyword">jr </span>  $<span class="hljs-built_in">ra</span><br></code></pre></td></tr></table></figure>
 
 <h2 id="两个注意事项"><a href="#两个注意事项" class="headerlink" title="两个注意事项"></a>两个注意事项</h2><h3 id="1-注意return的位置"><a href="#1-注意return的位置" class="headerlink" title="1.注意return的位置"></a>1.注意return的位置</h3><p>观察C语言代码，我们发现有两个需要return的位置。一般来说，return直接写作<code>jr $ra</code>即可。</p>
 <h3 id="2-递归调用前后的处理工作"><a href="#2-递归调用前后的处理工作" class="headerlink" title="2.递归调用前后的处理工作"></a>2.递归调用前后的处理工作</h3><p>我们把上面代码中设计递归调用的片段截取下来：</p>
-<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">addi </span>$<span class="built_in">t2</span>, $<span class="built_in">t1</span>, <span class="number">1</span></span><br><span class="line"><span class="keyword">sll </span> $<span class="built_in">t9</span>, $<span class="built_in">t0</span>, <span class="number">2</span></span><br><span class="line"><span class="keyword">sw </span>  $<span class="built_in">t2</span>, array($<span class="built_in">t9</span>)</span><br><span class="line"><span class="keyword">sll </span> $<span class="built_in">t9</span>, $<span class="built_in">t1</span>, <span class="number">2</span></span><br><span class="line"><span class="keyword">sw </span>  $<span class="built_in">s1</span>, symbol($<span class="built_in">t9</span>)</span><br><span class="line">				</span><br><span class="line">push($<span class="built_in">ra</span>)</span><br><span class="line">push($<span class="built_in">t0</span>)</span><br><span class="line">push($<span class="built_in">t1</span>)</span><br><span class="line">				</span><br><span class="line"><span class="keyword">addi </span>$<span class="built_in">t0</span>, $<span class="built_in">t0</span>, <span class="number">1</span></span><br><span class="line"><span class="keyword">jal </span> FullArray</span><br><span class="line">				</span><br><span class="line">pop($<span class="built_in">t1</span>)</span><br><span class="line">pop($<span class="built_in">t0</span>)</span><br><span class="line">pop($<span class="built_in">ra</span>)</span><br><span class="line">				</span><br><span class="line"><span class="keyword">sll </span> $<span class="built_in">t9</span>, $<span class="built_in">t1</span>, <span class="number">2</span></span><br><span class="line"><span class="keyword">sw </span>  $<span class="number">0</span>, symbol($<span class="built_in">t9</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-keyword">addi </span>$<span class="hljs-built_in">t2</span>, $<span class="hljs-built_in">t1</span>, <span class="hljs-number">1</span><br><span class="hljs-keyword">sll </span> $<span class="hljs-built_in">t9</span>, $<span class="hljs-built_in">t0</span>, <span class="hljs-number">2</span><br><span class="hljs-keyword">sw </span>  $<span class="hljs-built_in">t2</span>, array($<span class="hljs-built_in">t9</span>)<br><span class="hljs-keyword">sll </span> $<span class="hljs-built_in">t9</span>, $<span class="hljs-built_in">t1</span>, <span class="hljs-number">2</span><br><span class="hljs-keyword">sw </span>  $<span class="hljs-built_in">s1</span>, symbol($<span class="hljs-built_in">t9</span>)<br>				<br>push($<span class="hljs-built_in">ra</span>)<br>push($<span class="hljs-built_in">t0</span>)<br>push($<span class="hljs-built_in">t1</span>)<br>				<br><span class="hljs-keyword">addi </span>$<span class="hljs-built_in">t0</span>, $<span class="hljs-built_in">t0</span>, <span class="hljs-number">1</span><br><span class="hljs-keyword">jal </span> FullArray<br>				<br>pop($<span class="hljs-built_in">t1</span>)<br>pop($<span class="hljs-built_in">t0</span>)<br>pop($<span class="hljs-built_in">ra</span>)<br>				<br><span class="hljs-keyword">sll </span> $<span class="hljs-built_in">t9</span>, $<span class="hljs-built_in">t1</span>, <span class="hljs-number">2</span><br><span class="hljs-keyword">sw </span>  $<span class="hljs-number">0</span>, symbol($<span class="hljs-built_in">t9</span>)<br></code></pre></td></tr></table></figure>
 
 <p>这里，<code>$ra</code>存储的是之前调用的位置+4，比如说在执行完<code>jal FullArray</code>之后，<code>$ra</code>存储的是pop($t1)的地址。<code>$t0</code>存的是参数index，<code>$t1</code>存的是FullArray里的遍历变量i。</p>
 <p>进行push和pop的原因，无非是对寄存器内原有的值进行保护。<strong>对寄存器的保护(进行push和pop操作)一定是在函数调用前后进行的</strong>，而往往不是刚进入函数的时候。</p>
@@ -391,7 +378,7 @@
 </ul>
 <p>确定了需要被push和pop的变量之后，我们还需要注意push和pop的顺序是否对应，栈是后入先出，最先<code>push($ra)</code>就要最后<code>pop($ra)</code>。</p>
 <p>完成了push和pop的代码之后，我们就需要更新函数的参数</p>
-<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">addi </span>$<span class="built_in">t0</span>, $<span class="built_in">t0</span>, <span class="number">1</span> <span class="comment"># 下一个FullArray调用时参数为index + 1</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-keyword">addi </span>$<span class="hljs-built_in">t0</span>, $<span class="hljs-built_in">t0</span>, <span class="hljs-number">1</span> <span class="hljs-comment"># 下一个FullArray调用时参数为index + 1</span><br></code></pre></td></tr></table></figure>
 
 <p>然后就可以递归调用了！</p>
 <p>（一般来说函数的参数保存在<code>a0</code>-<code>a3</code>寄存器里，当我意识到这点时已经晚了）</p>
@@ -406,15 +393,15 @@
 <p>3、请勿使用 <code>.globl main</code></p>
 <p>4、最大运行指令条数限制为 100000</p>
 <p>5、请使用 <code>syscall</code> 结束程序：</p>
-<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">li $<span class="built_in">v0</span>, <span class="number">10</span></span><br><span class="line"><span class="keyword">syscall</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm">li $<span class="hljs-built_in">v0</span>, <span class="hljs-number">10</span><br><span class="hljs-keyword">syscall</span><br></code></pre></td></tr></table></figure>
 
-<h3 id="输入样例1"><a href="#输入样例1" class="headerlink" title="输入样例1"></a>输入样例1</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">5</span><br><span class="line">6</span><br><span class="line">1</span><br><span class="line">2</span><br><span class="line">1</span><br><span class="line">3</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">2</span><br><span class="line">4</span><br><span class="line">3</span><br><span class="line">5</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td></tr></table></figure>
+<h3 id="输入样例1"><a href="#输入样例1" class="headerlink" title="输入样例1"></a>输入样例1</h3><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs">5<br>6<br>1<br>2<br>1<br>3<br>2<br>3<br>2<br>4<br>3<br>5<br>4<br>5<br></code></pre></td></tr></table></figure>
 
-<h3 id="输出样例1"><a href="#输出样例1" class="headerlink" title="输出样例1"></a>输出样例1</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1</span><br></pre></td></tr></table></figure>
+<h3 id="输出样例1"><a href="#输出样例1" class="headerlink" title="输出样例1"></a>输出样例1</h3><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs">1<br></code></pre></td></tr></table></figure>
 
-<h3 id="输入样例2"><a href="#输入样例2" class="headerlink" title="输入样例2"></a>输入样例2</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">5</span><br><span class="line">6</span><br><span class="line">1</span><br><span class="line">2</span><br><span class="line">1</span><br><span class="line">3</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">2</span><br><span class="line">4</span><br><span class="line">1</span><br><span class="line">4</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td></tr></table></figure>
+<h3 id="输入样例2"><a href="#输入样例2" class="headerlink" title="输入样例2"></a>输入样例2</h3><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs">5<br>6<br>1<br>2<br>1<br>3<br>2<br>3<br>2<br>4<br>1<br>4<br>4<br>5<br></code></pre></td></tr></table></figure>
 
-<h3 id="输出样例2"><a href="#输出样例2" class="headerlink" title="输出样例2"></a>输出样例2</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0</span><br></pre></td></tr></table></figure>
+<h3 id="输出样例2"><a href="#输出样例2" class="headerlink" title="输出样例2"></a>输出样例2</h3><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs">0<br></code></pre></td></tr></table></figure>
 
 <h3 id="提交要求-1"><a href="#提交要求-1" class="headerlink" title="提交要求"></a>提交要求</h3><ol>
 <li><strong>请勿使用</strong> <code>.globl main</code></li>
@@ -422,9 +409,9 @@
 <li>只需要提交.asm文件。</li>
 <li>程序的初始地址设置为<strong>Compact,Data at Address 0</strong>。</li>
 </ol>
-<h2 id="参考C语言代码"><a href="#参考C语言代码" class="headerlink" title="参考C语言代码"></a>参考C语言代码</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> G[<span class="number">8</span>][<span class="number">8</span>];    <span class="comment">// 采用邻接矩阵存储图中的边</span></span><br><span class="line"><span class="type">int</span> book[<span class="number">8</span>];    <span class="comment">// 用于记录每个点是否已经走过</span></span><br><span class="line"><span class="type">int</span> m, n, ans;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">dfs</span><span class="params">(<span class="type">int</span> x)</span> &#123;</span><br><span class="line">    book[x] = <span class="number">1</span>;</span><br><span class="line">    <span class="type">int</span> flag = <span class="number">1</span>, i;</span><br><span class="line">    <span class="comment">// 判断是否经过了所有的点</span></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">        flag &amp;= book[i];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 判断是否形成一条哈密顿回路</span></span><br><span class="line">    <span class="keyword">if</span> (flag &amp;&amp; G[x][<span class="number">0</span>]) &#123;</span><br><span class="line">        ans = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 搜索与之相邻且未经过的边</span></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!book[i] &amp;&amp; G[x][i]) &#123;</span><br><span class="line">            dfs(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    book[x] = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>, &amp;n, &amp;m);</span><br><span class="line">    <span class="type">int</span> i, x, y;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; m; i++) &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>, &amp;x, &amp;y);</span><br><span class="line">        G[x - <span class="number">1</span>][y - <span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line">        G[y - <span class="number">1</span>][x - <span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 从第0个点（编号为1）开始深搜</span></span><br><span class="line">    dfs(<span class="number">0</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>, ans);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="参考C语言代码"><a href="#参考C语言代码" class="headerlink" title="参考C语言代码"></a>参考C语言代码</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-type">int</span> G[<span class="hljs-number">8</span>][<span class="hljs-number">8</span>];    <span class="hljs-comment">// 采用邻接矩阵存储图中的边</span><br><span class="hljs-type">int</span> book[<span class="hljs-number">8</span>];    <span class="hljs-comment">// 用于记录每个点是否已经走过</span><br><span class="hljs-type">int</span> m, n, ans;<br><br><span class="hljs-type">void</span> <span class="hljs-title function_">dfs</span><span class="hljs-params">(<span class="hljs-type">int</span> x)</span> &#123;<br>    book[x] = <span class="hljs-number">1</span>;<br>    <span class="hljs-type">int</span> flag = <span class="hljs-number">1</span>, i;<br>    <span class="hljs-comment">// 判断是否经过了所有的点</span><br>    <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; n; i++) &#123;<br>        flag &amp;= book[i];<br>    &#125;<br>    <span class="hljs-comment">// 判断是否形成一条哈密顿回路</span><br>    <span class="hljs-keyword">if</span> (flag &amp;&amp; G[x][<span class="hljs-number">0</span>]) &#123;<br>        ans = <span class="hljs-number">1</span>;<br>        <span class="hljs-keyword">return</span>;<br>    &#125;<br>    <span class="hljs-comment">// 搜索与之相邻且未经过的边</span><br>    <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; n; i++) &#123;<br>        <span class="hljs-keyword">if</span> (!book[i] &amp;&amp; G[x][i]) &#123;<br>            dfs(i);<br>        &#125;<br>    &#125;<br>    book[x] = <span class="hljs-number">0</span>;<br>&#125;<br><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>, &amp;n, &amp;m);<br>    <span class="hljs-type">int</span> i, x, y;<br>    <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; m; i++) &#123;<br>        <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>, &amp;x, &amp;y);<br>        G[x - <span class="hljs-number">1</span>][y - <span class="hljs-number">1</span>] = <span class="hljs-number">1</span>;<br>        G[y - <span class="hljs-number">1</span>][x - <span class="hljs-number">1</span>] = <span class="hljs-number">1</span>;<br>    &#125;<br>    <span class="hljs-comment">// 从第0个点（编号为1）开始深搜</span><br>    dfs(<span class="hljs-number">0</span>);<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d&quot;</span>, ans);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<h2 id="参考解答"><a href="#参考解答" class="headerlink" title="参考解答"></a>参考解答</h2><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">.data</span></span><br><span class="line">	G: <span class="meta">.space</span> <span class="number">280</span></span><br><span class="line"><span class="symbol">	book:</span> <span class="meta">.space</span> <span class="number">40</span></span><br><span class="line">	</span><br><span class="line"><span class="meta">.macro</span> get(%des, %i, %<span class="keyword">j, </span>%col)</span><br><span class="line">	<span class="keyword">mult </span>%i, %col</span><br><span class="line">	<span class="keyword">mflo </span>%des</span><br><span class="line">	<span class="keyword">add </span> %des, %des, %<span class="keyword">j</span></span><br><span class="line"><span class="keyword"></span>	<span class="keyword">sll </span> %des, %des, <span class="number">2</span></span><br><span class="line">.end_macro</span><br><span class="line"></span><br><span class="line"><span class="meta">.macro</span> push(%src)</span><br><span class="line">	<span class="keyword">sw </span>  %src, <span class="number">0</span>($<span class="built_in">sp</span>)</span><br><span class="line">	<span class="keyword">subi </span>$<span class="built_in">sp</span>, $<span class="built_in">sp</span>, <span class="number">4</span></span><br><span class="line">.end_macro</span><br><span class="line"></span><br><span class="line"><span class="meta">.macro</span> pop(%des)</span><br><span class="line">	<span class="keyword">addi </span>$<span class="built_in">sp</span>, $<span class="built_in">sp</span>, <span class="number">4</span></span><br><span class="line">	<span class="keyword">lw </span>  %des, <span class="number">0</span>($<span class="built_in">sp</span>)</span><br><span class="line">.end_macro</span><br><span class="line">	</span><br><span class="line"><span class="meta">.text</span></span><br><span class="line">	li   $<span class="built_in">v0</span>, <span class="number">5</span></span><br><span class="line">	<span class="keyword">syscall</span></span><br><span class="line"><span class="keyword"></span>	<span class="keyword">move </span>$<span class="built_in">s0</span>, $<span class="built_in">v0</span> <span class="comment"># n</span></span><br><span class="line">	li   $<span class="built_in">v0</span>, <span class="number">5</span></span><br><span class="line">	<span class="keyword">syscall</span></span><br><span class="line"><span class="keyword"></span>	<span class="keyword">move </span>$<span class="built_in">s1</span>, $<span class="built_in">v0</span> <span class="comment"># m</span></span><br><span class="line">	li   $<span class="built_in">s7</span>, <span class="number">1</span> <span class="comment"># constant</span></span><br><span class="line">	</span><br><span class="line">	li   $<span class="built_in">t0</span>, <span class="number">0</span></span><br><span class="line"><span class="symbol">	loop1:</span></span><br><span class="line">		<span class="keyword">beq </span> $<span class="built_in">t0</span>, $<span class="built_in">s1</span>, loop1_end</span><br><span class="line">		li   $<span class="built_in">v0</span>, <span class="number">5</span></span><br><span class="line">		<span class="keyword">syscall</span></span><br><span class="line"><span class="keyword"></span>		<span class="keyword">move </span>$<span class="built_in">t1</span>, $<span class="built_in">v0</span></span><br><span class="line">		<span class="keyword">subi </span>$<span class="built_in">t1</span>, $<span class="built_in">t1</span>, <span class="number">1</span></span><br><span class="line">		li   $<span class="built_in">v0</span>, <span class="number">5</span></span><br><span class="line">		<span class="keyword">syscall</span></span><br><span class="line"><span class="keyword"></span>		<span class="keyword">move </span>$<span class="built_in">t2</span>, $<span class="built_in">v0</span></span><br><span class="line">		<span class="keyword">subi </span>$<span class="built_in">t2</span>, $<span class="built_in">t2</span>, <span class="number">1</span></span><br><span class="line">		get($<span class="built_in">t9</span>, $<span class="built_in">t1</span>, $<span class="built_in">t2</span>, $<span class="built_in">s1</span>)</span><br><span class="line">		<span class="keyword">sw </span>  $<span class="built_in">s7</span>, G($<span class="built_in">t9</span>)</span><br><span class="line">		get($<span class="built_in">t9</span>, $<span class="built_in">t2</span>, $<span class="built_in">t1</span>, $<span class="built_in">s1</span>)</span><br><span class="line">		<span class="keyword">sw </span>  $<span class="built_in">s7</span>, G($<span class="built_in">t9</span>)</span><br><span class="line">		<span class="keyword">addi </span>$<span class="built_in">t0</span>, $<span class="built_in">t0</span>, <span class="number">1</span></span><br><span class="line">		<span class="keyword">j </span>   loop1</span><br><span class="line"><span class="symbol">	loop1_end:</span></span><br><span class="line">	</span><br><span class="line">	li   $<span class="built_in">a0</span>, <span class="number">0</span></span><br><span class="line">	li   $<span class="built_in">s2</span>, <span class="number">0</span> <span class="comment"># ans</span></span><br><span class="line">	<span class="keyword">jal </span> dfs</span><br><span class="line">	</span><br><span class="line">	<span class="comment">## print answer</span></span><br><span class="line">	li   $<span class="built_in">v0</span>, <span class="number">1</span></span><br><span class="line">	<span class="keyword">move </span>$<span class="built_in">a0</span>, $<span class="built_in">s2</span></span><br><span class="line">	<span class="keyword">syscall</span></span><br><span class="line"><span class="keyword"></span>	li   $<span class="built_in">v0</span>, <span class="number">10</span></span><br><span class="line">	<span class="keyword">syscall</span></span><br><span class="line"><span class="keyword"></span><span class="symbol">	</span></span><br><span class="line"><span class="symbol">dfs:</span></span><br><span class="line">	<span class="keyword">sll </span> $<span class="built_in">t9</span>, $<span class="built_in">a0</span>, <span class="number">2</span></span><br><span class="line">	<span class="keyword">sw </span>  $<span class="built_in">s7</span>, <span class="keyword">book($t9)</span></span><br><span class="line"><span class="keyword"></span>	li   $<span class="built_in">t8</span>, <span class="number">0</span> <span class="comment"># i</span></span><br><span class="line">	li   $<span class="built_in">t1</span>, <span class="number">1</span> <span class="comment"># flag</span></span><br><span class="line"><span class="symbol">	</span></span><br><span class="line"><span class="symbol">	loop2:</span></span><br><span class="line">		<span class="keyword">beq </span> $<span class="built_in">t8</span>, $<span class="built_in">s0</span>, loop2_end</span><br><span class="line">		<span class="keyword">sll </span> $<span class="built_in">t9</span>, $<span class="built_in">t8</span>, <span class="number">2</span></span><br><span class="line">		<span class="keyword">lw </span>  $<span class="built_in">t9</span>, <span class="keyword">book($t9)</span></span><br><span class="line"><span class="keyword"></span>		<span class="keyword">and </span> $<span class="built_in">t1</span>, $<span class="built_in">t1</span>, $<span class="built_in">t9</span></span><br><span class="line">		<span class="keyword">addi </span>$<span class="built_in">t8</span>, $<span class="built_in">t8</span>, <span class="number">1</span></span><br><span class="line">		<span class="keyword">j </span>   loop2</span><br><span class="line"><span class="symbol">	loop2_end:</span></span><br><span class="line">		</span><br><span class="line">	get($<span class="built_in">t9</span>, $<span class="built_in">a0</span>, $<span class="number">0</span>, $<span class="built_in">s1</span>)</span><br><span class="line">	<span class="keyword">lw </span>  $<span class="built_in">t9</span>, G($<span class="built_in">t9</span>)</span><br><span class="line">	<span class="keyword">bne </span> $<span class="built_in">t1</span>, $<span class="built_in">s7</span>, <span class="keyword">Nope</span></span><br><span class="line"><span class="keyword"></span>	<span class="keyword">bne </span> $<span class="built_in">t9</span>, $<span class="built_in">s7</span>, <span class="keyword">Nope</span></span><br><span class="line"><span class="keyword"></span>	</span><br><span class="line">	li   $<span class="built_in">s2</span>, <span class="number">1</span></span><br><span class="line">	<span class="keyword">jr </span>  $<span class="built_in">ra</span></span><br><span class="line"><span class="symbol">	</span></span><br><span class="line"><span class="symbol">	Nope:</span></span><br><span class="line">	li   $<span class="built_in">t0</span>, <span class="number">0</span> <span class="comment"># i in stack</span></span><br><span class="line"><span class="symbol">	loop3:</span></span><br><span class="line">		<span class="keyword">beq </span> $<span class="built_in">t0</span>, $<span class="built_in">s0</span>, loop3_end</span><br><span class="line">		<span class="keyword">sll </span> $<span class="built_in">t9</span>, $<span class="built_in">t0</span>, <span class="number">2</span></span><br><span class="line">		<span class="keyword">lw </span>  $<span class="built_in">t9</span>, <span class="keyword">book($t9)</span></span><br><span class="line"><span class="keyword"></span>		<span class="keyword">bne </span> $<span class="built_in">t9</span>, $<span class="number">0</span>, Else</span><br><span class="line">		get($<span class="built_in">t9</span>, $<span class="built_in">a0</span>, $<span class="built_in">t0</span>, $<span class="built_in">s1</span>)</span><br><span class="line">		<span class="keyword">lw </span>  $<span class="built_in">t9</span>, G($<span class="built_in">t9</span>)</span><br><span class="line">		<span class="keyword">beq </span> $<span class="built_in">t9</span>, $<span class="number">0</span>, Else</span><br><span class="line">		</span><br><span class="line">		push($<span class="built_in">ra</span>)</span><br><span class="line">		push($<span class="built_in">t0</span>)</span><br><span class="line">		push($<span class="built_in">a0</span>)</span><br><span class="line">		</span><br><span class="line">		<span class="keyword">move </span>$<span class="built_in">a0</span>, $<span class="built_in">t0</span></span><br><span class="line">		<span class="keyword">jal </span> dfs</span><br><span class="line">		</span><br><span class="line">		pop($<span class="built_in">a0</span>)</span><br><span class="line">		pop($<span class="built_in">t0</span>)</span><br><span class="line">		pop($<span class="built_in">ra</span>)</span><br><span class="line"><span class="symbol">		</span></span><br><span class="line"><span class="symbol">		Else:</span></span><br><span class="line">		<span class="keyword">addi </span>$<span class="built_in">t0</span>, $<span class="built_in">t0</span>, <span class="number">1</span></span><br><span class="line">		<span class="keyword">j </span>   loop3</span><br><span class="line"><span class="symbol">	loop3_end:</span></span><br><span class="line">	</span><br><span class="line">	<span class="keyword">sll </span> $<span class="built_in">t9</span>, $<span class="built_in">a0</span>, <span class="number">2</span></span><br><span class="line">	<span class="keyword">sw </span>  $<span class="number">0</span>, <span class="keyword">book($t9)</span></span><br><span class="line"><span class="keyword"></span>	<span class="keyword">jr </span>  $<span class="built_in">ra</span></span><br></pre></td></tr></table></figure>
+<h2 id="参考解答"><a href="#参考解答" class="headerlink" title="参考解答"></a>参考解答</h2><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-meta">.data</span><br>	G: <span class="hljs-meta">.space</span> <span class="hljs-number">280</span><br><span class="hljs-symbol">	book:</span> <span class="hljs-meta">.space</span> <span class="hljs-number">40</span><br>	<br><span class="hljs-meta">.macro</span> get(%des, %i, %<span class="hljs-keyword">j, </span>%col)<br>	<span class="hljs-keyword">mult </span>%i, %col<br>	<span class="hljs-keyword">mflo </span>%des<br>	<span class="hljs-keyword">add </span> %des, %des, %<span class="hljs-keyword">j</span><br><span class="hljs-keyword"></span>	<span class="hljs-keyword">sll </span> %des, %des, <span class="hljs-number">2</span><br>.end_macro<br><br><span class="hljs-meta">.macro</span> push(%src)<br>	<span class="hljs-keyword">sw </span>  %src, <span class="hljs-number">0</span>($<span class="hljs-built_in">sp</span>)<br>	<span class="hljs-keyword">subi </span>$<span class="hljs-built_in">sp</span>, $<span class="hljs-built_in">sp</span>, <span class="hljs-number">4</span><br>.end_macro<br><br><span class="hljs-meta">.macro</span> pop(%des)<br>	<span class="hljs-keyword">addi </span>$<span class="hljs-built_in">sp</span>, $<span class="hljs-built_in">sp</span>, <span class="hljs-number">4</span><br>	<span class="hljs-keyword">lw </span>  %des, <span class="hljs-number">0</span>($<span class="hljs-built_in">sp</span>)<br>.end_macro<br>	<br><span class="hljs-meta">.text</span><br>	li   $<span class="hljs-built_in">v0</span>, <span class="hljs-number">5</span><br>	<span class="hljs-keyword">syscall</span><br><span class="hljs-keyword"></span>	<span class="hljs-keyword">move </span>$<span class="hljs-built_in">s0</span>, $<span class="hljs-built_in">v0</span> <span class="hljs-comment"># n</span><br>	li   $<span class="hljs-built_in">v0</span>, <span class="hljs-number">5</span><br>	<span class="hljs-keyword">syscall</span><br><span class="hljs-keyword"></span>	<span class="hljs-keyword">move </span>$<span class="hljs-built_in">s1</span>, $<span class="hljs-built_in">v0</span> <span class="hljs-comment"># m</span><br>	li   $<span class="hljs-built_in">s7</span>, <span class="hljs-number">1</span> <span class="hljs-comment"># constant</span><br>	<br>	li   $<span class="hljs-built_in">t0</span>, <span class="hljs-number">0</span><br><span class="hljs-symbol">	loop1:</span><br>		<span class="hljs-keyword">beq </span> $<span class="hljs-built_in">t0</span>, $<span class="hljs-built_in">s1</span>, loop1_end<br>		li   $<span class="hljs-built_in">v0</span>, <span class="hljs-number">5</span><br>		<span class="hljs-keyword">syscall</span><br><span class="hljs-keyword"></span>		<span class="hljs-keyword">move </span>$<span class="hljs-built_in">t1</span>, $<span class="hljs-built_in">v0</span><br>		<span class="hljs-keyword">subi </span>$<span class="hljs-built_in">t1</span>, $<span class="hljs-built_in">t1</span>, <span class="hljs-number">1</span><br>		li   $<span class="hljs-built_in">v0</span>, <span class="hljs-number">5</span><br>		<span class="hljs-keyword">syscall</span><br><span class="hljs-keyword"></span>		<span class="hljs-keyword">move </span>$<span class="hljs-built_in">t2</span>, $<span class="hljs-built_in">v0</span><br>		<span class="hljs-keyword">subi </span>$<span class="hljs-built_in">t2</span>, $<span class="hljs-built_in">t2</span>, <span class="hljs-number">1</span><br>		get($<span class="hljs-built_in">t9</span>, $<span class="hljs-built_in">t1</span>, $<span class="hljs-built_in">t2</span>, $<span class="hljs-built_in">s1</span>)<br>		<span class="hljs-keyword">sw </span>  $<span class="hljs-built_in">s7</span>, G($<span class="hljs-built_in">t9</span>)<br>		get($<span class="hljs-built_in">t9</span>, $<span class="hljs-built_in">t2</span>, $<span class="hljs-built_in">t1</span>, $<span class="hljs-built_in">s1</span>)<br>		<span class="hljs-keyword">sw </span>  $<span class="hljs-built_in">s7</span>, G($<span class="hljs-built_in">t9</span>)<br>		<span class="hljs-keyword">addi </span>$<span class="hljs-built_in">t0</span>, $<span class="hljs-built_in">t0</span>, <span class="hljs-number">1</span><br>		<span class="hljs-keyword">j </span>   loop1<br><span class="hljs-symbol">	loop1_end:</span><br>	<br>	li   $<span class="hljs-built_in">a0</span>, <span class="hljs-number">0</span><br>	li   $<span class="hljs-built_in">s2</span>, <span class="hljs-number">0</span> <span class="hljs-comment"># ans</span><br>	<span class="hljs-keyword">jal </span> dfs<br>	<br>	<span class="hljs-comment">## print answer</span><br>	li   $<span class="hljs-built_in">v0</span>, <span class="hljs-number">1</span><br>	<span class="hljs-keyword">move </span>$<span class="hljs-built_in">a0</span>, $<span class="hljs-built_in">s2</span><br>	<span class="hljs-keyword">syscall</span><br><span class="hljs-keyword"></span>	li   $<span class="hljs-built_in">v0</span>, <span class="hljs-number">10</span><br>	<span class="hljs-keyword">syscall</span><br><span class="hljs-keyword"></span><span class="hljs-symbol">	</span><br><span class="hljs-symbol">dfs:</span><br>	<span class="hljs-keyword">sll </span> $<span class="hljs-built_in">t9</span>, $<span class="hljs-built_in">a0</span>, <span class="hljs-number">2</span><br>	<span class="hljs-keyword">sw </span>  $<span class="hljs-built_in">s7</span>, <span class="hljs-keyword">book($t9)</span><br><span class="hljs-keyword"></span>	li   $<span class="hljs-built_in">t8</span>, <span class="hljs-number">0</span> <span class="hljs-comment"># i</span><br>	li   $<span class="hljs-built_in">t1</span>, <span class="hljs-number">1</span> <span class="hljs-comment"># flag</span><br><span class="hljs-symbol">	</span><br><span class="hljs-symbol">	loop2:</span><br>		<span class="hljs-keyword">beq </span> $<span class="hljs-built_in">t8</span>, $<span class="hljs-built_in">s0</span>, loop2_end<br>		<span class="hljs-keyword">sll </span> $<span class="hljs-built_in">t9</span>, $<span class="hljs-built_in">t8</span>, <span class="hljs-number">2</span><br>		<span class="hljs-keyword">lw </span>  $<span class="hljs-built_in">t9</span>, <span class="hljs-keyword">book($t9)</span><br><span class="hljs-keyword"></span>		<span class="hljs-keyword">and </span> $<span class="hljs-built_in">t1</span>, $<span class="hljs-built_in">t1</span>, $<span class="hljs-built_in">t9</span><br>		<span class="hljs-keyword">addi </span>$<span class="hljs-built_in">t8</span>, $<span class="hljs-built_in">t8</span>, <span class="hljs-number">1</span><br>		<span class="hljs-keyword">j </span>   loop2<br><span class="hljs-symbol">	loop2_end:</span><br>		<br>	get($<span class="hljs-built_in">t9</span>, $<span class="hljs-built_in">a0</span>, $<span class="hljs-number">0</span>, $<span class="hljs-built_in">s1</span>)<br>	<span class="hljs-keyword">lw </span>  $<span class="hljs-built_in">t9</span>, G($<span class="hljs-built_in">t9</span>)<br>	<span class="hljs-keyword">bne </span> $<span class="hljs-built_in">t1</span>, $<span class="hljs-built_in">s7</span>, <span class="hljs-keyword">Nope</span><br><span class="hljs-keyword"></span>	<span class="hljs-keyword">bne </span> $<span class="hljs-built_in">t9</span>, $<span class="hljs-built_in">s7</span>, <span class="hljs-keyword">Nope</span><br><span class="hljs-keyword"></span>	<br>	li   $<span class="hljs-built_in">s2</span>, <span class="hljs-number">1</span><br>	<span class="hljs-keyword">jr </span>  $<span class="hljs-built_in">ra</span><br><span class="hljs-symbol">	</span><br><span class="hljs-symbol">	Nope:</span><br>	li   $<span class="hljs-built_in">t0</span>, <span class="hljs-number">0</span> <span class="hljs-comment"># i in stack</span><br><span class="hljs-symbol">	loop3:</span><br>		<span class="hljs-keyword">beq </span> $<span class="hljs-built_in">t0</span>, $<span class="hljs-built_in">s0</span>, loop3_end<br>		<span class="hljs-keyword">sll </span> $<span class="hljs-built_in">t9</span>, $<span class="hljs-built_in">t0</span>, <span class="hljs-number">2</span><br>		<span class="hljs-keyword">lw </span>  $<span class="hljs-built_in">t9</span>, <span class="hljs-keyword">book($t9)</span><br><span class="hljs-keyword"></span>		<span class="hljs-keyword">bne </span> $<span class="hljs-built_in">t9</span>, $<span class="hljs-number">0</span>, Else<br>		get($<span class="hljs-built_in">t9</span>, $<span class="hljs-built_in">a0</span>, $<span class="hljs-built_in">t0</span>, $<span class="hljs-built_in">s1</span>)<br>		<span class="hljs-keyword">lw </span>  $<span class="hljs-built_in">t9</span>, G($<span class="hljs-built_in">t9</span>)<br>		<span class="hljs-keyword">beq </span> $<span class="hljs-built_in">t9</span>, $<span class="hljs-number">0</span>, Else<br>		<br>		push($<span class="hljs-built_in">ra</span>)<br>		push($<span class="hljs-built_in">t0</span>)<br>		push($<span class="hljs-built_in">a0</span>)<br>		<br>		<span class="hljs-keyword">move </span>$<span class="hljs-built_in">a0</span>, $<span class="hljs-built_in">t0</span><br>		<span class="hljs-keyword">jal </span> dfs<br>		<br>		pop($<span class="hljs-built_in">a0</span>)<br>		pop($<span class="hljs-built_in">t0</span>)<br>		pop($<span class="hljs-built_in">ra</span>)<br><span class="hljs-symbol">		</span><br><span class="hljs-symbol">		Else:</span><br>		<span class="hljs-keyword">addi </span>$<span class="hljs-built_in">t0</span>, $<span class="hljs-built_in">t0</span>, <span class="hljs-number">1</span><br>		<span class="hljs-keyword">j </span>   loop3<br><span class="hljs-symbol">	loop3_end:</span><br>	<br>	<span class="hljs-keyword">sll </span> $<span class="hljs-built_in">t9</span>, $<span class="hljs-built_in">a0</span>, <span class="hljs-number">2</span><br>	<span class="hljs-keyword">sw </span>  $<span class="hljs-number">0</span>, <span class="hljs-keyword">book($t9)</span><br><span class="hljs-keyword"></span>	<span class="hljs-keyword">jr </span>  $<span class="hljs-built_in">ra</span><br></code></pre></td></tr></table></figure>
 
 
 
@@ -435,16 +422,16 @@
 <li>输入一个n*m的01矩阵作为01迷宫，并给定他的起点与终点，求出他不同逃跑路线的数目（不同逃跑路线中可以有相同的部分，但是不能完全相同）。</li>
 <li>每组数据最多执行5,000,000条指令。</li>
 </ol>
-<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><p><img src="https://pic.imgdb.cn/item/6533cfecc458853aefa04018.png" alt="迷宫示例" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
+<h3 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h3><p><img src="https://pic.imgdb.cn/item/6533cfecc458853aefa04018.png" srcset="/img/loading.gif" lazyload alt="迷宫示例"></p>
 <ol>
 <li>上图表示的是一个4*5的01矩阵，这个矩阵就是一个01迷宫。</li>
 <li>如上图，以红色0作为起点，绿色0作为终点，每一次行进只能选择上下左右中值为0且未走过的位置，满足上述条件的路线，即为一条迷宫逃跑路线。如右图中，蓝色的路线即为一条逃跑路线。</li>
 </ol>
 <h3 id="输入格式-2"><a href="#输入格式-2" class="headerlink" title="输入格式"></a>输入格式</h3><p>前两行输入两个整数n和m（n、m均为正整数并且小于等于7），分别代表01矩阵行数和列数。接下来的n*m行，每行输入1个整数（0或1），对应着01矩阵各个元素值(第i*m+j个整数为矩阵的第（i+1）行第j个元素，即一行一行输入)。接下来的四行分别代表迷宫的起点和终点，每行一个整数，分别代表起点与终点行数和列数。</p>
 <h3 id="输出格式-2"><a href="#输出格式-2" class="headerlink" title="输出格式"></a>输出格式</h3><p>只输出一个整数，代表逃跑路线的数目。</p>
-<h3 id="输入样例-1"><a href="#输入样例-1" class="headerlink" title="输入样例"></a>输入样例</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">4</span><br><span class="line">5</span><br><span class="line">0</span><br><span class="line">0</span><br><span class="line">1</span><br><span class="line">0</span><br><span class="line">0</span><br><span class="line">1</span><br><span class="line">0</span><br><span class="line">0</span><br><span class="line">0</span><br><span class="line">1</span><br><span class="line">1</span><br><span class="line">0</span><br><span class="line">1</span><br><span class="line">0</span><br><span class="line">1</span><br><span class="line">1</span><br><span class="line">0</span><br><span class="line">0</span><br><span class="line">0</span><br><span class="line">0</span><br><span class="line">1</span><br><span class="line">1</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td></tr></table></figure>
+<h3 id="输入样例-1"><a href="#输入样例-1" class="headerlink" title="输入样例"></a>输入样例</h3><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs">4<br>5<br>0<br>0<br>1<br>0<br>0<br>1<br>0<br>0<br>0<br>1<br>1<br>0<br>1<br>0<br>1<br>1<br>0<br>0<br>0<br>0<br>1<br>1<br>4<br>5<br></code></pre></td></tr></table></figure>
 
-<h3 id="输出样例-1"><a href="#输出样例-1" class="headerlink" title="输出样例"></a>输出样例</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2</span><br></pre></td></tr></table></figure>
+<h3 id="输出样例-1"><a href="#输出样例-1" class="headerlink" title="输出样例"></a>输出样例</h3><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs">2<br></code></pre></td></tr></table></figure>
 
 <h3 id="提交要求-2"><a href="#提交要求-2" class="headerlink" title="提交要求"></a>提交要求</h3><ol>
 <li><strong>请勿使用</strong> <code>.globl main</code></li>
@@ -452,198 +439,451 @@
 <li>只需要提交.asm文件。</li>
 <li>程序的初始地址设置为<strong>Compact,Data at Address 0</strong>。</li>
 </ol>
-<h2 id="参考C语言代码-1"><a href="#参考C语言代码-1" class="headerlink" title="参考C语言代码"></a>参考C语言代码</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> M 100007</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> N 1007</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> INF 0x3f3f3f3f</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> ll long long</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> db double</span></span><br><span class="line"><span class="type">int</span> n, m, cnt = <span class="number">0</span>;</span><br><span class="line"><span class="type">int</span> start_x, start_y, end_x, end_y;</span><br><span class="line"><span class="type">int</span> space[<span class="number">8</span>][<span class="number">8</span>], book[<span class="number">8</span>][<span class="number">8</span>];</span><br><span class="line"><span class="type">int</span> dir[<span class="number">4</span>][<span class="number">2</span>] = &#123;&#123;<span class="number">0</span>, <span class="number">1</span>&#125;, &#123;<span class="number">1</span>, <span class="number">0</span>&#125;, &#123;<span class="number">0</span>, <span class="number">-1</span>&#125;, &#123;<span class="number">-1</span>, <span class="number">0</span>&#125;&#125;;</span><br><span class="line"><span class="type">void</span> <span class="title function_">dfs</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> &#123;</span><br><span class="line">    <span class="comment">// printf(&quot;%d\n&quot;, cnt);</span></span><br><span class="line">    <span class="keyword">if</span> (x == end_x &amp;&amp; y == end_y) &#123;</span><br><span class="line">        cnt++;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">4</span>; i++) &#123;</span><br><span class="line">        <span class="type">int</span> tx = x + dir[i][<span class="number">0</span>];</span><br><span class="line">        <span class="type">int</span> ty = y + dir[i][<span class="number">1</span>];</span><br><span class="line">        <span class="keyword">if</span> (tx &lt;= <span class="number">0</span> || tx &gt; n || ty &lt;= <span class="number">0</span> || ty &gt; m || book[tx][ty] ||</span><br><span class="line">            space[tx][ty]) &#123;</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        book[tx][ty] = <span class="number">1</span>;</span><br><span class="line">        dfs(tx, ty);</span><br><span class="line">        book[tx][ty] = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>, &amp;n, &amp;m);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt;= n; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">1</span>; j &lt;= m; j++) &#123;</span><br><span class="line">            <span class="built_in">scanf</span>(<span class="string">&quot;%d&quot;</span>, &amp;space[i][j]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>, &amp;start_x, &amp;start_y);</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">&quot;%d%d&quot;</span>, &amp;end_x, &amp;end_y);</span><br><span class="line">    book[start_x][start_y] = <span class="number">1</span>;</span><br><span class="line">    dfs(start_x, start_y);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d&quot;</span>, cnt);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="参考C语言代码-1"><a href="#参考C语言代码-1" class="headerlink" title="参考C语言代码"></a>参考C语言代码</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> M 100007</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> N 1007</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> INF 0x3f3f3f3f</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> ll long long</span><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> db double</span><br><span class="hljs-type">int</span> n, m, cnt = <span class="hljs-number">0</span>;<br><span class="hljs-type">int</span> start_x, start_y, end_x, end_y;<br><span class="hljs-type">int</span> space[<span class="hljs-number">8</span>][<span class="hljs-number">8</span>], book[<span class="hljs-number">8</span>][<span class="hljs-number">8</span>];<br><span class="hljs-type">int</span> dir[<span class="hljs-number">4</span>][<span class="hljs-number">2</span>] = &#123;&#123;<span class="hljs-number">0</span>, <span class="hljs-number">1</span>&#125;, &#123;<span class="hljs-number">1</span>, <span class="hljs-number">0</span>&#125;, &#123;<span class="hljs-number">0</span>, <span class="hljs-number">-1</span>&#125;, &#123;<span class="hljs-number">-1</span>, <span class="hljs-number">0</span>&#125;&#125;;<br><span class="hljs-type">void</span> <span class="hljs-title function_">dfs</span><span class="hljs-params">(<span class="hljs-type">int</span> x, <span class="hljs-type">int</span> y)</span> &#123;<br>    <span class="hljs-comment">// printf(&quot;%d\n&quot;, cnt);</span><br>    <span class="hljs-keyword">if</span> (x == end_x &amp;&amp; y == end_y) &#123;<br>        cnt++;<br>        <span class="hljs-keyword">return</span>;<br>    &#125;<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">4</span>; i++) &#123;<br>        <span class="hljs-type">int</span> tx = x + dir[i][<span class="hljs-number">0</span>];<br>        <span class="hljs-type">int</span> ty = y + dir[i][<span class="hljs-number">1</span>];<br>        <span class="hljs-keyword">if</span> (tx &lt;= <span class="hljs-number">0</span> || tx &gt; n || ty &lt;= <span class="hljs-number">0</span> || ty &gt; m || book[tx][ty] ||<br>            space[tx][ty]) &#123;<br>            <span class="hljs-keyword">continue</span>;<br>        &#125;<br>        book[tx][ty] = <span class="hljs-number">1</span>;<br>        dfs(tx, ty);<br>        book[tx][ty] = <span class="hljs-number">0</span>;<br>    &#125;<br>&#125;<br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>, &amp;n, &amp;m);<br>    <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">1</span>; i &lt;= n; i++) &#123;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> j = <span class="hljs-number">1</span>; j &lt;= m; j++) &#123;<br>            <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d&quot;</span>, &amp;space[i][j]);<br>        &#125;<br>    &#125;<br>    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>, &amp;start_x, &amp;start_y);<br>    <span class="hljs-built_in">scanf</span>(<span class="hljs-string">&quot;%d%d&quot;</span>, &amp;end_x, &amp;end_y);<br>    book[start_x][start_y] = <span class="hljs-number">1</span>;<br>    dfs(start_x, start_y);<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d&quot;</span>, cnt);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
 
-<h2 id="参考解答-1"><a href="#参考解答-1" class="headerlink" title="参考解答"></a>参考解答</h2><h3 id="解答1"><a href="#解答1" class="headerlink" title="解答1"></a>解答1</h3><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">.data</span></span><br><span class="line"><span class="symbol">	map:</span> <span class="meta">.space</span> <span class="number">400</span></span><br><span class="line"><span class="symbol">	dir:</span> <span class="meta">.space</span> <span class="number">48</span></span><br><span class="line"></span><br><span class="line"><span class="meta">.macro</span> get_map(%des, %i, %<span class="keyword">j, </span>%col)</span><br><span class="line">	<span class="keyword">mult </span>%i, %col</span><br><span class="line">	<span class="keyword">mflo </span>%des</span><br><span class="line">	<span class="keyword">add </span> %des, %des, %<span class="keyword">j</span></span><br><span class="line"><span class="keyword"></span>	<span class="keyword">sll </span> %des, %des, <span class="number">2</span></span><br><span class="line">.end_macro</span><br><span class="line"></span><br><span class="line"><span class="meta">.macro</span> get_dir(%des, %i, %<span class="keyword">j)</span></span><br><span class="line"><span class="keyword"></span>	<span class="keyword">sll </span> %des, %i, <span class="number">1</span></span><br><span class="line">	<span class="keyword">add </span> %des, %des, %<span class="keyword">j</span></span><br><span class="line"><span class="keyword"></span>	<span class="keyword">sll </span> %des, %des, <span class="number">2</span></span><br><span class="line">.end_macro</span><br><span class="line"></span><br><span class="line"><span class="meta">.macro</span> push(%src)</span><br><span class="line">	<span class="keyword">sw </span>  %src, <span class="number">0</span>($<span class="built_in">sp</span>)</span><br><span class="line">	<span class="keyword">subi </span>$<span class="built_in">sp</span>, $<span class="built_in">sp</span>, <span class="number">4</span></span><br><span class="line">.end_macro</span><br><span class="line"></span><br><span class="line"><span class="meta">.macro</span> pop(%des)</span><br><span class="line">	<span class="keyword">addi </span>$<span class="built_in">sp</span>, $<span class="built_in">sp</span>, <span class="number">4</span></span><br><span class="line">	<span class="keyword">lw </span>  %des, <span class="number">0</span>($<span class="built_in">sp</span>)</span><br><span class="line">.end_macro</span><br><span class="line"></span><br><span class="line"><span class="meta">.text</span></span><br><span class="line">li   $<span class="built_in">s6</span>, -<span class="number">1</span></span><br><span class="line">li   $<span class="built_in">s7</span>, <span class="number">1</span> <span class="comment"># const</span></span><br><span class="line">li   $<span class="built_in">t8</span>, <span class="number">4</span></span><br><span class="line"><span class="symbol"></span></span><br><span class="line"><span class="symbol">init_dir:</span></span><br><span class="line">	li   $<span class="built_in">t0</span>, <span class="number">0</span></span><br><span class="line">	li   $<span class="built_in">t1</span>, <span class="number">0</span></span><br><span class="line">	get_dir($<span class="built_in">t9</span>, $<span class="built_in">t0</span>, $<span class="built_in">t1</span>)</span><br><span class="line">	<span class="keyword">sw </span>  $<span class="number">0</span>, <span class="keyword">dir($t9)</span></span><br><span class="line"><span class="keyword"></span>	li   $<span class="built_in">t1</span>, <span class="number">1</span></span><br><span class="line">	get_dir($<span class="built_in">t9</span>, $<span class="built_in">t0</span>, $<span class="built_in">t1</span>)</span><br><span class="line">	<span class="keyword">sw </span>  $<span class="built_in">s7</span>, <span class="keyword">dir($t9)</span></span><br><span class="line"><span class="keyword"></span>	</span><br><span class="line">	li   $<span class="built_in">t0</span>, <span class="number">1</span></span><br><span class="line">	li   $<span class="built_in">t1</span>, <span class="number">0</span></span><br><span class="line">	get_dir($<span class="built_in">t9</span>, $<span class="built_in">t0</span>, $<span class="built_in">t1</span>)</span><br><span class="line">	<span class="keyword">sw </span>  $<span class="built_in">s7</span>, <span class="keyword">dir($t9)</span></span><br><span class="line"><span class="keyword"></span>	li   $<span class="built_in">t1</span>, <span class="number">1</span></span><br><span class="line">	get_dir($<span class="built_in">t9</span>, $<span class="built_in">t0</span>, $<span class="built_in">t1</span>)</span><br><span class="line">	<span class="keyword">sw </span>  $<span class="number">0</span>, <span class="keyword">dir($t9)</span></span><br><span class="line"><span class="keyword"></span>	</span><br><span class="line">	li   $<span class="built_in">t0</span>, <span class="number">2</span></span><br><span class="line">	li   $<span class="built_in">t1</span>, <span class="number">0</span></span><br><span class="line">	get_dir($<span class="built_in">t9</span>, $<span class="built_in">t0</span>, $<span class="built_in">t1</span>)</span><br><span class="line">	<span class="keyword">sw </span>  $<span class="number">0</span>, <span class="keyword">dir($t9)</span></span><br><span class="line"><span class="keyword"></span>	li   $<span class="built_in">t1</span>, <span class="number">1</span></span><br><span class="line">	get_dir($<span class="built_in">t9</span>, $<span class="built_in">t0</span>, $<span class="built_in">t1</span>)</span><br><span class="line">	<span class="keyword">sw </span>  $<span class="built_in">s6</span>, <span class="keyword">dir($t9)</span></span><br><span class="line"><span class="keyword"></span>	</span><br><span class="line">	li   $<span class="built_in">t0</span>, <span class="number">3</span></span><br><span class="line">	li   $<span class="built_in">t1</span>, <span class="number">0</span></span><br><span class="line">	get_dir($<span class="built_in">t9</span>, $<span class="built_in">t0</span>, $<span class="built_in">t1</span>)</span><br><span class="line">	<span class="keyword">sw </span>  $<span class="built_in">s6</span>, <span class="keyword">dir($t9)</span></span><br><span class="line"><span class="keyword"></span>	li   $<span class="built_in">t1</span>, <span class="number">1</span></span><br><span class="line">	get_dir($<span class="built_in">t9</span>, $<span class="built_in">t0</span>, $<span class="built_in">t1</span>)</span><br><span class="line">	<span class="keyword">sw </span>  $<span class="number">0</span>, <span class="keyword">dir($t9)</span></span><br><span class="line"><span class="keyword"></span><span class="symbol">	</span></span><br><span class="line"><span class="symbol">main:</span></span><br><span class="line">	li   $<span class="built_in">v0</span>, <span class="number">5</span></span><br><span class="line">	<span class="keyword">syscall</span></span><br><span class="line"><span class="keyword"></span>	<span class="keyword">move </span>$<span class="built_in">s0</span>, $<span class="built_in">v0</span> <span class="comment"># n</span></span><br><span class="line">	li   $<span class="built_in">v0</span>, <span class="number">5</span></span><br><span class="line">	<span class="keyword">syscall</span></span><br><span class="line"><span class="keyword"></span>	<span class="keyword">move </span>$<span class="built_in">s1</span>, $<span class="built_in">v0</span> <span class="comment"># m</span></span><br><span class="line">	</span><br><span class="line">	li   $<span class="built_in">t0</span>, <span class="number">1</span> <span class="comment"># i</span></span><br><span class="line"><span class="symbol">	input1:</span></span><br><span class="line">		<span class="keyword">bgt </span> $<span class="built_in">t0</span>, $<span class="built_in">s0</span>, input1_end</span><br><span class="line">		li   $<span class="built_in">t1</span>, <span class="number">1</span> <span class="comment"># j</span></span><br><span class="line"><span class="symbol">		input2:</span></span><br><span class="line">			<span class="keyword">bgt </span> $<span class="built_in">t1</span>, $<span class="built_in">s1</span>, input2_end</span><br><span class="line">			get_map($<span class="built_in">t9</span>, $<span class="built_in">t0</span>, $<span class="built_in">t1</span>, $<span class="built_in">s1</span>)</span><br><span class="line">			li   $<span class="built_in">v0</span>, <span class="number">5</span></span><br><span class="line">			<span class="keyword">syscall</span></span><br><span class="line"><span class="keyword"></span>			<span class="keyword">sw </span>  $<span class="built_in">v0</span>, map($<span class="built_in">t9</span>)</span><br><span class="line">			<span class="keyword">addi </span>$<span class="built_in">t1</span>, $<span class="built_in">t1</span>, <span class="number">1</span></span><br><span class="line">			<span class="keyword">j </span>   input2</span><br><span class="line"><span class="symbol">		input2_end:</span></span><br><span class="line">		<span class="keyword">addi </span>$<span class="built_in">t0</span>, $<span class="built_in">t0</span>, <span class="number">1</span></span><br><span class="line">		<span class="keyword">j </span>   input1</span><br><span class="line"><span class="symbol">	input1_end:</span></span><br><span class="line">	</span><br><span class="line">	li   $<span class="built_in">v0</span>, <span class="number">5</span></span><br><span class="line">	<span class="keyword">syscall</span></span><br><span class="line"><span class="keyword"></span>	<span class="keyword">move </span>$<span class="built_in">s2</span>, $<span class="built_in">v0</span> <span class="comment"># start_x</span></span><br><span class="line">	li   $<span class="built_in">v0</span>, <span class="number">5</span></span><br><span class="line">	<span class="keyword">syscall</span></span><br><span class="line"><span class="keyword"></span>	<span class="keyword">move </span>$<span class="built_in">s3</span>, $<span class="built_in">v0</span> <span class="comment"># start_y</span></span><br><span class="line">	li   $<span class="built_in">v0</span>, <span class="number">5</span></span><br><span class="line">	<span class="keyword">syscall</span></span><br><span class="line"><span class="keyword"></span>	<span class="keyword">move </span>$<span class="built_in">s4</span>, $<span class="built_in">v0</span> <span class="comment"># end_x</span></span><br><span class="line">	li   $<span class="built_in">v0</span>, <span class="number">5</span></span><br><span class="line">	<span class="keyword">syscall</span></span><br><span class="line"><span class="keyword"></span>	<span class="keyword">move </span>$<span class="built_in">s5</span>, $<span class="built_in">v0</span> <span class="comment"># end_y</span></span><br><span class="line">	li   $<span class="built_in">t7</span>, <span class="number">0</span> <span class="comment"># result</span></span><br><span class="line">	</span><br><span class="line">	get_map($<span class="built_in">t9</span>, $<span class="built_in">s2</span>, $<span class="built_in">s3</span>, $<span class="built_in">s1</span>)</span><br><span class="line">	<span class="keyword">sw </span>  $<span class="built_in">s6</span>, map($<span class="built_in">t9</span>)</span><br><span class="line">	<span class="keyword">move </span>$<span class="built_in">a1</span>, $<span class="built_in">s2</span> <span class="comment"># argument x</span></span><br><span class="line">	<span class="keyword">move </span>$<span class="built_in">a2</span>, $<span class="built_in">s3</span> <span class="comment"># argument y</span></span><br><span class="line">	</span><br><span class="line">	<span class="keyword">jal </span> dfs</span><br><span class="line">	</span><br><span class="line">	li   $<span class="built_in">v0</span>, <span class="number">1</span></span><br><span class="line">	<span class="keyword">move </span>$<span class="built_in">a0</span>, $<span class="built_in">t7</span></span><br><span class="line">	<span class="keyword">syscall</span></span><br><span class="line"><span class="keyword"></span>	li   $<span class="built_in">v0</span>, <span class="number">10</span></span><br><span class="line">	<span class="keyword">syscall</span></span><br><span class="line"><span class="keyword"></span><span class="symbol">	</span></span><br><span class="line"><span class="symbol">dfs:</span></span><br><span class="line">	<span class="keyword">bne </span> $<span class="built_in">a1</span>, $<span class="built_in">s4</span>, Else</span><br><span class="line">	<span class="keyword">bne </span> $<span class="built_in">a2</span>, $<span class="built_in">s5</span>, Else</span><br><span class="line"><span class="symbol">	If0:</span></span><br><span class="line">		<span class="keyword">addi </span>$<span class="built_in">t7</span>, $<span class="built_in">t7</span>, <span class="number">1</span></span><br><span class="line">		<span class="keyword">jr </span>  $<span class="built_in">ra</span></span><br><span class="line"><span class="symbol">	Else:</span></span><br><span class="line">	</span><br><span class="line">	li   $<span class="built_in">t0</span>, <span class="number">0</span> <span class="comment"># for int i = 0;</span></span><br><span class="line"><span class="symbol">	loop:</span></span><br><span class="line">		<span class="keyword">bge </span> $<span class="built_in">t0</span>, $<span class="built_in">t8</span>, loop_end</span><br><span class="line">		get_dir($<span class="built_in">t9</span>, $<span class="built_in">t0</span>, $<span class="number">0</span>)</span><br><span class="line">		<span class="keyword">lw </span>  $<span class="built_in">t1</span>, <span class="keyword">dir($t9)</span></span><br><span class="line"><span class="keyword"></span>		get_dir($<span class="built_in">t9</span>, $<span class="built_in">t0</span>, $<span class="built_in">s7</span>)</span><br><span class="line">		<span class="keyword">lw </span>  $<span class="built_in">t2</span>, <span class="keyword">dir($t9)</span></span><br><span class="line"><span class="keyword"></span>		<span class="keyword">add </span> $<span class="built_in">t1</span>, $<span class="built_in">t1</span>, $<span class="built_in">a1</span> <span class="comment">#tx</span></span><br><span class="line">		<span class="keyword">add </span> $<span class="built_in">t2</span>, $<span class="built_in">t2</span>, $<span class="built_in">a2</span> <span class="comment">#ty</span></span><br><span class="line">		</span><br><span class="line">		<span class="keyword">ble </span> $<span class="built_in">t1</span>, $<span class="number">0</span>, If</span><br><span class="line">		<span class="keyword">ble </span> $<span class="built_in">t2</span>, $<span class="number">0</span>, If</span><br><span class="line">		<span class="keyword">bgt </span> $<span class="built_in">t1</span>, $<span class="built_in">s0</span>, If</span><br><span class="line">		<span class="keyword">bgt </span> $<span class="built_in">t2</span>, $<span class="built_in">s1</span>, If</span><br><span class="line">		</span><br><span class="line">		get_map($<span class="built_in">t9</span>, $<span class="built_in">t1</span>, $<span class="built_in">t2</span>, $<span class="built_in">s1</span>)</span><br><span class="line">		<span class="keyword">lw </span>  $<span class="built_in">t3</span>, map($<span class="built_in">t9</span>)</span><br><span class="line">		<span class="keyword">bne </span> $<span class="built_in">t3</span>, $<span class="number">0</span>, If</span><br><span class="line">		</span><br><span class="line">		<span class="comment"># possible</span></span><br><span class="line">		<span class="keyword">sw </span>  $<span class="built_in">s6</span>, map($<span class="built_in">t9</span>)</span><br><span class="line">		push($<span class="built_in">ra</span>)</span><br><span class="line">		push($<span class="built_in">a2</span>)</span><br><span class="line">		push($<span class="built_in">a1</span>)</span><br><span class="line">		push($<span class="built_in">t2</span>)</span><br><span class="line">		push($<span class="built_in">t1</span>)</span><br><span class="line">		push($<span class="built_in">t0</span>)</span><br><span class="line">		<span class="keyword">move </span>$<span class="built_in">a1</span>, $<span class="built_in">t1</span></span><br><span class="line">		<span class="keyword">move </span>$<span class="built_in">a2</span>, $<span class="built_in">t2</span></span><br><span class="line">		</span><br><span class="line">		<span class="keyword">jal </span> dfs</span><br><span class="line">		</span><br><span class="line">		pop($<span class="built_in">t0</span>)</span><br><span class="line">		pop($<span class="built_in">t1</span>)</span><br><span class="line">		pop($<span class="built_in">t2</span>)</span><br><span class="line">		pop($<span class="built_in">a1</span>)</span><br><span class="line">		pop($<span class="built_in">a2</span>)</span><br><span class="line">		pop($<span class="built_in">ra</span>)</span><br><span class="line">		get_map($<span class="built_in">t9</span>, $<span class="built_in">t1</span>, $<span class="built_in">t2</span>, $<span class="built_in">s1</span>)</span><br><span class="line">		<span class="keyword">sw </span>  $<span class="number">0</span>, map($<span class="built_in">t9</span>)</span><br><span class="line"><span class="symbol">		</span></span><br><span class="line"><span class="symbol">		If:</span></span><br><span class="line">		<span class="keyword">addi </span>$<span class="built_in">t0</span>, $<span class="built_in">t0</span>, <span class="number">1</span></span><br><span class="line">		<span class="keyword">j </span>   loop</span><br><span class="line"><span class="symbol">	loop_end:</span></span><br><span class="line">	<span class="keyword">jr </span>  $<span class="built_in">ra</span></span><br></pre></td></tr></table></figure>
+<h2 id="参考解答-1"><a href="#参考解答-1" class="headerlink" title="参考解答"></a>参考解答</h2><h3 id="解答1"><a href="#解答1" class="headerlink" title="解答1"></a>解答1</h3><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-meta">.data</span><br><span class="hljs-symbol">	map:</span> <span class="hljs-meta">.space</span> <span class="hljs-number">400</span><br><span class="hljs-symbol">	dir:</span> <span class="hljs-meta">.space</span> <span class="hljs-number">48</span><br><br><span class="hljs-meta">.macro</span> get_map(%des, %i, %<span class="hljs-keyword">j, </span>%col)<br>	<span class="hljs-keyword">mult </span>%i, %col<br>	<span class="hljs-keyword">mflo </span>%des<br>	<span class="hljs-keyword">add </span> %des, %des, %<span class="hljs-keyword">j</span><br><span class="hljs-keyword"></span>	<span class="hljs-keyword">sll </span> %des, %des, <span class="hljs-number">2</span><br>.end_macro<br><br><span class="hljs-meta">.macro</span> get_dir(%des, %i, %<span class="hljs-keyword">j)</span><br><span class="hljs-keyword"></span>	<span class="hljs-keyword">sll </span> %des, %i, <span class="hljs-number">1</span><br>	<span class="hljs-keyword">add </span> %des, %des, %<span class="hljs-keyword">j</span><br><span class="hljs-keyword"></span>	<span class="hljs-keyword">sll </span> %des, %des, <span class="hljs-number">2</span><br>.end_macro<br><br><span class="hljs-meta">.macro</span> push(%src)<br>	<span class="hljs-keyword">sw </span>  %src, <span class="hljs-number">0</span>($<span class="hljs-built_in">sp</span>)<br>	<span class="hljs-keyword">subi </span>$<span class="hljs-built_in">sp</span>, $<span class="hljs-built_in">sp</span>, <span class="hljs-number">4</span><br>.end_macro<br><br><span class="hljs-meta">.macro</span> pop(%des)<br>	<span class="hljs-keyword">addi </span>$<span class="hljs-built_in">sp</span>, $<span class="hljs-built_in">sp</span>, <span class="hljs-number">4</span><br>	<span class="hljs-keyword">lw </span>  %des, <span class="hljs-number">0</span>($<span class="hljs-built_in">sp</span>)<br>.end_macro<br><br><span class="hljs-meta">.text</span><br>li   $<span class="hljs-built_in">s6</span>, -<span class="hljs-number">1</span><br>li   $<span class="hljs-built_in">s7</span>, <span class="hljs-number">1</span> <span class="hljs-comment"># const</span><br>li   $<span class="hljs-built_in">t8</span>, <span class="hljs-number">4</span><br><span class="hljs-symbol"></span><br><span class="hljs-symbol">init_dir:</span><br>	li   $<span class="hljs-built_in">t0</span>, <span class="hljs-number">0</span><br>	li   $<span class="hljs-built_in">t1</span>, <span class="hljs-number">0</span><br>	get_dir($<span class="hljs-built_in">t9</span>, $<span class="hljs-built_in">t0</span>, $<span class="hljs-built_in">t1</span>)<br>	<span class="hljs-keyword">sw </span>  $<span class="hljs-number">0</span>, <span class="hljs-keyword">dir($t9)</span><br><span class="hljs-keyword"></span>	li   $<span class="hljs-built_in">t1</span>, <span class="hljs-number">1</span><br>	get_dir($<span class="hljs-built_in">t9</span>, $<span class="hljs-built_in">t0</span>, $<span class="hljs-built_in">t1</span>)<br>	<span class="hljs-keyword">sw </span>  $<span class="hljs-built_in">s7</span>, <span class="hljs-keyword">dir($t9)</span><br><span class="hljs-keyword"></span>	<br>	li   $<span class="hljs-built_in">t0</span>, <span class="hljs-number">1</span><br>	li   $<span class="hljs-built_in">t1</span>, <span class="hljs-number">0</span><br>	get_dir($<span class="hljs-built_in">t9</span>, $<span class="hljs-built_in">t0</span>, $<span class="hljs-built_in">t1</span>)<br>	<span class="hljs-keyword">sw </span>  $<span class="hljs-built_in">s7</span>, <span class="hljs-keyword">dir($t9)</span><br><span class="hljs-keyword"></span>	li   $<span class="hljs-built_in">t1</span>, <span class="hljs-number">1</span><br>	get_dir($<span class="hljs-built_in">t9</span>, $<span class="hljs-built_in">t0</span>, $<span class="hljs-built_in">t1</span>)<br>	<span class="hljs-keyword">sw </span>  $<span class="hljs-number">0</span>, <span class="hljs-keyword">dir($t9)</span><br><span class="hljs-keyword"></span>	<br>	li   $<span class="hljs-built_in">t0</span>, <span class="hljs-number">2</span><br>	li   $<span class="hljs-built_in">t1</span>, <span class="hljs-number">0</span><br>	get_dir($<span class="hljs-built_in">t9</span>, $<span class="hljs-built_in">t0</span>, $<span class="hljs-built_in">t1</span>)<br>	<span class="hljs-keyword">sw </span>  $<span class="hljs-number">0</span>, <span class="hljs-keyword">dir($t9)</span><br><span class="hljs-keyword"></span>	li   $<span class="hljs-built_in">t1</span>, <span class="hljs-number">1</span><br>	get_dir($<span class="hljs-built_in">t9</span>, $<span class="hljs-built_in">t0</span>, $<span class="hljs-built_in">t1</span>)<br>	<span class="hljs-keyword">sw </span>  $<span class="hljs-built_in">s6</span>, <span class="hljs-keyword">dir($t9)</span><br><span class="hljs-keyword"></span>	<br>	li   $<span class="hljs-built_in">t0</span>, <span class="hljs-number">3</span><br>	li   $<span class="hljs-built_in">t1</span>, <span class="hljs-number">0</span><br>	get_dir($<span class="hljs-built_in">t9</span>, $<span class="hljs-built_in">t0</span>, $<span class="hljs-built_in">t1</span>)<br>	<span class="hljs-keyword">sw </span>  $<span class="hljs-built_in">s6</span>, <span class="hljs-keyword">dir($t9)</span><br><span class="hljs-keyword"></span>	li   $<span class="hljs-built_in">t1</span>, <span class="hljs-number">1</span><br>	get_dir($<span class="hljs-built_in">t9</span>, $<span class="hljs-built_in">t0</span>, $<span class="hljs-built_in">t1</span>)<br>	<span class="hljs-keyword">sw </span>  $<span class="hljs-number">0</span>, <span class="hljs-keyword">dir($t9)</span><br><span class="hljs-keyword"></span><span class="hljs-symbol">	</span><br><span class="hljs-symbol">main:</span><br>	li   $<span class="hljs-built_in">v0</span>, <span class="hljs-number">5</span><br>	<span class="hljs-keyword">syscall</span><br><span class="hljs-keyword"></span>	<span class="hljs-keyword">move </span>$<span class="hljs-built_in">s0</span>, $<span class="hljs-built_in">v0</span> <span class="hljs-comment"># n</span><br>	li   $<span class="hljs-built_in">v0</span>, <span class="hljs-number">5</span><br>	<span class="hljs-keyword">syscall</span><br><span class="hljs-keyword"></span>	<span class="hljs-keyword">move </span>$<span class="hljs-built_in">s1</span>, $<span class="hljs-built_in">v0</span> <span class="hljs-comment"># m</span><br>	<br>	li   $<span class="hljs-built_in">t0</span>, <span class="hljs-number">1</span> <span class="hljs-comment"># i</span><br><span class="hljs-symbol">	input1:</span><br>		<span class="hljs-keyword">bgt </span> $<span class="hljs-built_in">t0</span>, $<span class="hljs-built_in">s0</span>, input1_end<br>		li   $<span class="hljs-built_in">t1</span>, <span class="hljs-number">1</span> <span class="hljs-comment"># j</span><br><span class="hljs-symbol">		input2:</span><br>			<span class="hljs-keyword">bgt </span> $<span class="hljs-built_in">t1</span>, $<span class="hljs-built_in">s1</span>, input2_end<br>			get_map($<span class="hljs-built_in">t9</span>, $<span class="hljs-built_in">t0</span>, $<span class="hljs-built_in">t1</span>, $<span class="hljs-built_in">s1</span>)<br>			li   $<span class="hljs-built_in">v0</span>, <span class="hljs-number">5</span><br>			<span class="hljs-keyword">syscall</span><br><span class="hljs-keyword"></span>			<span class="hljs-keyword">sw </span>  $<span class="hljs-built_in">v0</span>, map($<span class="hljs-built_in">t9</span>)<br>			<span class="hljs-keyword">addi </span>$<span class="hljs-built_in">t1</span>, $<span class="hljs-built_in">t1</span>, <span class="hljs-number">1</span><br>			<span class="hljs-keyword">j </span>   input2<br><span class="hljs-symbol">		input2_end:</span><br>		<span class="hljs-keyword">addi </span>$<span class="hljs-built_in">t0</span>, $<span class="hljs-built_in">t0</span>, <span class="hljs-number">1</span><br>		<span class="hljs-keyword">j </span>   input1<br><span class="hljs-symbol">	input1_end:</span><br>	<br>	li   $<span class="hljs-built_in">v0</span>, <span class="hljs-number">5</span><br>	<span class="hljs-keyword">syscall</span><br><span class="hljs-keyword"></span>	<span class="hljs-keyword">move </span>$<span class="hljs-built_in">s2</span>, $<span class="hljs-built_in">v0</span> <span class="hljs-comment"># start_x</span><br>	li   $<span class="hljs-built_in">v0</span>, <span class="hljs-number">5</span><br>	<span class="hljs-keyword">syscall</span><br><span class="hljs-keyword"></span>	<span class="hljs-keyword">move </span>$<span class="hljs-built_in">s3</span>, $<span class="hljs-built_in">v0</span> <span class="hljs-comment"># start_y</span><br>	li   $<span class="hljs-built_in">v0</span>, <span class="hljs-number">5</span><br>	<span class="hljs-keyword">syscall</span><br><span class="hljs-keyword"></span>	<span class="hljs-keyword">move </span>$<span class="hljs-built_in">s4</span>, $<span class="hljs-built_in">v0</span> <span class="hljs-comment"># end_x</span><br>	li   $<span class="hljs-built_in">v0</span>, <span class="hljs-number">5</span><br>	<span class="hljs-keyword">syscall</span><br><span class="hljs-keyword"></span>	<span class="hljs-keyword">move </span>$<span class="hljs-built_in">s5</span>, $<span class="hljs-built_in">v0</span> <span class="hljs-comment"># end_y</span><br>	li   $<span class="hljs-built_in">t7</span>, <span class="hljs-number">0</span> <span class="hljs-comment"># result</span><br>	<br>	get_map($<span class="hljs-built_in">t9</span>, $<span class="hljs-built_in">s2</span>, $<span class="hljs-built_in">s3</span>, $<span class="hljs-built_in">s1</span>)<br>	<span class="hljs-keyword">sw </span>  $<span class="hljs-built_in">s6</span>, map($<span class="hljs-built_in">t9</span>)<br>	<span class="hljs-keyword">move </span>$<span class="hljs-built_in">a1</span>, $<span class="hljs-built_in">s2</span> <span class="hljs-comment"># argument x</span><br>	<span class="hljs-keyword">move </span>$<span class="hljs-built_in">a2</span>, $<span class="hljs-built_in">s3</span> <span class="hljs-comment"># argument y</span><br>	<br>	<span class="hljs-keyword">jal </span> dfs<br>	<br>	li   $<span class="hljs-built_in">v0</span>, <span class="hljs-number">1</span><br>	<span class="hljs-keyword">move </span>$<span class="hljs-built_in">a0</span>, $<span class="hljs-built_in">t7</span><br>	<span class="hljs-keyword">syscall</span><br><span class="hljs-keyword"></span>	li   $<span class="hljs-built_in">v0</span>, <span class="hljs-number">10</span><br>	<span class="hljs-keyword">syscall</span><br><span class="hljs-keyword"></span><span class="hljs-symbol">	</span><br><span class="hljs-symbol">dfs:</span><br>	<span class="hljs-keyword">bne </span> $<span class="hljs-built_in">a1</span>, $<span class="hljs-built_in">s4</span>, Else<br>	<span class="hljs-keyword">bne </span> $<span class="hljs-built_in">a2</span>, $<span class="hljs-built_in">s5</span>, Else<br><span class="hljs-symbol">	If0:</span><br>		<span class="hljs-keyword">addi </span>$<span class="hljs-built_in">t7</span>, $<span class="hljs-built_in">t7</span>, <span class="hljs-number">1</span><br>		<span class="hljs-keyword">jr </span>  $<span class="hljs-built_in">ra</span><br><span class="hljs-symbol">	Else:</span><br>	<br>	li   $<span class="hljs-built_in">t0</span>, <span class="hljs-number">0</span> <span class="hljs-comment"># for int i = 0;</span><br><span class="hljs-symbol">	loop:</span><br>		<span class="hljs-keyword">bge </span> $<span class="hljs-built_in">t0</span>, $<span class="hljs-built_in">t8</span>, loop_end<br>		get_dir($<span class="hljs-built_in">t9</span>, $<span class="hljs-built_in">t0</span>, $<span class="hljs-number">0</span>)<br>		<span class="hljs-keyword">lw </span>  $<span class="hljs-built_in">t1</span>, <span class="hljs-keyword">dir($t9)</span><br><span class="hljs-keyword"></span>		get_dir($<span class="hljs-built_in">t9</span>, $<span class="hljs-built_in">t0</span>, $<span class="hljs-built_in">s7</span>)<br>		<span class="hljs-keyword">lw </span>  $<span class="hljs-built_in">t2</span>, <span class="hljs-keyword">dir($t9)</span><br><span class="hljs-keyword"></span>		<span class="hljs-keyword">add </span> $<span class="hljs-built_in">t1</span>, $<span class="hljs-built_in">t1</span>, $<span class="hljs-built_in">a1</span> <span class="hljs-comment">#tx</span><br>		<span class="hljs-keyword">add </span> $<span class="hljs-built_in">t2</span>, $<span class="hljs-built_in">t2</span>, $<span class="hljs-built_in">a2</span> <span class="hljs-comment">#ty</span><br>		<br>		<span class="hljs-keyword">ble </span> $<span class="hljs-built_in">t1</span>, $<span class="hljs-number">0</span>, If<br>		<span class="hljs-keyword">ble </span> $<span class="hljs-built_in">t2</span>, $<span class="hljs-number">0</span>, If<br>		<span class="hljs-keyword">bgt </span> $<span class="hljs-built_in">t1</span>, $<span class="hljs-built_in">s0</span>, If<br>		<span class="hljs-keyword">bgt </span> $<span class="hljs-built_in">t2</span>, $<span class="hljs-built_in">s1</span>, If<br>		<br>		get_map($<span class="hljs-built_in">t9</span>, $<span class="hljs-built_in">t1</span>, $<span class="hljs-built_in">t2</span>, $<span class="hljs-built_in">s1</span>)<br>		<span class="hljs-keyword">lw </span>  $<span class="hljs-built_in">t3</span>, map($<span class="hljs-built_in">t9</span>)<br>		<span class="hljs-keyword">bne </span> $<span class="hljs-built_in">t3</span>, $<span class="hljs-number">0</span>, If<br>		<br>		<span class="hljs-comment"># possible</span><br>		<span class="hljs-keyword">sw </span>  $<span class="hljs-built_in">s6</span>, map($<span class="hljs-built_in">t9</span>)<br>		push($<span class="hljs-built_in">ra</span>)<br>		push($<span class="hljs-built_in">a2</span>)<br>		push($<span class="hljs-built_in">a1</span>)<br>		push($<span class="hljs-built_in">t2</span>)<br>		push($<span class="hljs-built_in">t1</span>)<br>		push($<span class="hljs-built_in">t0</span>)<br>		<span class="hljs-keyword">move </span>$<span class="hljs-built_in">a1</span>, $<span class="hljs-built_in">t1</span><br>		<span class="hljs-keyword">move </span>$<span class="hljs-built_in">a2</span>, $<span class="hljs-built_in">t2</span><br>		<br>		<span class="hljs-keyword">jal </span> dfs<br>		<br>		pop($<span class="hljs-built_in">t0</span>)<br>		pop($<span class="hljs-built_in">t1</span>)<br>		pop($<span class="hljs-built_in">t2</span>)<br>		pop($<span class="hljs-built_in">a1</span>)<br>		pop($<span class="hljs-built_in">a2</span>)<br>		pop($<span class="hljs-built_in">ra</span>)<br>		get_map($<span class="hljs-built_in">t9</span>, $<span class="hljs-built_in">t1</span>, $<span class="hljs-built_in">t2</span>, $<span class="hljs-built_in">s1</span>)<br>		<span class="hljs-keyword">sw </span>  $<span class="hljs-number">0</span>, map($<span class="hljs-built_in">t9</span>)<br><span class="hljs-symbol">		</span><br><span class="hljs-symbol">		If:</span><br>		<span class="hljs-keyword">addi </span>$<span class="hljs-built_in">t0</span>, $<span class="hljs-built_in">t0</span>, <span class="hljs-number">1</span><br>		<span class="hljs-keyword">j </span>   loop<br><span class="hljs-symbol">	loop_end:</span><br>	<span class="hljs-keyword">jr </span>  $<span class="hljs-built_in">ra</span><br></code></pre></td></tr></table></figure>
 
-</article>
-    
-    
-
-</div>
-<div class="trm-post-next-prev row">
-    <div class="col-lg-12">
-        <!-- title -->
-        <h5 class="trm-title-with-divider">
-            其他文章
-            <span data-number="02"></span>
-        </h5>
-    </div>
-    
-        <div class="col-lg-6">
-    <div class="trm-blog-card trm-scroll-animation">
-        <a href="/2023/10/30/P3-%E5%8D%95%E5%91%A8%E6%9C%9FCPU%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3/" class="trm-cover-frame trm-anima-link">
-            
-            
-                <img alt="cover" class="no-fancybox" src="/img/block.jpg">
-            
-        </a>
-        
-        <div class="trm-card-descr">
-            <div class="trm-label trm-category trm-mb-20">
-                <a href=" /categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/">
-                    计算机组成
-                </a>
-            </div>
-            <h5>
-                <a href="/2023/10/30/P3-%E5%8D%95%E5%91%A8%E6%9C%9FCPU%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3/" class="trm-anima-link">
-                    P3 - 单周期CPU设计文档
-                </a>
-            </h5>
-            <div class="trm-divider trm-mb-20 trm-mt-20"></div>
-            <ul class="trm-card-data trm-label">
-                <li>23/10/30</li>
-                <li>21:38</li>
                 
-                
-            </ul>
-        </div>
-    </div>
-</div>
-    
-    
-        <div class="col-lg-6">
-    <div class="trm-blog-card trm-scroll-animation">
-        <a href="/2023/10/08/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" class="trm-cover-frame trm-anima-link">
+              </div>
             
-            
-                <img alt="cover" class="no-fancybox" src="/img/block.jpg">
-            
-        </a>
-        
-        <div class="trm-card-descr">
-            <div class="trm-label trm-category trm-mb-20">
-                <a href=" /categories/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/">
-                    面向对象程序设计
-                </a>
-            </div>
-            <h5>
-                <a href="/2023/10/08/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" class="trm-anima-link">
-                    正则表达式总结
-                </a>
-            </h5>
-            <div class="trm-divider trm-mb-20 trm-mt-20"></div>
-            <ul class="trm-card-data trm-label">
-                <li>23/10/08</li>
-                <li>23:46</li>
-                
-                
-            </ul>
-        </div>
-    </div>
-</div>
-    
-</div>
-
-    
-
-
-
-                    <div class="trm-divider footer-divider"></div>
-
-                    <!-- footer -->
-                    <footer class="trm-scroll-animation">
-
-    
-
-    
-
-    
-        <div class="trm-footer-item">
-            <span>
-                由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v6.3.0
-            </span>
-            <span class="footer-separator" data-separator=" | "></span>
-            <span> 
-                主题 - 
-                <a rel="noopener" href='https://github.com/MaLuns/hexo-theme-async' target='_blank'>Async</a>
-                v2.1.10
-            </span>
-        </div>
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
       
 
-     
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/" class="category-chain-item">计算机组成</a>
+  
+  
 
-     
-</footer>
-                    <!-- footer end -->
+      </span>
+    
+  
+</span>
 
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%80%BB%E7%BB%93/" class="print-no-link">#总结</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>递归调用汇编代码翻译的一些心得</div>
+      <div>https://galaxy-jewxw.github.io/2023/10/21/递归调用汇编代码翻译的一些心得/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Traumtänzer aka 'Jew1!5!'</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2023年10月21日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2023/10/30/P3-%E5%8D%95%E5%91%A8%E6%9C%9FCPU%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3/" title="P3 - 单周期CPU设计文档">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">P3 - 单周期CPU设计文档</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2023/10/08/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" title="正则表达式总结">
+                        <span class="hidden-mobile">正则表达式总结</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
                 </div>
+              
             </div>
-        </div>
-    </div>
-</div>
-            <!-- body end -->
 
             
-
-            
-<div class="trm-fixed-container">
-    
-    
-        <div class="trm-fixed-btn" data-title="阅读模式" onclick="asyncFun.switchReadMode()">
-            <i class="iconfont fas fa-book-reader"></i>
-        </div>
-    
-    
-    <div id="trm-back-top" class="trm-fixed-btn" data-title="回到顶部">
-        <i class="iconfont fas fa-arrow-up"></i>
-    </div>
-</div>
+          </article>
         </div>
       </div>
-      <!-- scroll container end -->
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
   </div>
-  <!-- app wrapper end -->
+</div>
+
+
+
+
 
   
-  <!-- Plugin -->
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
 
 
 
 
-    
-    
-<script src="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
-
-    
-
-    
-
-    
-
-    <!-- 数学公式 -->
-    
-
-    <!-- 评论插件 -->
-    
-        
-
-        
-    
 
 
 
-<!-- CDN -->
 
-
-    
 
     
 
     
-
-
-
-
-    <!-- Service Worker -->
-    
-    <!-- baidu push -->
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
     
 
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
 
-<script id="async-script" src="/js/main.js?v=2.1.10"></script>
+    
 
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+      Powered by <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> | <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
 </body>
-
 </html>
