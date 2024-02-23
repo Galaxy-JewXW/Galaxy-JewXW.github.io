@@ -1,312 +1,325 @@
-
-
 <!DOCTYPE html>
-<html lang="zh-CN" data-default-color-scheme=auto>
-
-
+<html lang="zh-CN">
 
 <head>
-  <meta charset="UTF-8">
-  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon-main.png">
-  <link rel="icon" href="/img/icon-main.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  
-  <meta name="theme-color" content="#2f4154">
-  <meta name="author" content="Traumtänzer aka &#39;Jew1!5!&#39;">
-  <meta name="keywords" content="">
-  
-    <meta name="description" content="MIPS微系统 - Verilog实现">
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<meta name="x5-fullscreen" content="true">
+<meta name="full-screen" content="yes">
+<meta name="theme-color" content="#317EFB" />
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=0" name="viewport">
+<meta name="description" content="MIPS微系统 - Verilog实现">
 <meta property="og:type" content="article">
 <meta property="og:title" content="P6 - 流水线CPU设计文档">
 <meta property="og:url" content="https://galaxy-jewxw.github.io/2023/11/28/P6%20%E6%B5%81%E6%B0%B4%E7%BA%BFCPU%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3/index.html">
 <meta property="og:site_name" content="Jew&#39;s Blog">
 <meta property="og:description" content="MIPS微系统 - Verilog实现">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://pic.imgdb.cn/item/654cc27dc458853aef789452.png">
+<meta property="og:image" content="https://galaxy-jewxw.github.io/img/404.jpg">
 <meta property="article:published_time" content="2023-11-28T05:52:12.000Z">
 <meta property="article:modified_time" content="2024-01-18T14:39:27.632Z">
 <meta property="article:author" content="Traumtänzer aka &#39;Jew1!5!&#39;">
 <meta property="article:tag" content="试题">
 <meta property="article:tag" content="解析">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://pic.imgdb.cn/item/654cc27dc458853aef789452.png">
-  
-  
-    <meta name="referrer" content="no-referrer-when-downgrade">
-  
-  
-  <title>P6 - 流水线CPU设计文档 | Jew&#39;s Blog</title>
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://galaxy-jewxw.github.io/img/404.jpg">
 
 
+<title >P6 - 流水线CPU设计文档</title>
 
-  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+<!-- Favicon -->
 
-  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
-
-  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
-
+    <link href='/img/favicon.svg?v=2.1.10' rel='icon' type='image/png' sizes='16x16' ></link>
 
 
-<!-- 主题依赖的图标库，不要自行修改 -->
-<!-- Do not modify the link that theme dependent icons -->
-
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
-
-
-
-<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
-
-
-<link  rel="stylesheet" href="/css/main.css" />
-
-
-  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
-  
-    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
-  
+    <link href='/img/favicon.svg?v=2.1.10' rel='icon' type='image/png' sizes='32x32' ></link>
 
 
 
 
-  <script id="fluid-configs">
-    var Fluid = window.Fluid || {};
-    Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"galaxy-jewxw.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":120,"cursorChar":"_","loop":true,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
-
-    if (CONFIG.web_analytics.follow_dnt) {
-      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
-      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
-    }
-  </script>
-  <script  src="/js/utils.js" ></script>
-  <script  src="/js/color-schema.js" ></script>
-  
+<!-- Plugin -->
 
 
-  
+
+
+    
+<link rel="stylesheet" href="/css/plugins/bootstrap.row.css">
+
+    
+<link rel="stylesheet" href="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.css">
+
+    
+    
+
+
+
+
+<!-- Icon -->
+
+    
+<link rel="stylesheet" href="/css/plugins/font-awesome.min.css">
+
+
+
+
+<!-- Variable -->
+<script>window.ASYNC_CONFIG = {"hostname":"galaxy-jewxw.github.io","author":"Traumtänzer aka 'Jew1!5!'","root":"/","typed_text":null,"theme_version":"2.1.10","theme":{"switch":true,"default":"style-light"},"favicon":{"logo":"/img/favicon.svg","icon16":"/img/favicon.svg","icon32":"/img/favicon.svg","appleTouchIcon":null,"webmanifest":null,"visibilitychange":false,"hidden":"/failure.ico","showText":"(/≧▽≦/)咦！又好了！","hideText":"(●—●)喔哟，崩溃啦！"},"i18n":{"placeholder":"搜索文章...","empty":"找不到您查询的内容: ${query}","hits":"找到 ${hits} 条结果","hits_time":"找到 ${hits} 条结果（用时 ${time} 毫秒）","author":"本文作者：","copyright_link":"本文链接：","copyright_license_title":"版权声明：","copyright_license_content":"本博客所有文章除特别声明外，均默认采用 undefined 许可协议。","copy_success":"复制成功","copy_failure":"复制失败","open_read_mode":"进入阅读模式","exit_read_mode":"退出阅读模式","notice_outdate_message":"距离上次更新已经 undefined 天了, 文章内容可能已经过时。","sticky":"置顶","just":"刚刚","min":"分钟前","hour":"小时前","day":"天前","month":"个月前"},"swup":false,"plugin":{"flickr_justified_gallery":"https://unpkg.com/flickr-justified-gallery@latest/dist/fjGallery.min.js"},"icons":{"sun":"far fa-sun","moon":"far fa-moon","play":"fas fa-play","email":"far fa-envelope","next":"fas fa-arrow-right","calendar":"far fa-calendar-alt","clock":"far fa-clock","user":"far fa-user","back_top":"fas fa-arrow-up","close":"fas fa-times","search":"fas fa-search","reward":"fas fa-hand-holding-usd","user_tag":"fas fa-user-alt","toc_tag":"fas fa-th-list","read":"fas fa-book-reader","arrows":"fas fa-arrows-alt-h","double_arrows":"fas fa-angle-double-down","copy":"fas fa-copy"},"icontype":"font","highlight":{"plugin":"highlighjs","theme":true,"copy":true,"lang":true,"title":"default","height_limit":false},"toc":{"post_title":true},"live_time":{"start_time":"","prefix":"博客已萌萌哒运行 undefined 天"}};</script>
+<script id="async-page-config">window.PAGE_CONFIG = {"isPost":true,"isHome":false,"postUpdate":"2024-01-18 22:39:27"};</script>
+
+<!-- Theme mode css -->
+<link data-swup-theme rel="stylesheet" href="/css/index.css?v=2.1.10" id="trm-switch-style">
+<script>
+    let defaultMode = ASYNC_CONFIG.theme.default !=='auto' ?  ASYNC_CONFIG.theme.default : (window.matchMedia("(prefers-color-scheme: light)").matches ? 'style-light' : 'style-dark')
+    let catchMode = localStorage.getItem('theme-mode') || defaultMode;
+    let type = catchMode === 'style-dark' ? 'add' : 'remove';
+    document.documentElement.classList[type]('dark')
+</script>
+
+<!-- CDN -->
+
+
+    
+    
+
+
+
+<!-- Site Analytics -->
+ 
 <meta name="generator" content="Hexo 6.3.0"></head>
 
-
 <body>
-  
 
-  <header>
-    
+  <!-- app wrapper -->
+  <div class="trm-app-frame">
 
-<div class="header-inner" style="height: 70vh;">
-  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
-  <div class="container">
-    <a class="navbar-brand" href="/">
-      <strong>Jew的博客</strong>
-    </a>
-
-    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
-            data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <div class="animated-icon"><span></span><span></span><span></span></div>
-    </button>
-
-    <!-- Collapsible content -->
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav ml-auto text-center">
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/">
-                <i class="iconfont icon-home-fill"></i>
-                <span>首页</span>
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/archives/">
-                <i class="iconfont icon-archive-fill"></i>
-                <span>归档</span>
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/categories/">
-                <i class="iconfont icon-category-fill"></i>
-                <span>分类</span>
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/tags/">
-                <i class="iconfont icon-tags-fill"></i>
-                <span>标签</span>
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/about/">
-                <i class="iconfont icon-user-fill"></i>
-                <span>关于</span>
-              </a>
-            </li>
-          
-        
-          
-          
-          
-          
-            <li class="nav-item">
-              <a class="nav-link" href="/links/">
-                <i class="iconfont icon-link-fill"></i>
-                <span>友链</span>
-              </a>
-            </li>
-          
-        
-        
-          <li class="nav-item" id="search-btn">
-            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
-              <i class="iconfont icon-search"></i>
-            </a>
-          </li>
-          
-        
-        
-          <li class="nav-item" id="color-toggle-btn">
-            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
-              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
-            </a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-</nav>
-
-  
-
-<div id="banner" class="banner" parallax=true
-     style="background: url('/img/banner_post.jpg') no-repeat center center; background-size: cover;">
-  <div class="full-bg-img">
-    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
-      <div class="banner-text text-center fade-in-up">
-        <div class="h2">
-          
-            <span id="subtitle" data-typed-text="P6 - 流水线CPU设计文档"></span>
-          
+    <!-- page preloader -->
+    <div class="trm-preloader">
+    <div class="trm-holder">
+        <div class="preloader">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
         </div>
-
-        
-          
-  <div class="mt-3">
-    
-    
-      <span class="post-meta">
-        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2023-11-28 13:52" pubdate>
-          星期二, 十一月 28日 2023, 1:52 下午
-        </time>
-      </span>
-    
-  </div>
-
-  <div class="mt-1">
-    
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-chart"></i>
-        
-          8.5k 字
-        
-      </span>
-    
-
-    
-      <span class="post-meta mr-2">
-        <i class="iconfont icon-clock-fill"></i>
-        
-        
-        
-          48 分钟
-        
-      </span>
-    
-
-    
-    
-      
-        <span id="busuanzi_container_page_pv" style="display: none">
-          <i class="iconfont icon-eye" aria-hidden="true"></i>
-          <span id="busuanzi_value_page_pv"></span> 次
-        </span>
-        
-      
-    
-  </div>
-
-
-        
-      </div>
-
-      
     </div>
-  </div>
+</div>
+    <!-- page preloader end -->
+
+    <!-- change mode preloader -->
+    <div class="trm-mode-swich-animation-frame">
+    <div class="trm-mode-swich-animation">
+        <i class="i-sun"><i class="iconfont far fa-sun"></i></i>
+        <div class="trm-horizon"></div>
+        <i class="i-moon"><i class="iconfont far fa-moon"></i></i>
+    </div>
+</div>
+    <!-- change mode preloader end -->
+
+      <!-- scroll container -->
+      <div id="trm-dynamic-content" class="trm-swup-animation">
+        <div id="trm-scroll-container" class="trm-scroll-container" style="opacity: 0">
+            <!-- top bar -->
+            <header class="trm-top-bar">
+	<div class="container">
+		<div class="trm-left-side">
+			<!-- logo -->
+<a href="/" class="trm-logo-frame trm-anima-link">
+    
+        <img alt="logo" src="/img/favicon.svg">
+    
+    
+        <div class="trm-logo-text">
+            Async<span>Theme</span>
+        </div>
+    
+</a>
+<!-- logo end -->
+		</div>
+		<div class="trm-right-side">
+			<!-- menu -->
+<div class="trm-menu">
+    <nav>
+        <ul>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/" target="">
+                    首页
+                </a>
+                
+            </li>
+            
+            <li class="menu-item-has-children ">
+                <a  href="/archives/" target="">
+                    归档
+                </a>
+                
+            </li>
+            
+        </ul>
+    </nav>
+</div>
+<!-- menu end -->
+			
+    <!-- mode switcher place -->
+    <div class="trm-mode-switcher-place">
+        <div class="trm-mode-switcher">
+            <i class="iconfont far fa-sun"></i>
+            <input class="tgl tgl-light" id="trm-swich" type="checkbox">
+            <label class="trm-swich" for="trm-swich"></label>
+            <i class="iconfont far fa-moon"></i>
+        </div>
+    </div>
+    <!-- mode switcher place end -->
+
+			
+		</div>
+		<div class="trm-menu-btn">
+			<span></span>
+		</div>
+	</div>
+</header>
+            <!-- top bar end -->
+
+            <!-- body -->
+            
+<div class="trm-content-start">
+    <!-- banner -->
+    <div class="trm-banner">
+    
+    <!-- banner cover -->
+    <img style="object-position:top;object-fit:cover;" alt="banner" class="trm-banner-cover" src="/img/banner.png">
+    <!-- banner cover end -->
+    
+
+    <!-- banner content -->
+    <div class="trm-banner-content trm-overlay">
+        <div class="container">
+            <div class="row">
+                
+                <div class="col-lg-4"></div>
+                
+                <div class="col-lg-8">
+
+                    <!-- banner title -->
+                    <div class="trm-banner-text ">
+                        <div class="trm-label trm-mb-20">
+                            NEWS LETTER
+                        </div>
+                        <h1 class="trm-mb-30 trm-hsmb-font">
+                            P6 - 流水线CPU设计文档
+                        </h1>
+
+                        
+                            <ul class="trm-breadcrumbs trm-label">
+                                <li>
+                                    <a href="/" class="trm-anima-link">Home</a>
+                                </li>
+                                <li>
+                                    <span>
+                                        2023
+                                    </span>
+                                </li>
+                            </ul>
+                        
+                    </div>
+                    <!-- banner title end -->
+
+                    <!-- scroll hint -->
+                    <span id="scroll-triger" class="trm-scroll-hint-frame">
+                        <div class="trm-scroll-hint"></div>
+                        <span class="trm-label">Scroll down</span>
+                    </span>
+                    <!-- scroll hint end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- banner content end -->
+</div>
+    <!-- banner end -->
+    <div class="container">
+        <div class="row">
+            
+                <div class="trm-page-sidebar col-lg-4 hidden-sm">
+                    <!-- main card -->
+                    <div class="trm-main-card-frame trm-sidebar">
+    <div class="trm-main-card"> 
+        <!-- card header -->
+<div class="trm-mc-header">
+    <div class="trm-avatar-frame trm-mb-20">
+        <img alt="Avatar" class="trm-avatar" src="/img/avatar.jpg">
+    </div>
+    <h5 class="trm-name trm-mb-15">
+        ThemeAsync
+    </h5>
+    
+</div>
+<!-- card header end -->
+        <!-- sidebar social -->
+
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<div class="trm-social">
+    
+        <a href="https://github.com" title="Github" rel="nofollow" target="_blank">
+            <i class="iconfont fab fa-github"></i>
+        </a>
+    
 </div>
 
-</div>
-
-  </header>
-
-  <main>
+<!-- sidebar social end -->
+        <!-- info -->
+<div class="trm-divider trm-mb-40 trm-mt-40"></div>
+<ul class="trm-table trm-mb-20">
     
-      
+        <li>
+            <div class="trm-label">
+                地址:
+            </div>
+            <div class="trm-label trm-label-light">
+                Mars
+            </div>
+        </li>
+    
+</ul>
+<!-- info end -->
 
-<div class="container-fluid nopadding-x">
-  <div class="row nomargin-x">
-    <div class="side-col d-none d-lg-block col-lg-2">
-      
-
+        
     </div>
-
-    <div class="col-lg-8 nopadding-x-md">
-      <div class="container nopadding-x-md" id="board-ctn">
-        <div id="board">
-          <article class="post-content mx-auto">
-            <h1 id="seo-header">P6 - 流水线CPU设计文档</h1>
+</div>
+                    <!-- main card end -->
+                </div>
             
-              <p class="note note-info">
-                
-                  
-                    本文最后更新于：2024年1月18日 晚上
-                  
-                
-              </p>
-            
-            
-              <div class="markdown-body">
-                
-                <h1 id="P6-流水线CPU设计文档"><a href="#P6-流水线CPU设计文档" class="headerlink" title="P6 流水线CPU设计文档"></a>P6 流水线CPU设计文档</h1><h2 id="设计概述"><a href="#设计概述" class="headerlink" title="设计概述"></a>设计概述</h2><ul>
+            <div class="trm-page-content col-lg-8">
+                <div id="trm-content" class="trm-content">
+                    <div class="trm-post-info row hidden-sm">
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-calendar-alt trm-icon"></i><br>
+            11/28
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-clock trm-icon"></i><br>
+            13:52
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div id="post-author" class="trm-card trm-label trm-label-light text-center">
+            <i class="iconfont far fa-user trm-icon"></i><br>
+            Traumtänzer aka &#39;Jew1!5!&#39;
+        </div>
+    </div>
+</div>
+<div class="trm-card ">
+    <article id="article-container" class="trm-publication">
+    <h1 id="P6-流水线CPU设计文档"><a href="#P6-流水线CPU设计文档" class="headerlink" title="P6 流水线CPU设计文档"></a>P6 流水线CPU设计文档</h1><h2 id="设计概述"><a href="#设计概述" class="headerlink" title="设计概述"></a>设计概述</h2><ul>
 <li><p>设计的处理器为32位五级流水线处理器</p>
 </li>
 <li><p>处理器支持的指令集为</p>
@@ -318,7 +331,7 @@
 </li>
 </ul>
 <p>整体架构参考了《数字设计与计算机体系结构》图7-58。</p>
-<p><img src="https://pic.imgdb.cn/item/654cc27dc458853aef789452.png" srcset="/img/loading.gif" lazyload alt="整体架构"></p>
+<p><img src="https://pic.imgdb.cn/item/654cc27dc458853aef789452.png" alt="整体架构" loading="lazy" onerror='this.onerror=null;this.src="/img/404.jpg"'></p>
 <h2 id="F级：取指令（Fetch）"><a href="#F级：取指令（Fetch）" class="headerlink" title="F级：取指令（Fetch）"></a>F级：取指令（Fetch）</h2><p>本级的输入为来自D级的<code>next_pc</code>，用于更新下一个PC的值。</p>
 <p>本级的输出为<code>F_PC</code>和<code>F_Instr</code>，分别对应从F级指令的PC和F级指令的内容，均需要参与流水。</p>
 <h3 id="F-IFU"><a href="#F-IFU" class="headerlink" title="F_IFU"></a>F_IFU</h3><p>只负责PC的存储与更新，F_instr来自<code>mips_txt.v</code>的交互。</p>
@@ -356,7 +369,7 @@
 <td>当前指令地址</td>
 </tr>
 </tbody></table>
-<h4 id="与mips-txt-v交互"><a href="#与mips-txt-v交互" class="headerlink" title="与mips_txt.v交互"></a>与<code>mips_txt.v</code>交互</h4><figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs verilog">ifu F_IFU(<br>    <span class="hljs-variable">.clk</span>(clk),<br>    <span class="hljs-variable">.reset</span>(reset),<br>    <span class="hljs-variable">.enable</span>(IFU_WE),<br>    <span class="hljs-variable">.next_pc</span>(next_PC),<br>    <span class="hljs-variable">.pc</span>(F_PC)<br>);<br><br><span class="hljs-keyword">assign</span> F_Instr = i_inst_rdata;<br><span class="hljs-keyword">assign</span> i_inst_addr = F_PC;<br></code></pre></td></tr></table></figure>
+<h4 id="与mips-txt-v交互"><a href="#与mips-txt-v交互" class="headerlink" title="与mips_txt.v交互"></a>与<code>mips_txt.v</code>交互</h4><figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">ifu F_IFU(</span><br><span class="line">    <span class="variable">.clk</span>(clk),</span><br><span class="line">    <span class="variable">.reset</span>(reset),</span><br><span class="line">    <span class="variable">.enable</span>(IFU_WE),</span><br><span class="line">    <span class="variable">.next_pc</span>(next_PC),</span><br><span class="line">    <span class="variable">.pc</span>(F_PC)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">assign</span> F_Instr = i_inst_rdata;</span><br><span class="line"><span class="keyword">assign</span> i_inst_addr = F_PC;</span><br></pre></td></tr></table></figure>
 
 <h3 id="F-D级流水线寄存器"><a href="#F-D级流水线寄存器" class="headerlink" title="F&#x2F;D级流水线寄存器"></a>F&#x2F;D级流水线寄存器</h3><table>
 <thead>
@@ -1031,7 +1044,7 @@
 <td>读&#x2F;写一个字节，对应lb和sb指令</td>
 </tr>
 </tbody></table>
-<h4 id="与mips-txt-v交互-1"><a href="#与mips-txt-v交互-1" class="headerlink" title="与mips_txt.v交互"></a>与<code>mips_txt.v</code>交互</h4><figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs verilog"><span class="hljs-keyword">wire</span> [<span class="hljs-number">31</span>:<span class="hljs-number">0</span>] M_dmrd;<br><span class="hljs-keyword">assign</span> m_inst_addr = M_PC;<br><span class="hljs-keyword">assign</span> m_data_addr = M_aluans;<br><br>toRAM M_Store(<br>    <span class="hljs-variable">.A</span>(M_aluans),<br>    <span class="hljs-variable">.gpr_rt</span>(M_fwd_gprrt),<br>    <span class="hljs-variable">.DMOp</span>(M_DMOp),<br>    <span class="hljs-variable">.MemWrite</span>(M_MemWrite),<br>    <span class="hljs-variable">.m_data_byteen</span>(m_data_byteen),<br>    <span class="hljs-variable">.m_data_wdata</span>(m_data_wdata)<br>);<br><br>fromRAM M_Load(<br>    <span class="hljs-variable">.A</span>(M_aluans),<br>    <span class="hljs-variable">.DMOp</span>(M_DMOp),<br>    <span class="hljs-variable">.m_data_rdata</span>(m_data_rdata),<br>    <span class="hljs-variable">.RD</span>(M_dmrd)<br>);<br><br><span class="hljs-keyword">assign</span> w_grf_wdata = W_grfWD;<br><span class="hljs-keyword">assign</span> w_inst_addr = W_PC;<br><span class="hljs-keyword">assign</span> w_grf_addr = W_A3Sel;<br></code></pre></td></tr></table></figure>
+<h4 id="与mips-txt-v交互-1"><a href="#与mips-txt-v交互-1" class="headerlink" title="与mips_txt.v交互"></a>与<code>mips_txt.v</code>交互</h4><figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">wire</span> [<span class="number">31</span>:<span class="number">0</span>] M_dmrd;</span><br><span class="line"><span class="keyword">assign</span> m_inst_addr = M_PC;</span><br><span class="line"><span class="keyword">assign</span> m_data_addr = M_aluans;</span><br><span class="line"></span><br><span class="line">toRAM M_Store(</span><br><span class="line">    <span class="variable">.A</span>(M_aluans),</span><br><span class="line">    <span class="variable">.gpr_rt</span>(M_fwd_gprrt),</span><br><span class="line">    <span class="variable">.DMOp</span>(M_DMOp),</span><br><span class="line">    <span class="variable">.MemWrite</span>(M_MemWrite),</span><br><span class="line">    <span class="variable">.m_data_byteen</span>(m_data_byteen),</span><br><span class="line">    <span class="variable">.m_data_wdata</span>(m_data_wdata)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line">fromRAM M_Load(</span><br><span class="line">    <span class="variable">.A</span>(M_aluans),</span><br><span class="line">    <span class="variable">.DMOp</span>(M_DMOp),</span><br><span class="line">    <span class="variable">.m_data_rdata</span>(m_data_rdata),</span><br><span class="line">    <span class="variable">.RD</span>(M_dmrd)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">assign</span> w_grf_wdata = W_grfWD;</span><br><span class="line"><span class="keyword">assign</span> w_inst_addr = W_PC;</span><br><span class="line"><span class="keyword">assign</span> w_grf_addr = W_A3Sel;</span><br></pre></td></tr></table></figure>
 
 <h3 id="M-W级流水线寄存器"><a href="#M-W级流水线寄存器" class="headerlink" title="M&#x2F;W级流水线寄存器"></a>M&#x2F;W级流水线寄存器</h3><table>
 <thead>
@@ -1104,15 +1117,15 @@
 </tbody></table>
 <h2 id="W级：写回（Writeback）"><a href="#W级：写回（Writeback）" class="headerlink" title="W级：写回（Writeback）"></a>W级：写回（Writeback）</h2><p>本级与D级是重合的，需要处理向E级和M级的转发。</p>
 <h2 id="转发"><a href="#转发" class="headerlink" title="转发"></a>转发</h2><p>采用<strong>暴力转发</strong>的方式。由AT法的分析，不阻塞就意味着一定能够在使用该寄存器的值之前获得最新的且正确的值。因此采用暴力转发总能得到一个正确的值去覆盖原先错误的值。</p>
-<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs verilog"><span class="hljs-comment">// D级转发</span><br><span class="hljs-keyword">assign</span> D_fwd_gprrs = (D_rs == <span class="hljs-number">5&#x27;d0</span>) ? (<span class="hljs-number">32&#x27;d0</span>) : <br>                    (D_rs == E_A3Sel) ? E_grfWD :<br>                    (D_rs == M_A3Sel) ? M_grfWD : D_gpr_rs;<br><br><span class="hljs-keyword">assign</span> D_fwd_gprrt = (D_rt == <span class="hljs-number">5&#x27;d0</span>) ? (<span class="hljs-number">32&#x27;d0</span>) : <br>                    (D_rt == E_A3Sel) ? E_grfWD :<br>                    (D_rt == M_A3Sel) ? M_grfWD : D_gpr_rt;<br><br><br><span class="hljs-comment">// E级转发</span><br><span class="hljs-keyword">assign</span> E_grfWD = (E_WDSel == `WDSel_PCa8) ? (E_PC + <span class="hljs-number">8</span>) : <span class="hljs-number">32&#x27;d0</span>; <span class="hljs-comment">// 不能对功能部件输出进行转发</span><br><span class="hljs-keyword">assign</span> E_fwd_gprrs = (E_rs == <span class="hljs-number">5&#x27;d0</span>) ? <span class="hljs-number">32&#x27;d0</span> :<br>                    (E_rs == M_A3Sel) ? M_grfWD :<br>                    (E_rs == W_A3Sel) ? W_grfWD :<br>                    E_gpr_rs;<br><br><span class="hljs-keyword">assign</span> E_fwd_gprrt = (E_rt == <span class="hljs-number">5&#x27;d0</span>) ? <span class="hljs-number">32&#x27;d0</span> :<br>                    (E_rt == M_A3Sel) ? M_grfWD :<br>                    (E_rt == W_A3Sel) ? W_grfWD :<br>                    E_gpr_rt;<br><br><br><span class="hljs-comment">// M级转发</span><br><span class="hljs-keyword">assign</span> M_grfWD = (M_WDSel == `WDSel_aluans) ? M_aluans :<br>                (M_WDSel == `WDSel_mduans) ? M_mduans :<br>                (M_WDSel == `WDSel_PCa8) ? (M_PC + <span class="hljs-number">8</span>) : <span class="hljs-number">32&#x27;d0</span>;<br><span class="hljs-keyword">assign</span> M_fwd_gprrt = (M_rt == <span class="hljs-number">5&#x27;d0</span>) ? (<span class="hljs-number">5&#x27;d0</span>) :<br>                    (M_rt == W_A3Sel) ? W_grfWD :<br>                    M_gpr_rt;<br><br><br><span class="hljs-comment">// W级转发</span><br><span class="hljs-keyword">assign</span> W_grfWD = (W_WDSel == `WDSel_aluans) ? W_aluans :<br>                (W_WDSel == `WDSel_dmrd) ? W_dmrd :<br>                (W_WDSel == `WDSel_mduans) ? W_mduans :<br>                (W_WDSel == `WDSel_PCa8) ? (W_PC + <span class="hljs-number">8</span>) : <span class="hljs-number">32&#x27;d0</span>;<br></code></pre></td></tr></table></figure>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// D级转发</span></span><br><span class="line"><span class="keyword">assign</span> D_fwd_gprrs = (D_rs == <span class="number">5&#x27;d0</span>) ? (<span class="number">32&#x27;d0</span>) : </span><br><span class="line">                    (D_rs == E_A3Sel) ? E_grfWD :</span><br><span class="line">                    (D_rs == M_A3Sel) ? M_grfWD : D_gpr_rs;</span><br><span class="line"></span><br><span class="line"><span class="keyword">assign</span> D_fwd_gprrt = (D_rt == <span class="number">5&#x27;d0</span>) ? (<span class="number">32&#x27;d0</span>) : </span><br><span class="line">                    (D_rt == E_A3Sel) ? E_grfWD :</span><br><span class="line">                    (D_rt == M_A3Sel) ? M_grfWD : D_gpr_rt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// E级转发</span></span><br><span class="line"><span class="keyword">assign</span> E_grfWD = (E_WDSel == `WDSel_PCa8) ? (E_PC + <span class="number">8</span>) : <span class="number">32&#x27;d0</span>; <span class="comment">// 不能对功能部件输出进行转发</span></span><br><span class="line"><span class="keyword">assign</span> E_fwd_gprrs = (E_rs == <span class="number">5&#x27;d0</span>) ? <span class="number">32&#x27;d0</span> :</span><br><span class="line">                    (E_rs == M_A3Sel) ? M_grfWD :</span><br><span class="line">                    (E_rs == W_A3Sel) ? W_grfWD :</span><br><span class="line">                    E_gpr_rs;</span><br><span class="line"></span><br><span class="line"><span class="keyword">assign</span> E_fwd_gprrt = (E_rt == <span class="number">5&#x27;d0</span>) ? <span class="number">32&#x27;d0</span> :</span><br><span class="line">                    (E_rt == M_A3Sel) ? M_grfWD :</span><br><span class="line">                    (E_rt == W_A3Sel) ? W_grfWD :</span><br><span class="line">                    E_gpr_rt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// M级转发</span></span><br><span class="line"><span class="keyword">assign</span> M_grfWD = (M_WDSel == `WDSel_aluans) ? M_aluans :</span><br><span class="line">                (M_WDSel == `WDSel_mduans) ? M_mduans :</span><br><span class="line">                (M_WDSel == `WDSel_PCa8) ? (M_PC + <span class="number">8</span>) : <span class="number">32&#x27;d0</span>;</span><br><span class="line"><span class="keyword">assign</span> M_fwd_gprrt = (M_rt == <span class="number">5&#x27;d0</span>) ? (<span class="number">5&#x27;d0</span>) :</span><br><span class="line">                    (M_rt == W_A3Sel) ? W_grfWD :</span><br><span class="line">                    M_gpr_rt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// W级转发</span></span><br><span class="line"><span class="keyword">assign</span> W_grfWD = (W_WDSel == `WDSel_aluans) ? W_aluans :</span><br><span class="line">                (W_WDSel == `WDSel_dmrd) ? W_dmrd :</span><br><span class="line">                (W_WDSel == `WDSel_mduans) ? W_mduans :</span><br><span class="line">                (W_WDSel == `WDSel_PCa8) ? (W_PC + <span class="number">8</span>) : <span class="number">32&#x27;d0</span>;</span><br></pre></td></tr></table></figure>
 
 <h2 id="阻塞"><a href="#阻塞" class="headerlink" title="阻塞"></a>阻塞</h2><p>使用组合逻辑，判断每一级中指令的$Tuse$和$Tnew$。</p>
 <p>如果有$Tuse$ &lt; $Tnew$，就执行阻塞。<strong>只可能在D级进行阻塞</strong>。</p>
-<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs verilog"><span class="hljs-comment">// stall_handle.v</span><br><span class="hljs-keyword">assign</span> D_Tuse_rs = (D_branch | D_j2r) ? <span class="hljs-number">3&#x27;d0</span> :<br>                (D_ic | D_rc | D_load | D_store | D_mt | D_md) ? <span class="hljs-number">3&#x27;d1</span> : <span class="hljs-number">3&#x27;d3</span>;<br><br><span class="hljs-keyword">assign</span> D_Tuse_rt = (D_branch) ? <span class="hljs-number">3&#x27;d0</span> :<br>                    (D_rc | D_md) ? <span class="hljs-number">3&#x27;d1</span> :<br>                    (D_store) ? <span class="hljs-number">3&#x27;d2</span> : <span class="hljs-number">3&#x27;d3</span>;<br><br><span class="hljs-keyword">assign</span> E_Tnew = (E_rc | E_ic | E_mf) ? <span class="hljs-number">3&#x27;d1</span> :<br>                (E_load) ? <span class="hljs-number">3&#x27;d2</span> :<br>                <span class="hljs-number">3&#x27;d0</span>;<br><br><span class="hljs-keyword">assign</span> E_stall_rs = (E_A3Sel == D_rs &amp;&amp; D_rs != <span class="hljs-number">5&#x27;d0</span>) &amp;&amp; (E_Tnew &gt; D_Tuse_rs);<br><span class="hljs-keyword">assign</span> E_stall_rt = (E_A3Sel == D_rt &amp;&amp; D_rt != <span class="hljs-number">5&#x27;d0</span>) &amp;&amp; (E_Tnew &gt; D_Tuse_rt);<br><br><span class="hljs-keyword">assign</span> M_Tnew = (M_load) ? <span class="hljs-number">3&#x27;d1</span> : <span class="hljs-number">3&#x27;d0</span>;<br><br><span class="hljs-keyword">assign</span> M_stall_rs = (M_A3Sel == D_rs &amp;&amp; D_rs != <span class="hljs-number">5&#x27;d0</span>) &amp;&amp; (M_Tnew &gt; D_Tuse_rs);<br><span class="hljs-keyword">assign</span> M_stall_rt = (M_A3Sel == D_rt &amp;&amp; D_rt != <span class="hljs-number">5&#x27;d0</span>) &amp;&amp; (M_Tnew &gt; D_Tuse_rt);<br><br><span class="hljs-keyword">assign</span> stall = E_stall_rs | E_stall_rt | M_stall_rs | M_stall_rt | E_stall_mdu;<br><br><br><span class="hljs-comment">// mips.v</span><br><span class="hljs-keyword">wire</span> stall;<br><span class="hljs-keyword">assign</span> FD_WE = !stall; <span class="hljs-comment">//冻结FD寄存器</span><br><span class="hljs-keyword">assign</span> IFU_WE = !stall; <span class="hljs-comment">//冻结PC</span><br><span class="hljs-keyword">assign</span> DE_flush = stall; <span class="hljs-comment">//清空DE寄存器</span><br><br><span class="hljs-keyword">assign</span> DE_WE = <span class="hljs-number">1&#x27;b1</span>;<br><span class="hljs-keyword">assign</span> EM_WE = <span class="hljs-number">1&#x27;b1</span>;<br><span class="hljs-keyword">assign</span> MW_WE = <span class="hljs-number">1&#x27;b1</span>;<br><br><span class="hljs-keyword">assign</span> FD_flush = <span class="hljs-number">1&#x27;b0</span>;<br><span class="hljs-keyword">assign</span> EM_flush = <span class="hljs-number">1&#x27;b0</span>;<br><span class="hljs-keyword">assign</span> MW_flush = <span class="hljs-number">1&#x27;b0</span>;<br></code></pre></td></tr></table></figure>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// stall_handle.v</span></span><br><span class="line"><span class="keyword">assign</span> D_Tuse_rs = (D_branch | D_j2r) ? <span class="number">3&#x27;d0</span> :</span><br><span class="line">                (D_ic | D_rc | D_load | D_store | D_mt | D_md) ? <span class="number">3&#x27;d1</span> : <span class="number">3&#x27;d3</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">assign</span> D_Tuse_rt = (D_branch) ? <span class="number">3&#x27;d0</span> :</span><br><span class="line">                    (D_rc | D_md) ? <span class="number">3&#x27;d1</span> :</span><br><span class="line">                    (D_store) ? <span class="number">3&#x27;d2</span> : <span class="number">3&#x27;d3</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">assign</span> E_Tnew = (E_rc | E_ic | E_mf) ? <span class="number">3&#x27;d1</span> :</span><br><span class="line">                (E_load) ? <span class="number">3&#x27;d2</span> :</span><br><span class="line">                <span class="number">3&#x27;d0</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">assign</span> E_stall_rs = (E_A3Sel == D_rs &amp;&amp; D_rs != <span class="number">5&#x27;d0</span>) &amp;&amp; (E_Tnew &gt; D_Tuse_rs);</span><br><span class="line"><span class="keyword">assign</span> E_stall_rt = (E_A3Sel == D_rt &amp;&amp; D_rt != <span class="number">5&#x27;d0</span>) &amp;&amp; (E_Tnew &gt; D_Tuse_rt);</span><br><span class="line"></span><br><span class="line"><span class="keyword">assign</span> M_Tnew = (M_load) ? <span class="number">3&#x27;d1</span> : <span class="number">3&#x27;d0</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">assign</span> M_stall_rs = (M_A3Sel == D_rs &amp;&amp; D_rs != <span class="number">5&#x27;d0</span>) &amp;&amp; (M_Tnew &gt; D_Tuse_rs);</span><br><span class="line"><span class="keyword">assign</span> M_stall_rt = (M_A3Sel == D_rt &amp;&amp; D_rt != <span class="number">5&#x27;d0</span>) &amp;&amp; (M_Tnew &gt; D_Tuse_rt);</span><br><span class="line"></span><br><span class="line"><span class="keyword">assign</span> stall = E_stall_rs | E_stall_rt | M_stall_rs | M_stall_rt | E_stall_mdu;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// mips.v</span></span><br><span class="line"><span class="keyword">wire</span> stall;</span><br><span class="line"><span class="keyword">assign</span> FD_WE = !stall; <span class="comment">//冻结FD寄存器</span></span><br><span class="line"><span class="keyword">assign</span> IFU_WE = !stall; <span class="comment">//冻结PC</span></span><br><span class="line"><span class="keyword">assign</span> DE_flush = stall; <span class="comment">//清空DE寄存器</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">assign</span> DE_WE = <span class="number">1&#x27;b1</span>;</span><br><span class="line"><span class="keyword">assign</span> EM_WE = <span class="number">1&#x27;b1</span>;</span><br><span class="line"><span class="keyword">assign</span> MW_WE = <span class="number">1&#x27;b1</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">assign</span> FD_flush = <span class="number">1&#x27;b0</span>;</span><br><span class="line"><span class="keyword">assign</span> EM_flush = <span class="number">1&#x27;b0</span>;</span><br><span class="line"><span class="keyword">assign</span> MW_flush = <span class="number">1&#x27;b0</span>;</span><br></pre></td></tr></table></figure>
 
 <h2 id="测试方案"><a href="#测试方案" class="headerlink" title="测试方案"></a>测试方案</h2><p>改进了P5的随机数据生成器，添加了延迟槽。</p>
 <p>一个测试数据如下</p>
-<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-keyword">add </span>$<span class="hljs-built_in">a0</span>,$<span class="hljs-number">0</span>,$<span class="hljs-number">0</span><br><span class="hljs-keyword">ori </span>$<span class="hljs-built_in">t1</span>,$<span class="hljs-number">0</span>,<span class="hljs-number">1</span><br><span class="hljs-keyword">ori </span>$<span class="hljs-built_in">t2</span>,$<span class="hljs-number">0</span>,<span class="hljs-number">2</span><br><span class="hljs-keyword">ori </span>$<span class="hljs-built_in">t3</span>,$<span class="hljs-number">0</span>,<span class="hljs-number">3</span><br><span class="hljs-keyword">add </span>$<span class="hljs-built_in">t4</span>,$<span class="hljs-built_in">t1</span>,$<span class="hljs-built_in">t2</span><br><span class="hljs-keyword">sub </span>$<span class="hljs-built_in">t5</span>,$<span class="hljs-built_in">t1</span>,$<span class="hljs-built_in">t2</span><br><span class="hljs-keyword">jal </span>out<br><span class="hljs-keyword">add </span>$<span class="hljs-built_in">t3</span>,$<span class="hljs-built_in">t4</span>,$<span class="hljs-number">0</span><br><span class="hljs-symbol"></span><br><span class="hljs-symbol">out:</span><br><span class="hljs-keyword">ori </span>$<span class="hljs-built_in">a0</span>,$<span class="hljs-number">0</span>,<span class="hljs-number">11</span><br><span class="hljs-keyword">beq </span>$<span class="hljs-built_in">a0</span>,$<span class="hljs-built_in">a1</span>,end<br><span class="hljs-keyword">lui </span>$<span class="hljs-built_in">a2</span>,<span class="hljs-number">111</span><br><span class="hljs-keyword">jr </span>$<span class="hljs-built_in">ra</span><br><span class="hljs-keyword">ori </span>$<span class="hljs-built_in">a1</span>,$<span class="hljs-number">0</span>,<span class="hljs-number">11</span><br><span class="hljs-symbol">end:</span><br><span class="hljs-keyword">nop</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">add </span>$<span class="built_in">a0</span>,$<span class="number">0</span>,$<span class="number">0</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="built_in">t1</span>,$<span class="number">0</span>,<span class="number">1</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="built_in">t2</span>,$<span class="number">0</span>,<span class="number">2</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="built_in">t3</span>,$<span class="number">0</span>,<span class="number">3</span></span><br><span class="line"><span class="keyword">add </span>$<span class="built_in">t4</span>,$<span class="built_in">t1</span>,$<span class="built_in">t2</span></span><br><span class="line"><span class="keyword">sub </span>$<span class="built_in">t5</span>,$<span class="built_in">t1</span>,$<span class="built_in">t2</span></span><br><span class="line"><span class="keyword">jal </span>out</span><br><span class="line"><span class="keyword">add </span>$<span class="built_in">t3</span>,$<span class="built_in">t4</span>,$<span class="number">0</span></span><br><span class="line"><span class="symbol"></span></span><br><span class="line"><span class="symbol">out:</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="built_in">a0</span>,$<span class="number">0</span>,<span class="number">11</span></span><br><span class="line"><span class="keyword">beq </span>$<span class="built_in">a0</span>,$<span class="built_in">a1</span>,end</span><br><span class="line"><span class="keyword">lui </span>$<span class="built_in">a2</span>,<span class="number">111</span></span><br><span class="line"><span class="keyword">jr </span>$<span class="built_in">ra</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="built_in">a1</span>,$<span class="number">0</span>,<span class="number">11</span></span><br><span class="line"><span class="symbol">end:</span></span><br><span class="line"><span class="keyword">nop</span></span><br></pre></td></tr></table></figure>
 
 <h2 id="思考题"><a href="#思考题" class="headerlink" title="思考题"></a>思考题</h2><ol>
 <li><p>为什么需要有单独的乘除法部件而不是整合进ALU？为何需要有独立的HI、LO寄存器？</p>
@@ -1138,456 +1151,201 @@
 <li><p>在本实验中你遇到了哪些不同指令类型组合产生的冲突？你又是如何解决的？相应的测试样例是什么样的？</p>
 <p>P6比P5增加了乘除槽的冲突，在进行乘除指令后紧接着立即执行mfhi或mflo会造成数据冲突。此时应进行阻塞，直到乘除指令执行完成为止。</p>
 <p>构造样例如下：</p>
-<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm"><span class="hljs-keyword">lui </span>$<span class="hljs-built_in">t0</span>,<span class="hljs-number">0x0123</span><br><span class="hljs-keyword">lui </span>$<span class="hljs-built_in">t2</span>,<span class="hljs-number">0xffff</span><br><span class="hljs-keyword">ori </span>$<span class="hljs-built_in">t0</span>,$<span class="hljs-built_in">t0</span>,<span class="hljs-number">0x9576</span><br><span class="hljs-keyword">ori </span>$<span class="hljs-built_in">t1</span>,$<span class="hljs-built_in">t1</span>,<span class="hljs-number">0xa312</span><br><span class="hljs-keyword">mult </span>$<span class="hljs-built_in">t0</span>,$<span class="hljs-built_in">t1</span><br><span class="hljs-keyword">mfhi </span>$<span class="hljs-built_in">s0</span><br><span class="hljs-keyword">mflo </span>$<span class="hljs-built_in">s1</span><br><span class="hljs-keyword">mult </span>$<span class="hljs-built_in">t0</span>,$<span class="hljs-built_in">t2</span><br><span class="hljs-keyword">mfhi </span>$<span class="hljs-built_in">s0</span><br><span class="hljs-keyword">mflo </span>$<span class="hljs-built_in">s1</span><br><span class="hljs-keyword">multu </span>$<span class="hljs-built_in">t0</span>,$<span class="hljs-built_in">t2</span><br><span class="hljs-keyword">mfhi </span>$<span class="hljs-built_in">s0</span><br><span class="hljs-keyword">mflo </span>$<span class="hljs-built_in">s1</span><br></code></pre></td></tr></table></figure>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">lui </span>$<span class="built_in">t0</span>,<span class="number">0x0123</span></span><br><span class="line"><span class="keyword">lui </span>$<span class="built_in">t2</span>,<span class="number">0xffff</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="built_in">t0</span>,$<span class="built_in">t0</span>,<span class="number">0x9576</span></span><br><span class="line"><span class="keyword">ori </span>$<span class="built_in">t1</span>,$<span class="built_in">t1</span>,<span class="number">0xa312</span></span><br><span class="line"><span class="keyword">mult </span>$<span class="built_in">t0</span>,$<span class="built_in">t1</span></span><br><span class="line"><span class="keyword">mfhi </span>$<span class="built_in">s0</span></span><br><span class="line"><span class="keyword">mflo </span>$<span class="built_in">s1</span></span><br><span class="line"><span class="keyword">mult </span>$<span class="built_in">t0</span>,$<span class="built_in">t2</span></span><br><span class="line"><span class="keyword">mfhi </span>$<span class="built_in">s0</span></span><br><span class="line"><span class="keyword">mflo </span>$<span class="built_in">s1</span></span><br><span class="line"><span class="keyword">multu </span>$<span class="built_in">t0</span>,$<span class="built_in">t2</span></span><br><span class="line"><span class="keyword">mfhi </span>$<span class="built_in">s0</span></span><br><span class="line"><span class="keyword">mflo </span>$<span class="built_in">s1</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p>如果你是手动构造的样例，请说明构造策略，说明你的测试程序如何保证覆盖了所有需要测试的情况；如果你是完全随机生成的测试样例，请思考完全随机的测试程序有何不足之处；如果你在生成测试样例时采用了特殊的策略，比如构造连续数据冒险序列，请你描述一下你使用的策略如何结合了随机性达到强测的效果。</p>
 <p>新增冲突只有一条，所以构造上述测试样例足够。</p>
 </li>
 </ol>
 
-                
-              </div>
-            
-            <hr/>
-            <div>
-              <div class="post-metas my-3">
-  
-    <div class="post-meta mr-3 d-flex align-items-center">
-      <i class="iconfont icon-category"></i>
-      
-
-<span class="category-chains">
-  
-  
+</article>
     
-      <span class="category-chain">
+    
+
+</div>
+<div class="trm-post-next-prev row">
+    <div class="col-lg-12">
+        <!-- title -->
+        <h5 class="trm-title-with-divider">
+            其他文章
+            <span data-number="02"></span>
+        </h5>
+    </div>
+    
+        <div class="col-lg-6">
+    <div class="trm-blog-card trm-scroll-animation">
+        <a href="/2023/12/06/P7%20%E6%B5%81%E6%B0%B4%E7%BA%BFCPU%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3/" class="trm-cover-frame trm-anima-link">
+            
+            
+                <img alt="cover" class="no-fancybox" src="/img/block.jpg">
+            
+        </a>
         
-  <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/" class="category-chain-item">计算机组成</a>
-  
-  
-
-      </span>
-    
-  
-</span>
-
-    </div>
-  
-  
-    <div class="post-meta">
-      <i class="iconfont icon-tags"></i>
-      
-        <a href="/tags/%E8%AF%95%E9%A2%98/" class="print-no-link">#试题</a>
-      
-        <a href="/tags/%E8%A7%A3%E6%9E%90/" class="print-no-link">#解析</a>
-      
-    </div>
-  
-</div>
-
-
-              
-  
-
-  <div class="license-box my-3">
-    <div class="license-title">
-      <div>P6 - 流水线CPU设计文档</div>
-      <div>https://galaxy-jewxw.github.io/2023/11/28/P6 流水线CPU设计文档/</div>
-    </div>
-    <div class="license-meta">
-      
-        <div class="license-meta-item">
-          <div>作者</div>
-          <div>Traumtänzer aka 'Jew1!5!'</div>
-        </div>
-      
-      
-        <div class="license-meta-item license-meta-date">
-          <div>发布于</div>
-          <div>2023年11月28日</div>
-        </div>
-      
-      
-      
-        <div class="license-meta-item">
-          <div>许可协议</div>
-          <div>
-            
-              
-              
-                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
-                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
-                    <i class="iconfont icon-by"></i>
-                  </span>
+        <div class="trm-card-descr">
+            <div class="trm-label trm-category trm-mb-20">
+                <a href=" /categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/">
+                    计算机组成
                 </a>
-              
-            
-          </div>
-        </div>
-      
-    </div>
-    <div class="license-icon iconfont"></div>
-  </div>
-
-
-
-              
-                <div class="post-prevnext my-3">
-                  <article class="post-prev col-6">
-                    
-                    
-                      <a href="/2023/12/06/P7%20%E6%B5%81%E6%B0%B4%E7%BA%BFCPU%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3/" title="P7 - 流水线CPU设计文档">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">P7 - 流水线CPU设计文档</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
-                  </article>
-                  <article class="post-next col-6">
-                    
-                    
-                      <a href="/2023/11/13/P5-%E6%B5%81%E6%B0%B4%E7%BA%BFCPU%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3/" title="P5 - 流水线CPU设计文档">
-                        <span class="hidden-mobile">P5 - 流水线CPU设计文档</span>
-                        <span class="visible-mobile">下一篇</span>
-                        <i class="iconfont icon-arrowright"></i>
-                      </a>
-                    
-                  </article>
-                </div>
-              
             </div>
+            <h5>
+                <a href="/2023/12/06/P7%20%E6%B5%81%E6%B0%B4%E7%BA%BFCPU%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3/" class="trm-anima-link">
+                    P7 - 流水线CPU设计文档
+                </a>
+            </h5>
+            <div class="trm-divider trm-mb-20 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>23/12/06</li>
+                <li>23:52</li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</div>
+    
+    
+        <div class="col-lg-6">
+    <div class="trm-blog-card trm-scroll-animation">
+        <a href="/2023/11/13/P5-%E6%B5%81%E6%B0%B4%E7%BA%BFCPU%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3/" class="trm-cover-frame trm-anima-link">
+            
+            
+                <img alt="cover" class="no-fancybox" src="/img/block.jpg">
+            
+        </a>
+        
+        <div class="trm-card-descr">
+            <div class="trm-label trm-category trm-mb-20">
+                <a href=" /categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90/">
+                    计算机组成
+                </a>
+            </div>
+            <h5>
+                <a href="/2023/11/13/P5-%E6%B5%81%E6%B0%B4%E7%BA%BFCPU%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3/" class="trm-anima-link">
+                    P5 - 流水线CPU设计文档
+                </a>
+            </h5>
+            <div class="trm-divider trm-mb-20 trm-mt-20"></div>
+            <ul class="trm-card-data trm-label">
+                <li>23/11/13</li>
+                <li>23:52</li>
+                
+                
+            </ul>
+        </div>
+    </div>
+</div>
+    
+</div>
+
+    
+
+
+
+                    <div class="trm-divider footer-divider"></div>
+
+                    <!-- footer -->
+                    <footer class="trm-scroll-animation">
+
+    
+
+    
+
+    
+        <div class="trm-footer-item">
+            <span>
+                由 <a href="https://hexo.io" target="_blank" rel="noopener">Hexo</a> 驱动 v6.3.0
+            </span>
+            <span class="footer-separator" data-separator=" | "></span>
+            <span> 
+                主题 - 
+                <a rel="noopener" href='https://github.com/MaLuns/hexo-theme-async' target='_blank'>Async</a>
+                v2.1.10
+            </span>
+        </div>
+      
+
+     
+
+     
+</footer>
+                    <!-- footer end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            <!-- body end -->
 
             
-          </article>
+
+            
+<div class="trm-fixed-container">
+    
+    
+        <div class="trm-fixed-btn" data-title="阅读模式" onclick="asyncFun.switchReadMode()">
+            <i class="iconfont fas fa-book-reader"></i>
+        </div>
+    
+    
+    <div id="trm-back-top" class="trm-fixed-btn" data-title="回到顶部">
+        <i class="iconfont fas fa-arrow-up"></i>
+    </div>
+</div>
         </div>
       </div>
-    </div>
-
-    <div class="side-col d-none d-lg-block col-lg-2">
-      
-  <aside class="sidebar" style="margin-left: -1rem">
-    <div id="toc">
-  <p class="toc-header">
-    <i class="iconfont icon-list"></i>
-    <span>目录</span>
-  </p>
-  <div class="toc-body" id="toc-body"></div>
-</div>
-
-
-
-  </aside>
-
-
-    </div>
+      <!-- scroll container end -->
   </div>
-</div>
-
-
-
-
+  <!-- app wrapper end -->
 
   
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-
-  
-
-
-  
-  
-
-
-
-
-
+  <!-- Plugin -->
 
 
 
 
     
-
     
-      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
-        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
-      </a>
-    
-
-    
-      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
-     aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header text-center">
-        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
-        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body mx-3">
-        <div class="md-form mb-5">
-          <input type="text" id="local-search-input" class="form-control validate">
-          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
-        </div>
-        <div class="list-group" id="local-search-result"></div>
-      </div>
-    </div>
-  </div>
-</div>
+<script src="https://unpkg.com/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
 
     
 
     
-  </main>
 
-  <footer>
-    <div class="footer-inner">
-  
-    <div class="footer-content">
-      Powered by <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> | <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
-    </div>
-  
-  
-    <div class="statistics">
-  
-  
-
-  
-    
-      <span id="busuanzi_container_site_pv" style="display: none">
-        总访问量 
-        <span id="busuanzi_value_site_pv"></span>
-         次
-      </span>
-    
-    
-      <span id="busuanzi_container_site_uv" style="display: none">
-        总访客数 
-        <span id="busuanzi_value_site_uv"></span>
-         人
-      </span>
-    
-    
-  
-</div>
-
-  
-  
-  
-</div>
-
-  </footer>
-
-  <!-- Scripts -->
-  
-  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
-  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
-
-  <script>
-    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
-    NProgress.start()
-    window.addEventListener('load', function() {
-      NProgress.done();
-    })
-  </script>
-
-
-<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
-<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
-<script  src="/js/events.js" ></script>
-<script  src="/js/plugins.js" ></script>
-
-
-  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
-  <script>
-    (function (window, document) {
-      var typing = Fluid.plugins.typing;
-      var subtitle = document.getElementById('subtitle');
-      if (!subtitle || !typing) {
-        return;
-      }
-      var text = subtitle.getAttribute('data-typed-text');
-      
-        typing(text);
-      
-    })(window, document);
-  </script>
-
-
-
-
-  
-    <script  src="/js/img-lazyload.js" ></script>
-  
-
-
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
-    var toc = jQuery('#toc');
-    if (toc.length === 0 || !window.tocbot) { return; }
-    var boardCtn = jQuery('#board-ctn');
-    var boardTop = boardCtn.offset().top;
-
-    window.tocbot.init(Object.assign({
-      tocSelector     : '#toc-body',
-      contentSelector : '.markdown-body',
-      linkClass       : 'tocbot-link',
-      activeLinkClass : 'tocbot-active-link',
-      listClass       : 'tocbot-list',
-      isCollapsedClass: 'tocbot-is-collapsed',
-      collapsibleClass: 'tocbot-is-collapsible',
-      scrollSmooth    : true,
-      includeTitleTags: true,
-      headingsOffset  : -boardTop,
-    }, CONFIG.toc));
-    if (toc.find('.toc-list-item').length > 0) {
-      toc.css('visibility', 'visible');
-    }
-
-    Fluid.events.registerRefreshCallback(function() {
-      if ('tocbot' in window) {
-        tocbot.refresh();
-        var toc = jQuery('#toc');
-        if (toc.length === 0 || !tocbot) {
-          return;
-        }
-        if (toc.find('.toc-list-item').length > 0) {
-          toc.css('visibility', 'visible');
-        }
-      }
-    });
-  });
-</script>
-
-
-  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
-
-  <script>Fluid.plugins.codeWidget();</script>
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
-    window.anchors.options = {
-      placement: CONFIG.anchorjs.placement,
-      visible  : CONFIG.anchorjs.visible
-    };
-    if (CONFIG.anchorjs.icon) {
-      window.anchors.options.icon = CONFIG.anchorjs.icon;
-    }
-    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
-    var res = [];
-    for (var item of el) {
-      res.push('.markdown-body > ' + item.trim());
-    }
-    if (CONFIG.anchorjs.placement === 'left') {
-      window.anchors.options.class = 'anchorjs-link-left';
-    }
-    window.anchors.add(res.join(', '));
-
-    Fluid.events.registerRefreshCallback(function() {
-      if ('anchors' in window) {
-        anchors.removeAll();
-        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
-        var res = [];
-        for (var item of el) {
-          res.push('.markdown-body > ' + item.trim());
-        }
-        if (CONFIG.anchorjs.placement === 'left') {
-          anchors.options.class = 'anchorjs-link-left';
-        }
-        anchors.add(res.join(', '));
-      }
-    });
-  });
-</script>
-
-
-  
-<script>
-  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
-    Fluid.plugins.fancyBox();
-  });
-</script>
-
-
-  <script>Fluid.plugins.imageCaption();</script>
-
-  
-      <script>
-        if (!window.MathJax) {
-          window.MathJax = {
-            tex    : {
-              inlineMath: { '[+]': [['$', '$']] }
-            },
-            loader : {
-              load: ['ui/lazy']
-            },
-            options: {
-              renderActions: {
-                insertedScript: [200, () => {
-                  document.querySelectorAll('mjx-container').forEach(node => {
-                    let target = node.parentNode;
-                    if (target.nodeName.toLowerCase() === 'li') {
-                      target.parentNode.classList.add('has-jax');
-                    }
-                  });
-                }, '', false]
-              }
-            }
-          };
-        } else {
-          MathJax.startup.document.state(0);
-          MathJax.texReset();
-          MathJax.typeset();
-          MathJax.typesetPromise();
-        }
-
-        Fluid.events.registerRefreshCallback(function() {
-          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
-            MathJax.startup.document.state(0);
-            MathJax.texReset();
-            MathJax.typeset();
-            MathJax.typesetPromise();
-          }
-        });
-      </script>
     
 
-  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+    <!-- 数学公式 -->
+    
 
-  <script  src="/js/local-search.js" ></script>
+    <!-- 评论插件 -->
+    
+        
 
-  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
-
-
-
-
-
-<!-- 主题的启动项，将它保持在最底部 -->
-<!-- the boot of the theme, keep it at the bottom -->
-<script  src="/js/boot.js" ></script>
+        
+    
 
 
-  
 
-  <noscript>
-    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
-  </noscript>
+<!-- CDN -->
+
+
+    
+
+    
+
+    
+
+
+
+
+    <!-- Service Worker -->
+    
+    <!-- baidu push -->
+    
+
+
+<script id="async-script" src="/js/main.js?v=2.1.10"></script>
+
 </body>
+
 </html>
