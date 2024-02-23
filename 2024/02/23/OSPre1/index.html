@@ -16,26 +16,24 @@
   <meta name="author" content="Traumtänzer aka &#39;Jew1!5!&#39;">
   <meta name="keywords" content="">
   
-    <meta name="description" content="这也行？">
+    <meta name="description" content="进行OS实验之前需要对其实验环境进行充分的了解。这篇文章结合课程组的教程对Linux等知识进行总结。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="两道“原地”哈希题">
-<meta property="og:url" content="https://galaxy-jewxw.github.io/2024/02/17/%E5%8E%9F%E5%9C%B0%E5%93%88%E5%B8%8C/index.html">
+<meta property="og:title" content="OS假期预习（一）——Linux，Git与Shell">
+<meta property="og:url" content="https://galaxy-jewxw.github.io/2024/02/23/OSPre1/index.html">
 <meta property="og:site_name" content="Jew&#39;s Blog">
-<meta property="og:description" content="这也行？">
+<meta property="og:description" content="进行OS实验之前需要对其实验环境进行充分的了解。这篇文章结合课程组的教程对Linux等知识进行总结。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://pic.imgdb.cn/item/65d05b919f345e8d03533744.jpg">
-<meta property="article:published_time" content="2024-02-17T06:24:11.000Z">
-<meta property="article:modified_time" content="2024-02-23T09:35:24.065Z">
+<meta property="article:published_time" content="2024-02-23T13:10:03.000Z">
+<meta property="article:modified_time" content="2024-02-23T13:19:36.782Z">
 <meta property="article:author" content="Traumtänzer aka &#39;Jew1!5!&#39;">
-<meta property="article:tag" content="刷题">
+<meta property="article:tag" content="总结">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://pic.imgdb.cn/item/65d05b919f345e8d03533744.jpg">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
   
   
-  <title>两道“原地”哈希题 | Jew&#39;s Blog</title>
+  <title>OS假期预习（一）——Linux，Git与Shell | Jew&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -213,7 +211,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="两道“原地”哈希题"></span>
+            <span id="subtitle" data-typed-text="OS假期预习（一）——Linux，Git与Shell"></span>
           
         </div>
 
@@ -224,8 +222,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-02-17 14:24" pubdate>
-          星期六, 二月 17日 2024, 2:24 下午
+        <time datetime="2024-02-23 21:10" pubdate>
+          星期五, 二月 23日 2024, 9:10 晚上
         </time>
       </span>
     
@@ -236,7 +234,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.5k 字
+          1.2k 字
         
       </span>
     
@@ -247,7 +245,7 @@
         
         
         
-          9 分钟
+          7 分钟
         
       </span>
     
@@ -292,12 +290,12 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">两道“原地”哈希题</h1>
+            <h1 id="seo-header">OS假期预习（一）——Linux，Git与Shell</h1>
             
               <p class="note note-info">
                 
                   
-                    本文最后更新于：2024年2月23日 下午
+                    本文最后更新于：2024年2月23日 晚上
                   
                 
               </p>
@@ -305,30 +303,18 @@
             
               <div class="markdown-body">
                 
-                <h1 id="两道“原地”哈希题"><a href="#两道“原地”哈希题" class="headerlink" title="两道“原地”哈希题"></a>两道“原地”哈希题</h1><h2 id="442-数组中重复的数据"><a href="#442-数组中重复的数据" class="headerlink" title="442. 数组中重复的数据"></a>442. 数组中重复的数据</h2><p>题目链接：<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/find-all-duplicates-in-an-array/">442. 数组中重复的数据</a></p>
-<p>给你一个长度为 <code>n</code> 的整数数组 <code>nums</code> ，其中 <code>nums</code> 的所有整数都在范围 <code>[1, n]</code> 内，且每个整数出现 <strong>一次</strong> 或 <strong>两次</strong> 。请你找出所有出现 <strong>两次</strong> 的整数，并以数组形式返回。</p>
-<p>你必须设计并实现一个时间复杂度为 <code>O(n)</code> 且仅使用常量额外空间的算法解决此问题。</p>
-<h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><p>由题目可知数组 nums 中的 n 个数都在 [1, n] 的范围内，因为是数字的个数和位置个数应该一一对应如果有数字出现了两次，就意味着 [1,n] 中有数字没有出现过。</p>
-<p>解题突破口就是，将每一个数放在对应的位置。如果位置和值不相等，就是出现两次的数。</p>
-<p>由于数组的下标范围是 [0, n-1]，我们需要将数 i 放在数组中下标为 i-1 的位置。如果 nums[i] 恰好出现了一次，那么将 nums[i] 放在数组中下标为 nums[i]−1 的位置即可； 如果 nums[i] 出现了两次，那么我们希望其中的一个 nums[i] 放在数组下标中为 nums[i]−1 的位置，另一个 nums[i] 放置在任意「不冲突」的位置 x。</p>
-<p><img src="https://pic.imgdb.cn/item/65d05b919f345e8d03533744.jpg" srcset="/img/loading.gif" lazyload></p>
-<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><ul>
-<li>遍历数组；<ul>
-<li>当遍历到位置 i 时，看 nums[i] 和 nums[i]−1，是否相同；</li>
-<li>如果相同这开始从下一个数字开始比较；</li>
-<li>如果不同则应该把 nums[i]−1 放在对应的位置上，因此我们交换 num[i] 和 nums[nums[i]−1] 即可，直到待交换的两个元素相等为止；</li>
+                <h1 id="OS假期预习（一）——Linux，Git与Shell"><a href="#OS假期预习（一）——Linux，Git与Shell" class="headerlink" title="OS假期预习（一）——Linux，Git与Shell"></a>OS假期预习（一）——Linux，Git与Shell</h1><h2 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h2><h3 id="基本信息"><a href="#基本信息" class="headerlink" title="基本信息"></a>基本信息</h3><p>Linux 操作系统是基于 <strong>Linux 内核</strong>的开源操作系统，Linux 内核在 1991 年由 Linus Torvalds 首次发布，在庞大的社区下不断完善和升级。Linux 系统通常制作成 <strong>Linux 发行版</strong>供用户使用。Linux 发行版包括 Linux 内核，以及相关的软件和库。这些软件和库大多数都是由 <strong>GNU 项目</strong>提供的。</p>
+<p>GNU（GNU is Not Unix 的递归缩写），是一个广泛的自由软件集合，为 Linux 操作系统提供了大量的开源软件。这些开源软件有一些非常出名，可以说是家喻户晓：比如的编译器套件 GCC 和调试器 GDB，编程语言 Pascal，用于科学计算的 R 语言，很多人以之为信仰的 Emacs 编辑器等，都是 GNU 项目的产物。</p>
+<p>实验课程使用的 Linux 发行版叫做 Ubuntu，是目前最为流行的 Linux 发行版之一。</p>
+<h3 id="命令行界面"><a href="#命令行界面" class="headerlink" title="命令行界面"></a>命令行界面</h3><p>使用命令行界面（Command Line Interface，CLI），我们会用一行一行的命令来告诉操作系统我们需要进行什么操作，操作系统也会把执行的结果输出到屏幕上。</p>
+<p>Shell 直译为“壳”，也就是操作系统的“外壳”（相对于操作系统“内核”而言），即用于访问操作系统服务的用户界面。Shell 可以分为命令行界面（CLI Shell）和图形用户界面（GUI Shell，GUI 是 Graphical User Interface 的简称）。我们经常使用的 Windows，macOS，都是 GUI Shell，很多 Linux 发行版也会提供 GUI Shell，但服务器上运行的 Linux 一般都是 CLI Shell。</p>
+<p>使用CLI Shell的主要原因在于：</p>
+<ul>
+<li>节约资源。在很多资源有限的小型服务器或单片机设备上，内存和 CPU 等资源是十分受限的。运行 GUI Shell 本身就是一笔不小的资源开销，这会大大增加系统性能的负担。</li>
+<li>高效自动化操作。举个例子：如果你希望把一个目录下的一千多个文件按序号重命名，在 GUI Shell 下可能很难实现，需要一个一个重命名。但在 CLI Shell 下，你就可以写一个脚本文件，利用循环高效完成这些操作。对于很多复杂操作，GUI 可能不会提供相应的操作方式，但命令行可以完成相当复杂的操作逻辑。</li>
+<li>精准操作。命令行本质上是对操作和返回结果的文本描述。针对一些复杂的操作，我们只需要将命令的集合打包成一个脚本文件，就可以在以后精准复现这些操作。这种性质在传播经验时也非常奏效：相比于手把手教你在图形界面上点来点去，不如直接发你一个命令脚本，你就立刻能够知道每一步都在做什么，而且可以直接运行复现。</li>
 </ul>
-</li>
-<li>遍历数组，找到数组中下标和值不一样的数字就是 重复出现两次的数 加入到resul 中即可；</li>
-<li>返回结果 result。</li>
-</ul>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function">vector&lt;<span class="hljs-type">int</span>&gt; <span class="hljs-title">findDuplicates</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span> </span>&#123;<br>        vector&lt;<span class="hljs-type">int</span>&gt; result;<br>        <span class="hljs-comment">/* 原地啊交换数组 */</span><br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; nums.<span class="hljs-built_in">size</span>(); i++)<br>            <span class="hljs-keyword">while</span> (nums[i] != nums[nums[i] - <span class="hljs-number">1</span>])<br>                <span class="hljs-built_in">swap</span>(nums[i], nums[nums[i] - <span class="hljs-number">1</span>]);<br>        <span class="hljs-comment">/* 找到数组中下标和值不一样的数字就是 重复出现两次的数 */</span><br>        <span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; nums.<span class="hljs-built_in">size</span>(); ++i)<br>            <span class="hljs-keyword">if</span> (nums[i] - <span class="hljs-number">1</span> != i) result.<span class="hljs-built_in">emplace_back</span>(nums[i]);<br>        <span class="hljs-keyword">return</span> result;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
-
-<h2 id="41-缺失的第一个正数"><a href="#41-缺失的第一个正数" class="headerlink" title="41. 缺失的第一个正数"></a>41. 缺失的第一个正数</h2><p>题目链接：<a target="_blank" rel="noopener" href="https://leetcode.cn/problems/first-missing-positive/">41. 缺失的第一个正数</a></p>
-<p>给你一个未排序的整数数组 <code>nums</code> ，请你找出其中没有出现的最小的正整数。</p>
-<p>请你实现时间复杂度为 <code>O(n)</code> 并且只使用常数级别额外空间的解决方案。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-keyword">class</span> <span class="hljs-title class_">Solution</span> &#123;<br><span class="hljs-keyword">public</span>:<br>    <span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">firstMissingPositive</span><span class="hljs-params">(vector&lt;<span class="hljs-type">int</span>&gt;&amp; nums)</span> </span>&#123;<br>        <span class="hljs-type">int</span> n = nums.<span class="hljs-built_in">size</span>();<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; n; i++) &#123;<br>            <span class="hljs-keyword">while</span> (nums[i] &gt;= <span class="hljs-number">1</span> &amp;&amp; nums[i] &lt;= n &amp;&amp; nums[i] != nums[nums[i] - <span class="hljs-number">1</span>]) &#123;<br>                <span class="hljs-built_in">swap</span>(nums[i], nums[nums[i] - <span class="hljs-number">1</span>]);<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">for</span> (<span class="hljs-type">int</span> i = <span class="hljs-number">0</span>; i &lt; n; i++) &#123;<br>            <span class="hljs-keyword">if</span> (nums[i] != i + <span class="hljs-number">1</span>)<br>                <span class="hljs-keyword">return</span> i + <span class="hljs-number">1</span>;<br>        &#125;<br>        <span class="hljs-keyword">return</span> n + <span class="hljs-number">1</span>;<br>    &#125;<br>&#125;;<br></code></pre></td></tr></table></figure>
-
+<h3 id="基础操作"><a href="#基础操作" class="headerlink" title="基础操作"></a>基础操作</h3><p>在命令行界面中，用户通过一行一行命令向操作系统发出指示，从而达到人机交互的目的。在 Linux 操作系统中，命令的一般格式为：<code>命令名 [选项] [参数] ...</code>，方括号的意思是可选，意为可以没有，也可以有一个或多个。</p>
 
                 
               </div>
@@ -347,7 +333,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/leetcode/" class="category-chain-item">leetcode</a>
+  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="category-chain-item">操作系统</a>
   
   
 
@@ -362,7 +348,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/%E5%88%B7%E9%A2%98/" class="print-no-link">#刷题</a>
+        <a href="/tags/%E6%80%BB%E7%BB%93/" class="print-no-link">#总结</a>
       
     </div>
   
@@ -374,8 +360,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>两道“原地”哈希题</div>
-      <div>https://galaxy-jewxw.github.io/2024/02/17/原地哈希/</div>
+      <div>OS假期预习（一）——Linux，Git与Shell</div>
+      <div>https://galaxy-jewxw.github.io/2024/02/23/OSPre1/</div>
     </div>
     <div class="license-meta">
       
@@ -387,7 +373,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年2月17日</div>
+          <div>2024年2月23日</div>
         </div>
       
       
@@ -419,18 +405,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/02/23/OSPre1/" title="OS假期预习（一）——Linux，Git与Shell">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">OS假期预习（一）——Linux，Git与Shell</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/01/30/%E5%8F%8C%E6%8C%87%E9%92%88%E7%9A%84%E4%B8%80%E4%B8%AA%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF/" title="双指针的一个应用">
-                        <span class="hidden-mobile">双指针的一个应用</span>
+                      <a href="/2024/02/17/%E5%8E%9F%E5%9C%B0%E5%93%88%E5%B8%8C/" title="两道“原地”哈希题">
+                        <span class="hidden-mobile">两道“原地”哈希题</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
