@@ -18,14 +18,14 @@
   
     <meta name="description" content="进行OS实验之前需要对其实验环境进行充分的了解。这篇文章结合课程组的教程对Linux等知识进行总结。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="OS假期预习（一）——Linux，Git与Shell">
+<meta property="og:title" content="OS假期预习（一）——Linux，Git与Shell脚本">
 <meta property="og:url" content="https://galaxy-jewxw.github.io/2024/02/23/OSPre1/index.html">
 <meta property="og:site_name" content="Jew&#39;s Blog">
 <meta property="og:description" content="进行OS实验之前需要对其实验环境进行充分的了解。这篇文章结合课程组的教程对Linux等知识进行总结。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://galaxy-jewxw.github.io/img/os001.jpg">
 <meta property="article:published_time" content="2024-02-23T13:10:03.000Z">
-<meta property="article:modified_time" content="2024-02-24T02:17:16.804Z">
+<meta property="article:modified_time" content="2024-02-24T03:15:55.039Z">
 <meta property="article:author" content="Traumtänzer aka &#39;Jew1!5!&#39;">
 <meta property="article:tag" content="总结">
 <meta name="twitter:card" content="summary_large_image">
@@ -37,7 +37,7 @@
   
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC&display=swap" rel="stylesheet">
   
-  <title>OS假期预习（一）——Linux，Git与Shell | Jew&#39;s Blog</title>
+  <title>OS假期预习（一）——Linux，Git与Shell脚本 | Jew&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -219,7 +219,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="OS假期预习（一）——Linux，Git与Shell"></span>
+            <span id="subtitle" data-typed-text="OS假期预习（一）——Linux，Git与Shell脚本"></span>
           
         </div>
 
@@ -242,7 +242,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          3k 字
+          16k 字
         
       </span>
     
@@ -253,7 +253,7 @@
         
         
         
-          17 分钟
+          87 分钟
         
       </span>
     
@@ -298,7 +298,7 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">OS假期预习（一）——Linux，Git与Shell</h1>
+            <h1 id="seo-header">OS假期预习（一）——Linux，Git与Shell脚本</h1>
             
               <p class="note note-info">
                 
@@ -311,7 +311,7 @@
             
               <div class="markdown-body">
                 
-                <h1 id="OS假期预习（一）——Linux，Git与Shell"><a href="#OS假期预习（一）——Linux，Git与Shell" class="headerlink" title="OS假期预习（一）——Linux，Git与Shell"></a>OS假期预习（一）——Linux，Git与Shell</h1><h2 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h2><h3 id="基本信息"><a href="#基本信息" class="headerlink" title="基本信息"></a>基本信息</h3><p>Linux 操作系统是基于 <strong>Linux 内核</strong>的开源操作系统，Linux 内核在 1991 年由 Linus Torvalds 首次发布，在庞大的社区下不断完善和升级。Linux 系统通常制作成 <strong>Linux 发行版</strong>供用户使用。Linux 发行版包括 Linux 内核，以及相关的软件和库。这些软件和库大多数都是由 <strong>GNU 项目</strong>提供的。</p>
+                <h1 id="OS假期预习（一）——Linux，Git与Shell脚本"><a href="#OS假期预习（一）——Linux，Git与Shell脚本" class="headerlink" title="OS假期预习（一）——Linux，Git与Shell脚本"></a>OS假期预习（一）——Linux，Git与Shell脚本</h1><h2 id="Linux"><a href="#Linux" class="headerlink" title="Linux"></a>Linux</h2><h3 id="Linux是什么？"><a href="#Linux是什么？" class="headerlink" title="Linux是什么？"></a>Linux是什么？</h3><p>Linux 操作系统是基于 <strong>Linux 内核</strong>的开源操作系统，Linux 内核在 1991 年由 Linus Torvalds 首次发布，在庞大的社区下不断完善和升级。Linux 系统通常制作成 <strong>Linux 发行版</strong>供用户使用。Linux 发行版包括 Linux 内核，以及相关的软件和库。这些软件和库大多数都是由 <strong>GNU 项目</strong>提供的。</p>
 <p>GNU（GNU is Not Unix 的递归缩写），是一个广泛的自由软件集合，为 Linux 操作系统提供了大量的开源软件。这些开源软件有一些非常出名，可以说是家喻户晓：比如的编译器套件 GCC 和调试器 GDB，编程语言 Pascal，用于科学计算的 R 语言，很多人以之为信仰的 Emacs 编辑器等，都是 GNU 项目的产物。</p>
 <p>实验课程使用的 Linux 发行版叫做 Ubuntu，是目前最为流行的 Linux 发行版之一。</p>
 <h3 id="命令行界面"><a href="#命令行界面" class="headerlink" title="命令行界面"></a>命令行界面</h3><p>使用命令行界面（Command Line Interface，CLI），我们会用一行一行的命令来告诉操作系统我们需要进行什么操作，操作系统也会把执行的结果输出到屏幕上。</p>
@@ -378,6 +378,249 @@
 <p>Tips：<code>rm -rf</code> 是十分危险的命令（尤其在 root 用户下），非必要不使用 <code>rm -rf</code> 命令，在执行之前需要再三确认。root 用户具有至高无上的权限，在该用户下执行 <code>rm -rf /</code> 可以删除一切文件，包括 Linux 本身，从而导致系统被毁灭。</p>
 </blockquote>
 <p>常用的文件操作除了新建文件和删除文件，还有复制和移动文件。</p>
+<div class="note note-success">
+            <p>cp<br>用法：cp [选项] 源文件 目标路径<br>作用：将源文件（也可以是目录）复制为目标路径对应的文件（如果目标路径是文件）或复制到目标路径（如果目标路径是目录）。<br>选项（常用）：<br>-r              递归复制目录及其子目录内的所有内容。</p>
+          </div>
+
+<blockquote>
+<p>递归复制指的是当要复制的目录下存在子目录，且子目录中存在子目录或文件的时候，将逐一复制它们。windows的复制默认是递归复制的。</p>
+<p>如果不递归复制，结果得到的目录只包含空的子目录，其子目录下的内容将不会复制。</p>
+</blockquote>
+<p>我们在用户主目录中使用命令 <code>touch test.txt</code> 来创建一个名为 <code>test.txt</code> 的文件，然后使用 <code>mkdir dir</code> 创建一个名为 <code>dir</code> 的目录。接下来使用 <code>cp test.txt dir/</code> 来进行复制操作。我们先用前面提到过的 <code>ls</code> 命令看看当前目录下的 <code>test.txt</code> 是否还存在，然后切换到 <code>dir</code> 目录，使用 <code>ls</code> 命令，可以看到 <code>test.txt</code> 这个文件。</p>
+<div class="note note-success">
+            <p>mv<br>用法：mv [选项] 源文件 目标路径<br>作用：将源文件（也可以是目录）移动为目标路径对应的文件（如果目标路径是文件）或移动到目标路径（如果目标路径是目录）。<br>选项（常用）：<br>-r              递归移动目录及其子目录内的所有内容。</p>
+          </div>
+
+<p><code>mv</code> 命令的另外一个作用就是重命名文件。原理上很好理解，也就是把一个文件以不同的名字移动到当前目录下，这和重命名是等价的。举个例子，我们在 <code>dir</code> 下使用 <code>mv test.txt test2.txt</code> 就可以把 <code>test.txt</code> 重命名为 <code>test2.txt</code> 了。</p>
+<p>对于两个纯文本文件来说，我们还可以使用 <code>diff</code> 命令进行比较的操作。</p>
+<div class="note note-success">
+            <p>diff<br>用法：diff [选项] 文件1 文件2<br>选项（常用）：<br>-b              不检查空白字符的不同。<br>-B              不检查空行。<br>-q              仅显示有无差异，不显示详细信息。</p>
+          </div>
+
+<h4 id="查找操作"><a href="#查找操作" class="headerlink" title="查找操作"></a>查找操作</h4><p>在 Windows 或 macOS 操作系统中，文件管理器提供了搜索的功能，以便我们查找文件。那么在 Linux 下如何进行查找操作呢？我们引入两个命令：<code>find</code> 和 <code>grep</code>。</p>
+<div class="note note-success">
+            <p>find<br>用法：find [路径] &lt;选项&gt;<br>作用：在给定路径下递归地查找文件，输出符合要求的文件的路径。如果没有给定路径，则在当前目录下查找。<br>选项（常用）：<br>-name &lt;文件名&gt;             指定需要查找的文件名。</p>
+          </div>
+
+<p>使用 <code>find</code> 命令并加上 <code>-name</code> 选项可以在当前目录下递归地查找符合参数所示文件名的文件，并将文件的路径输出至屏幕上。</p>
+<p><code>grep</code> 命令则有所不同。<code>find</code> 是根据文件的属性（文件名、修改日期等）查找文件，而 <code>grep</code> 则是匹配文件内的内容查找文件和文件中的匹配位置。</p>
+<div class="note note-success">
+            <p>grep<br>用法：grep [选项] PATTERN FILE<br>（PATTERN是匹配字符串，FILE是文件或目录的路径）<br>作用：输出匹配PATTERN的文件和相关的行。<br>选项（常用）：<br>-a              不忽略二进制数据进行搜索。<br>-i              忽略大小写差异。<br>-r              从目录中递归查找。<br>-n              显示行号。</p>
+          </div>
+
+<p>当你需要在整个项目目录中查找某个函数名、变量名等特定文本的时候，<code>grep</code> 将是你手头一个强有力的工具。</p>
+<p>前面讲到 <code>ls</code> 命令的功能是列出文件。在我们的 Linux 系统中有一个比 <code>ls</code> 更“高级”的命令，叫做 <code>tree</code>，它可以直接输出一个目录下的文件树。这个命令一般不是 Linux 发行版预装的，但我们已经为你安装好了，直接使用即可。</p>
+<div class="note note-success">
+            <p>tree<br>用法: tree [选项] [目录名]<br>选项(常用)：<br>-a              列出全部文件（包含隐藏文件）。<br>-d              只列出目录。</p>
+          </div>
+
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>连接终端后，我们所处的目录是 <code>~</code> 目录，也就是用户主目录。我们可以使用 <code>ls</code> 命令列出一个目录下都有什么内容，可以用 <code>cd</code> 进入到一个目录（输入绝对路径和相对路径都可以），可以用 <code>pwd</code> 显示当前目录的绝对路径。我们可以用 <code>mkdir</code> 创建一个目录，用 <code>rmdir</code> 删除一个空目录。我们可以使用 <code>touch</code> 新建文件，<code>rm</code> 删除文件，<code>cp</code> 复制文件，<code>mv</code> 移动或者重命名文件。</p>
+<p>如果想要查看一个命令的详尽说明，就需要使用 Linux 下的帮助命令——<code>man</code> 命令，通过 <code>man</code> 命令可以查看 Linux 中的命令帮助、配置文件帮助和编程帮助等信息。</p>
+<div class="note note-success">
+            <p>man<br>用法：man [选项] 命令<br>作用：查看命令的详细说明手册。</p>
+          </div>
+
+<h4 id="常用快捷键"><a href="#常用快捷键" class="headerlink" title="常用快捷键"></a>常用快捷键</h4><h3 id="常用的快捷键"><a href="#常用的快捷键" class="headerlink" title="常用的快捷键"></a>常用的快捷键</h3><ul>
+<li>Ctrl+C 终止当前程序的执行。当程序卡死或者你不想让它继续执行了，可以输入 Ctrl+C 终止程序。请注意，Ctrl+C 在 Windows 中是复制的意思，但在 Linux CLI 的环境下就是结束进程的意思。所以在使用终端模拟器（比如使用浏览器或 XShell 等）连接终端时，复制终端中显示的内容时记得不要按 Ctrl+C，而是老老实实右键复制，以免误杀进程。</li>
+<li>Ctrl+Z 挂起当前程序。暂停程序，放到后台。Ctrl+Z 挂起程序后会显示该程序挂起编号，若想要恢复该程序可以使用 <code>fg [job_spec]</code>即可，<code>job_spec</code> 即为挂起编号，不输入时默认为最近挂起进程。</li>
+<li>Ctrl+D 终止输入（若正在使用 Shell，则退出当前 Shell）。在标准输入中输入 Ctrl+D 也意味着输入了一个 EOF。</li>
+<li>Ctrl+L 清屏。相当于命令 <code>clear</code>。</li>
+</ul>
+<p>特别提示，Ctrl+S 在终端中的作用是暂停该终端。有的同学在进行编辑的时候会误触此组合键导致终端“卡死”，此时使用 Ctrl+Q 组合键即可让终端继续运行。</p>
+<blockquote>
+<p>Tips：在多数 Shell 中，四个方向键也是有各自特定的功能的：Left 和 Right 可以控制光标的位置，Up 和 Down 可以切换最近使用过的命令。</p>
+</blockquote>
+<h2 id="实用工具"><a href="#实用工具" class="headerlink" title="实用工具"></a>实用工具</h2><p>下面介绍的若干 Linux 下的实用工具，它们都是在 Linux 下开发工作中非常重要的工具，可以说是不可或缺。</p>
+<h3 id="GCC"><a href="#GCC" class="headerlink" title="GCC"></a>GCC</h3><p>GCC（GNU Compiler Collection，GNU 编译器套件）包含了著名的 C 语言编译器 gcc（GNU project C and C++ compiler）。</p>
+<div class="note note-success">
+            <p>gcc<br>用法：gcc [选项] 源代码文件<br>作用：编译源代码文件。</p>
+          </div>
+
+<p>首先我们在用户主目录下创建一个文件 <code>hello.c</code>，使用 Vim 打开这个文件。进入编辑模式，输入以下内容，保存退出。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br><span class="hljs-type">int</span> <span class="hljs-title function_">main</span><span class="hljs-params">()</span> &#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;Hello, world!\n&quot;</span>);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>接下来在当前目录下使用 <code>gcc</code> 命令进行编译。</p>
+<figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs crystal"><span class="hljs-variable">$ </span>gcc hello.c<br></code></pre></td></tr></table></figure>
+
+<p>此时我们没有看到相关输出，说明编译过程成功完成。在当前目录下出现了 <code>a.out</code> 这个文件（这个文件名是 gcc 编译器默认的可执行程序的文件名）。</p>
+<p>既然 gcc 为我们编译出了一个可执行文件，那么我们就可以执行这个文件。执行 <code>a.out</code> 的命令是：</p>
+<figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs crystal"><span class="hljs-variable">$ </span>./a.<span class="hljs-keyword">out</span><br></code></pre></td></tr></table></figure>
+
+<p>我们知道，<code>./</code> 是“当前目录下”的意思。为什么要加上一个 <code>./</code> 呢，难道不是多此一举吗？实际上在 Linux 中，<code>./</code> 表示被执行的文件在当前目录，Linux 会在当前目录中查找可执行文件。如果不加 <code>./</code>，那么 Linux 就会在“系统 <code>PATH</code>”中寻找。然而 <code>a.out</code> 并不在系统 <code>PATH</code> 中，所以 Shell 就会报错<code>a.out: command not found</code>。</p>
+<blockquote>
+<p>系统 <code>PATH</code>：<code>PATH</code> 是一个系统变量，记录了若干目录。如果待运行的程序不在当前目录，操作系统便可以去依次搜索 <code>PATH</code> 变量中记录的目录，如果在这些目录中找到待运行的程序，操作系统便可以运行这个程序。</p>
+</blockquote>
+<p>运行 <code>a.out</code> 之后，我们就可以看到终端输出了 <code>Hello, world!</code>。</p>
+<h3 id="make-Makefile"><a href="#make-Makefile" class="headerlink" title="make &amp; Makefile"></a>make &amp; Makefile</h3><p>GNU 项目中有一个叫做“make”的工具，是最常用的 C 语言项目构建工具。我们都知道，“make”是制作的意思，而 make 构建工具的作用本质上就是“制作出一个文件”。当我们开发了一个较大的项目，make 工具就可以将这些文件编译链接成可执行文件。当然 make 工具进行编译和链接的操作是需要人工指导的，这个“指导文件”就是 Makefile。make 工具可以根据时间戳自动判断项目的哪些部分是需要重新编译的，每次只重新编译必要的部分。make 工具是基于 Shell 命令运行的，所以只要项目的编译器可以通过 Shell 命令调用，make 都可以对项目进行构建。</p>
+<p>为了能够清晰地了解 make 的基本概念，我们来使用 Makefile 指导编译一个最简单的项目——也就是刚刚的 Hello World 项目。</p>
+<p>不使用 make 工具，我们可以使用下面的命令来对 hello.c 进行编译：</p>
+<figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs crystal"><span class="hljs-variable">$ </span>gcc -o hello hello.c<br></code></pre></td></tr></table></figure>
+
+<p>如果使用 make 工具来构建，我们就需要在当前目录下创建并编辑 Makefile 文件（文件名就叫做 <code>Makefile</code>）。Makefile 的基本格式如下。</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-keyword">target</span>: dependencies<br>    <span class="hljs-keyword">command</span> <span class="hljs-number">1</span><br>    <span class="hljs-keyword">command</span> <span class="hljs-number">2</span><br>    ...<br>    <span class="hljs-keyword">command</span> n<br></code></pre></td></tr></table></figure>
+
+<p>其中，<code>target</code> 是我们构建（Build）的目标，可以是真的目标文件、可执行文件，也可以是一个标签（详见参考教程）。而 <code>dependencies</code> 是构建该目标所需的其它文件或其他目标。之后是构建出该目标所需执行的命令。有一点尤为需要注意：每一个命令（command）之前必须有一个制表符（tab）。这里必须使用制表符而不能是空格，否则 make 会报错。</p>
+<p>我们通过在 Makefile 中书写这些显式规则来告诉 make 工具文件间的依赖关系：如果想要构建 <code>target</code>，那么首先要准备好 <code>dependencies</code>，接着执行 <code>command</code> 中的命令，以得到 <code>target</code>。在书写完恰当的规则之后，只需要在 shell 中输入 <code>make target</code>（<code>target</code> 是目标名），即可执行相应的命令、生成相应的目标。</p>
+<p>因此，我们的简易的 Makefile 可以写成如下的样子，之后执行 <code>make hello</code> 或是 <code>make</code>，即可产生 <code>hello</code> 这个可执行文件，使用 <code>./hello</code> 就可以执行它。值得注意的是，当执行 <code>make</code> 指令而不附加其他参数时，默认构建第一个目标。</p>
+<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs avrasm"><span class="hljs-symbol">all:</span> hello<br><br><span class="hljs-symbol">hello:</span> hello.c<br>    gcc -o hello hello.c<br></code></pre></td></tr></table></figure>
+
+<h3 id="ctags"><a href="#ctags" class="headerlink" title="ctags"></a>ctags</h3><p>ctags 是一个方便代码阅读的工具，我们用到的功能是代码跳转功能。利用 ctags，我们可以在 Vim 下进行更便捷的开发。</p>
+<p>在使用之前我们需要修改 Vim 的配置文件，使其支持 ctags 的相关功能。打开 <code>~/.vimrc</code> 文件（如果没有则新建），添加下面两行并保存。</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs routeros"><span class="hljs-built_in">set</span> <span class="hljs-attribute">tags</span>=tags<br><span class="hljs-built_in">set</span> autochdir<br></code></pre></td></tr></table></figure>
+
+<p>我们修改 <code>hello.c</code> 文件，如下所示。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs cpp"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;ctags_test.h&quot;</span></span><br><span class="hljs-function"><span class="hljs-type">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>&#123;<br>    <span class="hljs-keyword">struct</span> <span class="hljs-title class_">Pair</span> p;<br>    p.a = <span class="hljs-number">1</span>;<br>    p.b = <span class="hljs-number">2</span>;<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>新建一个文件 <code>ctags_test.h</code>，输入如下内容：</p>
+<figure class="highlight abnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs abnf">struct Pair &#123;<br>    int a<span class="hljs-comment">;</span><br>    int b<span class="hljs-comment">;</span><br>&#125;<span class="hljs-comment">;</span><br></code></pre></td></tr></table></figure>
+
+<p>我们保存并退出 Vim，执行命令 <code>ctags -R *</code>，就会发现在该目录下出现了新的文件 <code>tags</code> ——这是 ctags 为我们创建的符号名索引文件。此时我们就能使用 ctags 的功能了。</p>
+<p>使用 Vim 打开 <code>hello.c</code> 文件，将光标移动到 <code>a</code> 或 <code>b</code> 上，按下 Ctrl+]，就可以跳转到结构体中 <code>a</code>或 <code>b</code> 的定义处。再按下 Ctrl+O就可以返回跳转前的位置。</p>
+<h3 id="tmux"><a href="#tmux" class="headerlink" title="tmux"></a>tmux</h3><p>对于我们来说，Linux 终端就是我们眼前的黑框框。Linux 是一个优秀的多用户多进程操作系统，用户经常需要同时运行多个程序并同时观察它们的输出。然而我们的终端看起来只能同时显示一个程序，并不能同时观察多个程序的运行。一个简单的解决方案就是同时打开多个终端，让一个用户同时多次登录 Linux 计算机（Linux 允许这样做）。但这样做有时在窗口切换时会产生麻烦。</p>
+<p>另外还有一个问题：当我们的终端和 Linux 计算机断开连接时，终端前台正在运行的进程会被杀死。所以我们在终端中等待程序运行时就需要一直保持着终端的连接，这对于长时间运行程序的服务器来说是不现实的，运维人员不能总是在前台看着程序不断输出。</p>
+<p>为了解决这两个问题，我们引入“终端复用神器” <strong>tmux</strong>（Terminal multiplexer）。它实现了终端窗口和进程分离，同时也可以在窗口中同时显示多个进程的运行。</p>
+<p>窗格、窗口、会话是 tmux 的三个基本概念，一个会话可以包含多个窗口，一个窗口可以分割为多个窗格。突然断开连接或主动分离（Detach）后 tmux 仍会保持程序的运行，通过重新连接会话可以直接在之前的环境继续工作。</p>
+<p>看到了 tmux 的运行效果，我们立刻会问，如何进入 tmux，实现分屏操作呢？</p>
+<p>我们在 Shell 下直接输入命令 <code>tmux</code>，可以看到终端底部出现一行绿色，这时就已经进入了 tmux 的新会话。tmux 的操作由一系列快捷键组成，下面对重要的快捷键进行介绍。</p>
+<ul>
+<li>Ctrl+B Shift+Num 5（同时按下 Ctrl 和 B，然后松开这两个键，紧接着立刻输入“%”，下面同理），将窗口左右分屏。</li>
+<li>Ctrl+B Shift+’ ，将窗口上下分屏。</li>
+<li>重复以上两个快捷键，可以将目前活动的窗格继续分屏。</li>
+<li>Ctrl+B Up &#x2F; Down &#x2F; Left &#x2F; Right 根据按键方向切换到某个窗格。</li>
+<li>Ctrl+B Space，切换窗格布局（上下变成左右，左右变成上下）。</li>
+<li>Ctrl+B X，关闭当前正在使用的窗格（根据提示按 Y 确认关闭）。</li>
+<li>Ctrl+B D，分离（Detach）当前会话，回到 Shell 的终端环境。此时程序仍然保持在 tmux 会话中的状态。</li>
+</ul>
+<p>当我们使用 Ctrl+B D 分离了会话或者意外断开了连接，我们该如何恢复到之前的会话中呢？</p>
+<p>我们首先使用 <code>tmux ls</code> 命令查看当前都有哪些会话。记住会话名（会话名是冒号左边的内容，默认情况下是一个数字），使用 <code>tmux a -t 会话名</code> 恢复到原来的会话。</p>
+<h2 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h2><h3 id="Git是什么？"><a href="#Git是什么？" class="headerlink" title="Git是什么？"></a>Git是什么？</h3><p>Git 是一个先进的<strong>版本控制系统</strong>。试想一个几百人同时开发一个大项目的场景：有人想在某个版本进行测试，也有人想要在这个版本的基础上进行新功能的开发而不影响测试人员，还有人想进行另外一个功能的开发……在迭代许多版本之后，代码的管理就变得十分复杂了。复杂主要包括两个方面：时间上的复杂（版本不断更新，新功能出现问题需要回退等等）和空间上的复杂（不同人开发不同的部分）。为了解决这些问题，就出现了版本控制系统。</p>
+<h3 id="三种储存位置"><a href="#三种储存位置" class="headerlink" title="三种储存位置"></a>三种储存位置</h3><p>Git 中的三种储存状态分别是：工作区（Working Directory）、暂存区（Staging Area）和储存库（Repository）。</p>
+<p>一般来说，一个项目在 Git 中是以目录的形式存在的，这个目录包含了<strong>工作区</strong>（<code>.git</code> 子目录之外的内容）和<strong>储存库</strong>（<code>.git</code> 子目录）。工作区可以理解为“目前正在编辑的版本”，储存库储存在一个隐藏目录 <code>.git</code> 中（因为它以 <code>.</code> 开头，所以是隐藏的），用来存放提交过的所有版本的内容及其联系。<strong>暂存区</strong>存放了已经确定修改但尚未提交的文件。暂存区的信息理论上也储存在 <code>.git</code> 目录中，但是在用途上和储存库有区别，因此和储存库的概念区分开来。</p>
+<h3 id="四种储存状态"><a href="#四种储存状态" class="headerlink" title="四种储存状态"></a>四种储存状态</h3><p>一个文件，在 Git 目录中有以下四种状态：</p>
+<ul>
+<li>未跟踪（Untracked）：一个文件在储存库的版本信息中没有被记录过。比如在储存库中新建了一个文件，这个文件现在就是未跟踪的状态；在一个非空目录下使用 <code>git init</code> 来初始化一个空储存库，此时这个目录下的所有文件都处于未跟踪的状态。</li>
+<li>未修改（Unmodified）：一个文件在跟踪之后一直没有改动过，或者改动已经被提交（即工作区的内容和储存库中的内容相同），则处于未修改状态。当我们修改这个文件时，则会使这个文件变成已修改状态。</li>
+<li>已修改（Modified）：一个文件已经被修改（即工作区的内容和储存库中的内容不同），但还没有加入（<code>git add</code>) 到暂存区中。</li>
+<li>已暂存（Staged）：一个文件已被加入暂存区。加入暂存区意味着将一个已修改的文件加入下次提交（<code>git commit</code>）需要存入储存库的文件清单中。</li>
+</ul>
+<h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><h4 id="git-init"><a href="#git-init" class="headerlink" title="git init"></a><code>git init</code></h4><p><code>git init</code> 会自动把当前目录变成一个空的 Git 仓库，这样就可以对当前目录下的内容进行版本管理了。</p>
+<h4 id="git-clone"><a href="#git-clone" class="headerlink" title="git clone"></a><code>git clone</code></h4><p><code>git init</code> 创建一个新的储存库，而 <code>git clone &lt;URL&gt;</code> 则是“克隆”一个已有的储存库到当前目录下。通常我们会从一个互联网地址（即 URL，统一资源定位符）进行克隆，所以一般这种操作可以理解为“下载”。</p>
+<h4 id="git-status"><a href="#git-status" class="headerlink" title="git status"></a><code>git status</code></h4><p>这个命令可以查看当前分支的状态，以及当前工作区的变动和暂存区的内容，便于我们对工作区的概况进行掌握。</p>
+<h4 id="git-add"><a href="#git-add" class="headerlink" title="git add"></a><code>git add</code></h4><p>使用这个命令，可以把一个新文件或者已经修改过的文件加入暂存区中。在你完成一部分实验内容之后，可以使用 <code>git add .</code> 将你的所有修改加入暂存区，也可以使用 <code>git add &lt;filename&gt;</code> 来将指定的文件加入暂存区。</p>
+<h4 id="git-restore"><a href="#git-restore" class="headerlink" title="git restore"></a><code>git restore</code></h4><p>我们在修改一个文件之后，可能想要放弃这个修改。当这个文件还没有通过 <code>git add</code> 加入暂存区时，我们可以使用 <code>git restore &lt;filename&gt;</code> 来撤销对这个文件的修改，使其退回到上一个 commit 的状态。如果这个文件已经加入了暂存区，我们可以通过 <code>git restore --staged &lt;filename&gt;</code> 来取消暂存。</p>
+<h4 id="git-checkout"><a href="#git-checkout" class="headerlink" title="git checkout"></a><code>git checkout</code></h4><p>这个命令涉及到分支的知识，分支的概念在这里不会详细介绍，可以参考 <a target="_blank" rel="noopener" href="https://git-scm.com/book/zh/v2">Pro Git</a>。在实验课程中，可能会涉及在各个 Lab 中进行切换。这时使用 <code>git checkout lab&lt;x&gt;</code> 可以切换到相应的分支。</p>
+<p>请注意，在切换时，需要保证目前所有文件的状态均为“未修改”（没有修改过，或者已经提交）。</p>
+<h4 id="git-commit"><a href="#git-commit" class="headerlink" title="git commit"></a><code>git commit</code></h4><p>使用 <code>git commit -m &lt;message&gt;</code> 这个命令将暂存区的修改提交到储存库中。当 message 参数有空格时需要把 message 用引号括起来。在提交时，要求给出一段说明性文字。这段文字可以任意填写，但建议按照提交内容填写，以保证多人协作时的可读性。本实验不会涉及多人协作，所以方便自己开发即可。</p>
+<h4 id="git-push"><a href="#git-push" class="headerlink" title="git push"></a><code>git push</code></h4><p>这个命令将本地的 commit 推送到一个远程仓库。在课程实验中，这个命令可以将你的 commit 推送到 GitLab。</p>
+<h4 id="git-pull"><a href="#git-pull" class="headerlink" title="git pull"></a><code>git pull</code></h4><p>这个命令将远程新建的分支下载到本地，并且将远端的更改合并到当前的分支。在利用评测机进行实验分支的初始化之后，可以在开发机中使用这个命令来将新的分支下载到本地。</p>
+<h2 id="Shell脚本"><a href="#Shell脚本" class="headerlink" title="Shell脚本"></a>Shell脚本</h2><p>所谓 Shell 脚本，其实就是一条一条命令组合起来，放到一个文件中，并且可以直接运行这个文件。</p>
+<p>Shell 脚本和 Windows 批处理文件是十分类似的，只不过在 Linux 下，脚本语言编程是用户的必备技能，也是高效操作所必需的技能；而在 Windows 下的批处理脚本则对于普通用户来说可有可无，因为他们只需操作图形界面就可以完成日常生活中的绝大多数操作。</p>
+<h3 id="Shell脚本的执行"><a href="#Shell脚本的执行" class="headerlink" title="Shell脚本的执行"></a>Shell脚本的执行</h3><p>在 Windows 中，批处理文件的扩展名是 <code>.bat</code>，类似地，在 Linux 中，脚本文件的文件名在最后一般会加上 <code>.sh</code> 后缀。实际上 Linux 中没有扩展名的概念，所以加不加 <code>.sh</code> 对运行是没有影响的。但为了区分于其他文件，一般约定脚本文件的文件名都以 <code>.sh</code> 结尾。</p>
+<p>执行 Shell 脚本很容易：<code>./文件名</code>（文件名包含 <code>.sh</code>，因为这是文件名的一部分。再次强调，Linux 中没有扩展名的概念）即可运行。</p>
+<p>需要注意的是，被执行的脚本文件必须有“执行”权限。在 Linux 系统中，每个文件对于拥有者、用户组和其他用户都分别有“读”、“写”、“执行”的权限。我们使用 <code>touch</code> 命令创建的文件默认是没有“执行”权限的，需要手动添加。若发现 Shell 脚本执行时出现了“Permission denied”的错误，多半是因为没有添加“执行”权限。我们可以使用下面的命令手动添加“执行”权限。</p>
+<div class="note note-success">
+            <p>chmod +x 文件名</p>
+          </div>
+
+<p>后文中提到的 Shell 语法均指的是 Bash Shell 语法。</p>
+<h3 id="语法基础"><a href="#语法基础" class="headerlink" title="语法基础"></a>语法基础</h3><h4 id="Hello-world"><a href="#Hello-world" class="headerlink" title="Hello, world!"></a>Hello, world!</h4><p>首先用 <code>touch</code> 命令创建一个新文件 <code>hello.sh</code>，使用 Vim 输入以下内容。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-meta">#!/bin/bash</span><br><span class="hljs-comment">#My first Shell script!</span><br><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;Hello, world!&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>保存退出，修改权限，运行。我们可以看到终端输出了 <code>Hello, world!</code>。下面对程序进行逐行解释。</p>
+<p>第一行：指定脚本的默认运行程序（即解释器）。在这里指定为 bash，这是我们最常使用的脚本运行程序。</p>
+<blockquote>
+<p>其中，<code>#!</code> 出现在脚本文件的第一行的前两个字符，被称为 Shebang。当文件中存在 Shebang 的情况下，程序加载器会分析 Shebang 后面的内容，并且将这些内容作为脚本文件的解释器。</p>
+</blockquote>
+<p>第二行：注释。注释以 <code>#</code> 开头。</p>
+<p>第三行：输出。将 <code>echo</code> 命令后面的字符串输出。像本章开头所说的，Shell 脚本是命令和组合，其实 <code>echo</code> 也是一个命令。不信你把这一行在终端中直接运行一下，看看发生了什么，也可以使用 <code>man</code> 命令查询一下 <code>echo</code> 命令是做什么的。</p>
+<h4 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h4><p>一般的脚本语言都涉及到变量的操作，那么 Shell 脚本中是如何定义和使用变量的呢？</p>
+<p>Shell 是弱类型语言，定义变量时无需指定类型。定义变量（变量名为 <code>var_name</code>，值为 <code>value</code>）的方式是：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs ini"><span class="hljs-attr">var_name</span>=value<br></code></pre></td></tr></table></figure>
+
+<p>请注意，等号两边<strong>不允许有空格</strong>。</p>
+<p>使用 <code>$var_name</code> 可以获取变量的值。在使用时，建议在变量名的两端加一个花括号（形如 <code>$&#123;var_name&#125;</code>），以帮助解释器识别变量的边界，避免歧义。</p>
+<p>下面我们用定义和使用变量的形式，重新编写上面的 Hello, world 程序，将 <code>hello.sh</code> 的内容修改为：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">#</span><span class="language-bash">!/bin/bash</span><br>str=&quot;Hello, world!&quot;<br>echo $str<br></code></pre></td></tr></table></figure>
+
+<p>保存退出，运行，达到了同样的效果。</p>
+<h4 id="脚本参数——特殊的变量"><a href="#脚本参数——特殊的变量" class="headerlink" title="脚本参数——特殊的变量"></a>脚本参数——特殊的变量</h4><p>之前学习命令的时候，我们发现很多命令都需要传入参数和选项。在 Shell 脚本中，传递参数是完全支持的，这也大大提高了 Shell 脚本的通用性和便捷性。下面我们简单讲解如何传递参数。</p>
+<p>参数在 Shell 脚本中体现为特殊的变量。在执行语句中，参数以空格分隔，每一个参数在脚本中都是一个字符串变量。第一个参数映射到变量名 <code>1</code>，第二个参数映射到变量名 <code>2</code>，以此类推……</p>
+<p>我们用一个实例来说明参数的传递。我们将 <code>hello.sh</code> 的内容修改为：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">#</span><span class="language-bash">!/bin/bash</span><br>str=&quot;Hello, $1 and $2!&quot;<br>echo $str<br></code></pre></td></tr></table></figure>
+
+<p>输入如下命令运行，看看控制台输出了什么：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">$ </span><span class="language-bash">./hello.sh world OS</span><br></code></pre></td></tr></table></figure>
+
+<p>请在双引号中引用变量。如果将上述的双引号改成单引号，则会原文输出引号内的内容，你可以尝试一下。</p>
+<p>需要补充的是，对于传递的参数，不仅有 <code>$1</code>、<code>$2</code> 这样的特殊变量，还提供了其他的特殊变量：</p>
+<ul>
+<li><code>$#</code> 传递的参数个数；</li>
+<li><code>$*</code>一个字符串，内容是传递的全部参数。</li>
+</ul>
+<h4 id="条件与循环"><a href="#条件与循环" class="headerlink" title="条件与循环"></a>条件与循环</h4><p>如果我们想对大批量的文件进行复杂操作，我们一般需要用到条件控制和循环控制。这也是自动化操作的精髓所在。下面我们对 <code>if</code> 和 <code>while</code> 关键字进行简单讲解。</p>
+<p><code>if</code> 语句块的格式如下：</p>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli"><span class="hljs-keyword">if</span> condition1<br>then<br>    <span class="hljs-keyword">command</span>11<br>    <span class="hljs-keyword">command</span>12<br>    <span class="hljs-string">......</span><br>elif condition2<br>then<br>    <span class="hljs-keyword">command</span>21<br>    <span class="hljs-keyword">command</span>22<br>    <span class="hljs-string">......</span><br>else<br>    <span class="hljs-keyword">command</span>31<br>    <span class="hljs-keyword">command</span>32<br>    <span class="hljs-string">......</span><br>fi<br></code></pre></td></tr></table></figure>
+
+<p>其中，<code>fi</code> 是“if”的倒写，代表 <code>if</code> 语句块的结束；<code>elif</code> 意为“else if”。<code>elif</code> 和 <code>else</code> 可以按需省略。下面举例说明：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">#</span><span class="language-bash">!/bin/bash</span><br>if (( $1 &gt; $2 ))<br>then<br>        echo &quot;first &gt; second&quot;<br>elif (( $1 &lt; $2 ))<br>then<br>        echo &quot;first &lt; second&quot;<br>elif (( $1 == $2 ))<br>then<br>        echo &quot;first == second&quot;<br>else<br>        echo &quot;I don&#x27;t know...&quot;<br>fi<br></code></pre></td></tr></table></figure>
+
+<p>其中 <code>(())</code> 是用于比较<strong>整数</strong>之间大小的表达方式。传入字符串或浮点数，则是未定义的行为。可以试着传入不同的参数，看看程序输出了什么。</p>
+<p><code>while</code> 语句块的格式如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-keyword">while</span> condition<br><span class="hljs-keyword">do</span><br>    command1<br>    command2<br>    ...<br><span class="hljs-keyword">done</span><br></code></pre></td></tr></table></figure>
+
+<p>其中 <code>done</code> 表示“do”语句块的结束。下面举例说明。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">#</span><span class="language-bash">!/bin/bash</span><br>mkdir files<br>cd files<br>i=1<br>while (($i &lt;= $1))<br>do<br>        touch &quot;file$i.txt&quot;<br>        let i=i+1 # or i=$((i+1))<br>done<br></code></pre></td></tr></table></figure>
+
+<p>这里，<code>let</code> 是为变量赋值的命令，与之等价地，也可以使用 <code>i=$((i+1))</code>。</p>
+<h4 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h4><p>Shell 脚本也支持<strong>函数</strong>。函数的定义方式如下：</p>
+<figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs ada"><span class="hljs-keyword">function</span> <span class="hljs-title">fun_name</span>() &#123;<br>    body...<br>    <span class="hljs-keyword">return</span> <span class="hljs-type">int_value</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>其中 <code>function</code> 和 <code>()</code> 可以省略其中一个。其中返回语句是可选的，函数可以不返回值。<code>int_value</code> 是一个[0,255][0,255]之间的整数，返回其他值是未定义的行为，一般会返回一个错误的结果。</p>
+<p>函数的调用方法如下：</p>
+<figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs gams"><span class="hljs-function"><span class="hljs-title">fun_name</span></span> param1 param2 ... paramN<br></code></pre></td></tr></table></figure>
+
+<p>其中第 N 个参数在函数体内使用 <code>$N</code> 来获取，且不需要在函数定义开头声明。值得注意的是，当 N&gt;&#x3D;10 时，需要用 <code>$&#123;N&#125;</code> 来获取参数，否则 <code>$</code> 只会带第一位数字。如果函数有返回值，则在函数调用的后面需要使用 <code>$?</code> 获取返回值。下面用一个例子说明函数是如何定义和调用的。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">#</span><span class="language-bash">!/bin/bash</span><br>function fun1() &#123;<br>        echo &quot;Hello, world!&quot;<br>&#125;<br>function fun2() &#123;<br>        echo &quot;I&#x27;ve got &quot;$1&quot; and &quot;$2&quot;!&quot;<br>&#125;<br>function fun3() &#123;<br>        echo &quot;I&#x27;m computing first + second!&quot;<br>        return $(($1 + $2))<br>&#125;<br>fun1<br>fun2 2 3<br>fun3 4 5<br>echo &quot;The sum is &quot;$?&quot;.&quot;<br></code></pre></td></tr></table></figure>
+
+<p>其中，<code>$(($1 + $2))</code> 的意思是先计算 <code>$1 + $2</code> 的值。</p>
+<h3 id="sed——用命令编辑和输出文本"><a href="#sed——用命令编辑和输出文本" class="headerlink" title="sed——用命令编辑和输出文本"></a>sed——用命令编辑和输出文本</h3><p>我们已经初步了解到 Shell 脚本的强大功能。但我们目前对于文本的编辑功能仅仅学习了 Vim 等工具的使用。有人可能会想到，可以通过 Shell 脚本（即一条条的命令）对文本文件的内容进行编辑和输出吗？当然可以！sed 是通过命令编辑和输出文本的工具，通过掌握 <code>sed</code> 命令的使用，我们就可以实现文本内容编辑和选择输出的自动化。</p>
+<div class="note note-success">
+            <p>sed<br>sed [选项] ‘命令’ 输入文本<br>选项（常用）：<br>-n：安静模式，只显示经过sed处理的内容。否则显示输入文本的所有内容。<br>-i：直接修改读取的档案内容，而不是输出到屏幕。否则，只输出不编辑。<br>命令（常用）：<br>&lt;行号&gt;a&lt;内容&gt;： 新增，在行号后新增一行相应内容。行号可以是“数字”，在这一行之后新增，也可以是“起始行，终止行”，在其中的每一行后新增。当不写行号时，在每一行之后新增。使用$表示最后一行。后面的命令同理。<br>&lt;行号&gt;c&lt;内容&gt;：取代。用内容取代相应行的文本。<br>&lt;行号&gt;i&lt;内容&gt;：插入。在当前行的上面插入一行文本。<br>&lt;行号&gt;d：删除当前行的内容。<br>&lt;行号&gt;p：输出选择的内容。通常与选项-n一起使用。<br>s&#x2F;<re>&#x2F;<string>：将<re>（正则表达式）匹配的内容替换为<string>。</p>
+          </div>
+
+<blockquote>
+<p>sed 中正则表达式的相关语法可以查阅 <a target="_blank" rel="noopener" href="https://www.gnu.org/software/sed/manual/html_node/Regular-Expressions.html">sed 文档</a>。sed 等工具中的正则表达式语法和 Java 等语言中不完全相同，请注意区分。</p>
+</blockquote>
+<p>不加 <code>-i</code> 选项时，只在控制台显示编辑后的文件内容，而不修改文件本身。下面举几个使用例子，以便更好地理解 <code>sed</code> 命令的使用方法。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs shell">sed -n &#x27;3p&#x27; my.txt<br><span class="hljs-meta prompt_"># </span><span class="language-bash">输出 my.txt 的第三行</span><br>sed &#x27;2d&#x27; my.txt<br><span class="hljs-meta prompt_"># </span><span class="language-bash">删除 my.txt 文件的第二行</span><br>sed &#x27;2,$d&#x27; my.txt<br><span class="hljs-meta prompt_"># </span><span class="language-bash">删除 my.txt 文件的第二行到最后一行</span><br>sed &#x27;s/str1/str2/g&#x27; my.txt<br><span class="hljs-meta prompt_"># </span><span class="language-bash">在整行范围内把 str1 替换为 str2。</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">如果没有 g 标记，则只有每行第一个匹配的 str1 被替换成 str2</span><br>sed -e &#x27;4astr &#x27; -e &#x27;s/str/aaa/&#x27; my.txt<br><span class="hljs-meta prompt_">#</span><span class="language-bash">-e 选项允许在同一行里执行多条命令。例子的第一条是第四行后添加一个 str，</span><br><span class="hljs-meta prompt_"># </span><span class="language-bash">第二个命令是将 str 替换为 aaa。命令的执行顺序对结果有影响。</span><br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>除了 <code>sed</code> 命令，还有更强大的 <code>awk</code> 命令，但使用也更加复杂。</p>
+</blockquote>
+<h3 id="重定向"><a href="#重定向" class="headerlink" title="重定向"></a>重定向</h3><p>很多命令都有控制台输出。如果想要把这些命令的输出写到文件中，应该怎么办呢？答案是使用重定向。Linux 定义了三种流：</p>
+<ul>
+<li>标准输入：<code>stdin</code>，由 0 表示。</li>
+<li>标准输出：<code>stdout</code>，由 1 表示。</li>
+<li>标准错误：<code>stderr</code>，由 2 表示。</li>
+</ul>
+<p>默认情况下，这些流使用的设备是控制台，也就是我们可以在控制台上看到命令的输出。在命令后使用<code>&gt;</code>符号可以将输出重定向。举个例子：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs powershell"><span class="hljs-variable">$</span> <span class="hljs-built_in">ls</span> / &gt; lsoutput.txt<br></code></pre></td></tr></table></figure>
+
+<p>这个命令就是将根目录下的文件名输出到当前目录的 <code>lsoutput.txt</code> 文件中，<strong>覆盖文件的原有内容</strong>，如果想在文件后追加命令的输出，使用 <code>&gt;&gt;</code> 符号而不是<code>&gt;</code>。由于输出被重定向到文件，所以我们在控制台中看不到输出了。这就是输出重定向的基本用法。</p>
+<p>我们在控制台中单独运行 <code>gcc</code> 命令，什么参数也不加。由于没有输入文件，显然编译器是无法正确运行的。所以我们可以看到 gcc 产生了一个 fatal error：</p>
+<figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs gams"><span class="hljs-symbol">$</span> gcc<br>gcc: fatal error: <span class="hljs-keyword">no</span> input <span class="hljs-keyword">files</span><br>compilation terminated.<br></code></pre></td></tr></table></figure>
+
+<p>试试看使用命令 <code>gcc &gt; gccerr</code>，看看发生了什么？我们发现控制台仍然输出了错误，而 <code>gccerr</code> 中没有任何内容。似乎重定向不好用了。这是为什么呢？</p>
+<p>实际上，<code>&gt;</code> 是 <code>1&gt;</code> 的简写。在我们刚才提到的三种流中，1 指的是标准输出，而不包括标准错误输出。<code>gcc</code> 输出的编译错误消息属于标准错误输出。如果想要将错误输出到文件，需要使用 <code>2&gt;</code>，也就是将错误输出重定向到文件。试试使用 <code>gcc 2&gt; gccerr</code>，看看是否达到了预期效果。</p>
+<p>同理，我们也可以对输入进行重定向。</p>
+<h3 id="管道"><a href="#管道" class="headerlink" title="管道"></a>管道</h3><p>管道符号<code>|</code>可以对命令进行连接。</p>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli"><span class="hljs-keyword">command</span>1 | <span class="hljs-keyword">command</span>2 | <span class="hljs-keyword">command</span>3 | <span class="hljs-string">...</span><br></code></pre></td></tr></table></figure>
+
+<p>以上内容是将 <code>command1</code> 的输出传给 <code>command2</code> 的输入，<code>command2</code> 的输出传给 <code>command3</code> 的输入，以此类推。</p>
+<p><code>cat</code> 命令将文件内容输出到标准输出，<code>grep</code> 命令支持从标准输入读取文本。所以这两个命令就可以用管道进行连接。</p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs vim"><span class="hljs-keyword">cat</span> hello.txt | <span class="hljs-keyword">grep</span> <span class="hljs-string">&quot;Hello&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>这个命令的作用就是将 <code>hello.txt</code> 文件输出，输出的内容传入 <code>grep</code> 命令，<code>grep</code> 命令在这些内容中查找 <code>Hello</code> 字符串。</p>
 
                 
               </div>
@@ -423,7 +666,7 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>OS假期预习（一）——Linux，Git与Shell</div>
+      <div>OS假期预习（一）——Linux，Git与Shell脚本</div>
       <div>https://galaxy-jewxw.github.io/2024/02/23/OSPre1/</div>
     </div>
     <div class="license-meta">
@@ -467,6 +710,12 @@
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2024/02/24/111/" title="OS假期预习（二）——MIPS知识补充">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">OS假期预习（二）——MIPS知识补充</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
