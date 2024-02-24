@@ -5,8 +5,8 @@
   
   <entry>
     <title>OS假期预习（二）——MIPS知识补充</title>
-    <link href="/2024/02/24/111/"/>
-    <url>/2024/02/24/111/</url>
+    <link href="/2024/02/24/OSPre2/"/>
+    <url>/2024/02/24/OSPre2/</url>
     
     <content type="html"><![CDATA[<h1 id="OS假期预习（二）——MIPS知识补充"><a href="#OS假期预习（二）——MIPS知识补充" class="headerlink" title="OS假期预习（二）——MIPS知识补充"></a>OS假期预习（二）——MIPS知识补充</h1><p>下面将介绍操作系统实验使用的 CPU 与我们计组的课设 CPU 的不同之处，并对 MIPS 汇编相关知识进行补充。</p><p>操作系统实验使用 MIPS32 4Kc CPU， 这是一款由 MIPS® Technologies 公司开发的使用 MIPS32 指令集的商业处理器核。</p><p>而计组中实现的 CPU 使用 MIPS-C 指令集，MIPS-C 指令集是 MIPS32 指令集的精简版本，也就是相当于计组实现的 CPU 指令集和功能是操作系统实验中使用的一个子集。</p><p>具体谈及操作系统实验中涉及，而计组 CPU 不完整的功能，主要是有两个部分：访存流程、CP0协处理器相关。</p><h2 id="访存流程"><a href="#访存流程" class="headerlink" title="访存流程"></a>访存流程</h2><p>在计组中，我们的 CPU 不存在<strong>虚拟地址</strong>机制，访存指令中的所有地址均是物理地址。物理地址被直接发送到 DM、IM 中，直接获取数据。这简化了 MIPS32 的访存流程，让大家可以更多的关注 CPU 内部计算与控制逻辑。</p><p>而在完整的 MIPS32 访存流程中，汇编指令 <strong>不直接和物理内存打交道</strong>。</p><p>访存指令中的地址，被称作<strong>虚拟地址</strong>，在执行访存操作的时候，虚拟地址会先被送入 <strong>MMU</strong> 进行<strong>地址翻译</strong>、<strong>权限检查</strong>，最终拿到物理地址。</p><p>对于 MMU 检查合法的访存操作，通过 MMU 拿到物理地址之后，相应访存操作才会进一步被实际在物理地址上执行。</p><p>所有的软件（包括 MIPS 汇编、C 语言编写的软件等）访存的地址都是虚拟地址。</p><p>MIPS32 的 MMU 支持基于 <strong>TLB</strong> 的 <strong>页式地址翻译</strong>，而操作系统实验使用了 MIPS32 的这个地址翻译功能。这一部分在计组的 CPU 中并没有涉及。</p><p>这将牵扯出我们OS中的两个知识点：MIPS32 具体访存流程、TLB 在 MIPS32 地址翻译中扮演的角色。具体内容将在我们 Lab2 内存管理中学到，在 pre 中我们仅介绍到此。</p><p>目前，只需要大家牢记，在 MIPS32 指令集中，我们的访存指令不再直接操作物理地址，而是使用虚拟地址以及地址翻译机制，间接管理物理内存。</p>]]></content>
     
