@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>递归下降法——处理复杂输入</title>
+    <link href="/2024/02/26/OO1/"/>
+    <url>/2024/02/26/OO1/</url>
+    
+    <content type="html"><![CDATA[<h1 id="递归下降法——处理复杂输入"><a href="#递归下降法——处理复杂输入" class="headerlink" title="递归下降法——处理复杂输入"></a>递归下降法——处理复杂输入</h1><p>这篇文章对oolens的推文《OO加油站——递归下降》进行总结。</p><h2 id="文法"><a href="#文法" class="headerlink" title="文法"></a>文法</h2><p>文法（Grammar）是对语言结构的定义与描述，通过形式化的表述来规定语言结构的规则。</p><p>简单来说，<strong>文法是语言的规则</strong>。</p><h3 id="词法"><a href="#词法" class="headerlink" title="词法"></a>词法</h3><p>词法（Lex）是指语言中的词汇及其属性和含义的规则，它规定了一个语言中的“词”是如何构成的。</p><p>假设有一个语法单元“变量名”，定义其为<strong>由大于0个小写字母组成的字符串</strong>，也可以表示成这样：</p><p><img src="https://pic.imgdb.cn/item/65dc4c589f345e8d03187948.png"></p><p>其中：</p><ol><li>尖括号内表示一个语法成分；</li><li>右箭头表示左侧的部分由右侧的部分组成；</li><li>竖线表示右边的规则可以选取竖线两侧的任一种情况。</li></ol><p>这样，我们就可以得到变量名的构成规则。换言之，所定义的变量名<strong>仅限于一个字母或一个字母后接另一个变量名</strong>。</p><div class="note note-success">            <p><strong>Example</strong></p><p>“buaa”是变量名；“buaa_cs”不是变量名，因为它出现了不属于letter中的下划线“_”。</p>          </div><h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><p>语法（Syntax）是指描述语言中句子结构和组织方式的规则。它规定了一个语言中的”句”是如何构成的。比如说：</p><p><img src="https://pic.imgdb.cn/item/65dc4d619f345e8d031b0835.png"></p><p>在这里，句子是一个主语加上一个谓语连在一起构成的。其中主语可能是<code>i</code>也可能是<code>you</code>；谓语可能是<code>smile</code>，可能是<code>laugh</code>。</p><h2 id="文法分析"><a href="#文法分析" class="headerlink" title="文法分析"></a>文法分析</h2><p>已知一个字符串，如何判断它是不是我们上面定义的变量名？如何判断它是不是我们定义的句子？</p><h3 id="词法分析"><a href="#词法分析" class="headerlink" title="词法分析"></a>词法分析</h3><p>可以首先判断一下字符串的长度是否为0 。然后对所有字符依次检查它是否是字母。这是比较基础的应用。</p><p>那么考虑下一个问题：</p><blockquote><p>已知有多种词A、B、C、D和他们的构成规则（假设规则间不存在矛盾或重复），给定一个字符串，如果保证字符串完全由这些词组成，依次输出字符串里面的<strong>词</strong>及其所属的<strong>类别</strong>。</p></blockquote><p>这个问题不仅涉及到字符串的判断，也同时涉及到字符串的划分。</p><p>举一个最简单的例子<code>ismileyoulaughsmile</code>。每一个词的开头都是不重复的。因此可以依次读取所有字母，然后依据该字母是什么而判断读到的是什么单词。</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs java"><br><span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;str.size();i++)&#123;<br>  <span class="hljs-keyword">if</span>(str.charAt(i)==<span class="hljs-string">&#x27;i&#x27;</span>)&#123;<br>    System.out.println(<span class="hljs-string">&quot;i - 主语&quot;</span>);<br>  &#125;<br>  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(str.charAt(i)==<span class="hljs-string">&#x27;y&#x27;</span>)&#123;<br>    i=i+<span class="hljs-number">2</span>;<br>    System.out.println(<span class="hljs-string">&quot;you - 主语&quot;</span>);<br>  &#125;<br>  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(str.charAt(i)==<span class="hljs-string">&#x27;s&#x27;</span>)&#123;<br>    i=i+<span class="hljs-number">4</span>;<br>    System.out.println(<span class="hljs-string">&quot;smile - 谓语&quot;</span>);<br>  &#125;<br>  <span class="hljs-keyword">else</span>&#123;<br>    i=i+<span class="hljs-number">4</span>;<br>    System.out.println(<span class="hljs-string">&quot;laugh - 谓语&quot;</span>);<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure><h4 id="Token"><a href="#Token" class="headerlink" title="Token"></a>Token</h4><p>在计算机领域，<strong>token</strong>常常用来表示文本的最小语法单位。这里可以以token来存储字符串经过词法分析得到的一个个单元。</p><p>不妨假设我们用一个<strong>list</strong>来存储分析得到的token，那么每识别出一个token，就可以向这个列表中加上它。这样，经过一遍扫描，我们就可以将一个字符串的信息整合转化成一个token的列表。</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs java"><br><span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;str.size();i++)&#123;<br>  <span class="hljs-keyword">if</span>(str.charAt(i)==<span class="hljs-string">&#x27;i&#x27;</span>)&#123;<br>    tokenList.add(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Token</span>(<span class="hljs-string">&quot;i&quot;</span>,<span class="hljs-string">&quot;主语&quot;</span>));<br>  &#125;<br>  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(str.charAt(i)==<span class="hljs-string">&#x27;y&#x27;</span>)&#123;<br>    i=i+<span class="hljs-number">2</span>;<br>    tokenList.add(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Token</span>(<span class="hljs-string">&quot;you&quot;</span>,<span class="hljs-string">&quot;主语&quot;</span>));<br>  &#125;<br>  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(str.charAt(i)==<span class="hljs-string">&#x27;s&#x27;</span>)&#123;<br>    i=i+<span class="hljs-number">4</span>;<br>    tokenList.add(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Token</span>(<span class="hljs-string">&quot;smile&quot;</span>,<span class="hljs-string">&quot;谓语&quot;</span>));<br>  &#125;<br>  <span class="hljs-keyword">else</span>&#123;<br>    i=i+<span class="hljs-number">4</span>;<br>    tokenList.add(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Token</span>(<span class="hljs-string">&quot;laugh&quot;</span>,<span class="hljs-string">&quot;谓语&quot;</span>));<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure><h3 id="语法分析"><a href="#语法分析" class="headerlink" title="语法分析"></a>语法分析</h3><p>现已经将字符串转化为一个一个token了，从现在开始，语法分析的对象从初始的字符串可以转化为这个 “token” 列表。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>面向对象设计与构造</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>总结</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>OS假期预习（二）——MIPS知识补充</title>
     <link href="/2024/02/24/OSPre2/"/>
     <url>/2024/02/24/OSPre2/</url>
@@ -348,7 +373,7 @@
     
     <categories>
       
-      <category>面向对象程序设计</category>
+      <category>面向对象设计与构造</category>
       
     </categories>
     

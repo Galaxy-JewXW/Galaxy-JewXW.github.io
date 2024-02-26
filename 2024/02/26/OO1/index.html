@@ -16,20 +16,20 @@
   <meta name="author" content="Traumtänzer aka &#39;Jew1!5!&#39;">
   <meta name="keywords" content="">
   
-    <meta name="description" content="在上学期的计组课程中，我们实现了一个可以与外设交互，响应并处理中断、异常的 MIPS CPU。CPU 是如何运行操作系统的？计组知识又是如何和 OS 实验衔接起来的？">
+    <meta name="description" content="第一单元中将探讨与表达式化简相关的内容。其中一个主要难点是如何处理结构复杂的输入。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="OS假期预习（二）——MIPS知识补充">
-<meta property="og:url" content="https://galaxy-jewxw.github.io/2024/02/24/OSPre2/index.html">
+<meta property="og:title" content="递归下降法——处理复杂输入">
+<meta property="og:url" content="https://galaxy-jewxw.github.io/2024/02/26/OO1/index.html">
 <meta property="og:site_name" content="Jew&#39;s Blog">
-<meta property="og:description" content="在上学期的计组课程中，我们实现了一个可以与外设交互，响应并处理中断、异常的 MIPS CPU。CPU 是如何运行操作系统的？计组知识又是如何和 OS 实验衔接起来的？">
+<meta property="og:description" content="第一单元中将探讨与表达式化简相关的内容。其中一个主要难点是如何处理结构复杂的输入。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://galaxy-jewxw.github.io/img/os002.jpeg">
-<meta property="article:published_time" content="2024-02-24T03:16:09.000Z">
-<meta property="article:modified_time" content="2024-02-24T03:24:04.457Z">
+<meta property="og:image" content="https://galaxy-jewxw.github.io/img/oo1.png">
+<meta property="article:published_time" content="2024-02-26T08:07:28.000Z">
+<meta property="article:modified_time" content="2024-02-26T08:48:11.038Z">
 <meta property="article:author" content="Traumtänzer aka &#39;Jew1!5!&#39;">
 <meta property="article:tag" content="总结">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://galaxy-jewxw.github.io/img/os002.jpeg">
+<meta name="twitter:image" content="https://galaxy-jewxw.github.io/img/oo1.png">
   
   
     <meta name="referrer" content="no-referrer-when-downgrade">
@@ -37,7 +37,7 @@
   
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC&display=swap" rel="stylesheet">
   
-  <title>OS假期预习（二）——MIPS知识补充 | Jew&#39;s Blog</title>
+  <title>递归下降法——处理复杂输入 | Jew&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -213,13 +213,13 @@
   
 
 <div id="banner" class="banner" parallax=true
-     style="background: url('/img/banner_os001.jpg') no-repeat center center; background-size: cover;">
+     style="background: url('/img/banner_oo.png') no-repeat center center; background-size: cover;">
   <div class="full-bg-img">
     <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="OS假期预习（二）——MIPS知识补充"></span>
+            <span id="subtitle" data-typed-text="递归下降法——处理复杂输入"></span>
           
         </div>
 
@@ -230,8 +230,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2024-02-24 11:16" pubdate>
-          星期六, 二月 24日 2024, 11:16 上午
+        <time datetime="2024-02-26 16:07" pubdate>
+          星期一, 二月 26日 2024, 4:07 下午
         </time>
       </span>
     
@@ -242,7 +242,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          779 字
+          1.9k 字
         
       </span>
     
@@ -253,7 +253,7 @@
         
         
         
-          5 分钟
+          11 分钟
         
       </span>
     
@@ -298,12 +298,12 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">OS假期预习（二）——MIPS知识补充</h1>
+            <h1 id="seo-header">递归下降法——处理复杂输入</h1>
             
               <p class="note note-info">
                 
                   
-                    本文最后更新于：2024年2月24日 上午
+                    本文最后更新于：2024年2月26日 下午
                   
                 
               </p>
@@ -311,18 +311,41 @@
             
               <div class="markdown-body">
                 
-                <h1 id="OS假期预习（二）——MIPS知识补充"><a href="#OS假期预习（二）——MIPS知识补充" class="headerlink" title="OS假期预习（二）——MIPS知识补充"></a>OS假期预习（二）——MIPS知识补充</h1><p>下面将介绍操作系统实验使用的 CPU 与我们计组的课设 CPU 的不同之处，并对 MIPS 汇编相关知识进行补充。</p>
-<p>操作系统实验使用 MIPS32 4Kc CPU， 这是一款由 MIPS® Technologies 公司开发的使用 MIPS32 指令集的商业处理器核。</p>
-<p>而计组中实现的 CPU 使用 MIPS-C 指令集，MIPS-C 指令集是 MIPS32 指令集的精简版本，也就是相当于计组实现的 CPU 指令集和功能是操作系统实验中使用的一个子集。</p>
-<p>具体谈及操作系统实验中涉及，而计组 CPU 不完整的功能，主要是有两个部分：访存流程、CP0协处理器相关。</p>
-<h2 id="访存流程"><a href="#访存流程" class="headerlink" title="访存流程"></a>访存流程</h2><p>在计组中，我们的 CPU 不存在<strong>虚拟地址</strong>机制，访存指令中的所有地址均是物理地址。物理地址被直接发送到 DM、IM 中，直接获取数据。这简化了 MIPS32 的访存流程，让大家可以更多的关注 CPU 内部计算与控制逻辑。</p>
-<p>而在完整的 MIPS32 访存流程中，汇编指令 <strong>不直接和物理内存打交道</strong>。</p>
-<p>访存指令中的地址，被称作<strong>虚拟地址</strong>，在执行访存操作的时候，虚拟地址会先被送入 <strong>MMU</strong> 进行<strong>地址翻译</strong>、<strong>权限检查</strong>，最终拿到物理地址。</p>
-<p>对于 MMU 检查合法的访存操作，通过 MMU 拿到物理地址之后，相应访存操作才会进一步被实际在物理地址上执行。</p>
-<p>所有的软件（包括 MIPS 汇编、C 语言编写的软件等）访存的地址都是虚拟地址。</p>
-<p>MIPS32 的 MMU 支持基于 <strong>TLB</strong> 的 <strong>页式地址翻译</strong>，而操作系统实验使用了 MIPS32 的这个地址翻译功能。这一部分在计组的 CPU 中并没有涉及。</p>
-<p>这将牵扯出我们OS中的两个知识点：MIPS32 具体访存流程、TLB 在 MIPS32 地址翻译中扮演的角色。具体内容将在我们 Lab2 内存管理中学到，在 pre 中我们仅介绍到此。</p>
-<p>目前，只需要大家牢记，在 MIPS32 指令集中，我们的访存指令不再直接操作物理地址，而是使用虚拟地址以及地址翻译机制，间接管理物理内存。</p>
+                <h1 id="递归下降法——处理复杂输入"><a href="#递归下降法——处理复杂输入" class="headerlink" title="递归下降法——处理复杂输入"></a>递归下降法——处理复杂输入</h1><p>这篇文章对oolens的推文《OO加油站——递归下降》进行总结。</p>
+<h2 id="文法"><a href="#文法" class="headerlink" title="文法"></a>文法</h2><p>文法（Grammar）是对语言结构的定义与描述，通过形式化的表述来规定语言结构的规则。</p>
+<p>简单来说，<strong>文法是语言的规则</strong>。</p>
+<h3 id="词法"><a href="#词法" class="headerlink" title="词法"></a>词法</h3><p>词法（Lex）是指语言中的词汇及其属性和含义的规则，它规定了一个语言中的“词”是如何构成的。</p>
+<p>假设有一个语法单元“变量名”，定义其为<strong>由大于0个小写字母组成的字符串</strong>，也可以表示成这样：</p>
+<p><img src="https://pic.imgdb.cn/item/65dc4c589f345e8d03187948.png" srcset="/img/loading.gif" lazyload></p>
+<p>其中：</p>
+<ol>
+<li>尖括号内表示一个语法成分；</li>
+<li>右箭头表示左侧的部分由右侧的部分组成；</li>
+<li>竖线表示右边的规则可以选取竖线两侧的任一种情况。</li>
+</ol>
+<p>这样，我们就可以得到变量名的构成规则。换言之，所定义的变量名<strong>仅限于一个字母或一个字母后接另一个变量名</strong>。</p>
+<div class="note note-success">
+            <p><strong>Example</strong></p><p>“buaa”是变量名；“buaa_cs”不是变量名，因为它出现了不属于letter中的下划线“_”。</p>
+          </div>
+
+<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><p>语法（Syntax）是指描述语言中句子结构和组织方式的规则。它规定了一个语言中的”句”是如何构成的。比如说：</p>
+<p><img src="https://pic.imgdb.cn/item/65dc4d619f345e8d031b0835.png" srcset="/img/loading.gif" lazyload></p>
+<p>在这里，句子是一个主语加上一个谓语连在一起构成的。其中主语可能是<code>i</code>也可能是<code>you</code>；谓语可能是<code>smile</code>，可能是<code>laugh</code>。</p>
+<h2 id="文法分析"><a href="#文法分析" class="headerlink" title="文法分析"></a>文法分析</h2><p>已知一个字符串，如何判断它是不是我们上面定义的变量名？如何判断它是不是我们定义的句子？</p>
+<h3 id="词法分析"><a href="#词法分析" class="headerlink" title="词法分析"></a>词法分析</h3><p>可以首先判断一下字符串的长度是否为0 。然后对所有字符依次检查它是否是字母。这是比较基础的应用。</p>
+<p>那么考虑下一个问题：</p>
+<blockquote>
+<p>已知有多种词A、B、C、D和他们的构成规则（假设规则间不存在矛盾或重复），给定一个字符串，如果保证字符串完全由这些词组成，依次输出字符串里面的<strong>词</strong>及其所属的<strong>类别</strong>。</p>
+</blockquote>
+<p>这个问题不仅涉及到字符串的判断，也同时涉及到字符串的划分。</p>
+<p>举一个最简单的例子<code>ismileyoulaughsmile</code>。每一个词的开头都是不重复的。因此可以依次读取所有字母，然后依据该字母是什么而判断读到的是什么单词。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs java"><br><span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;str.size();i++)&#123;<br>  <span class="hljs-keyword">if</span>(str.charAt(i)==<span class="hljs-string">&#x27;i&#x27;</span>)&#123;<br>    System.out.println(<span class="hljs-string">&quot;i - 主语&quot;</span>);<br>  &#125;<br>  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(str.charAt(i)==<span class="hljs-string">&#x27;y&#x27;</span>)&#123;<br>    i=i+<span class="hljs-number">2</span>;<br>    System.out.println(<span class="hljs-string">&quot;you - 主语&quot;</span>);<br>  &#125;<br>  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(str.charAt(i)==<span class="hljs-string">&#x27;s&#x27;</span>)&#123;<br>    i=i+<span class="hljs-number">4</span>;<br>    System.out.println(<span class="hljs-string">&quot;smile - 谓语&quot;</span>);<br>  &#125;<br>  <span class="hljs-keyword">else</span>&#123;<br>    i=i+<span class="hljs-number">4</span>;<br>    System.out.println(<span class="hljs-string">&quot;laugh - 谓语&quot;</span>);<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h4 id="Token"><a href="#Token" class="headerlink" title="Token"></a>Token</h4><p>在计算机领域，<strong>token</strong>常常用来表示文本的最小语法单位。这里可以以token来存储字符串经过词法分析得到的一个个单元。</p>
+<p>不妨假设我们用一个<strong>list</strong>来存储分析得到的token，那么每识别出一个token，就可以向这个列表中加上它。这样，经过一遍扫描，我们就可以将一个字符串的信息整合转化成一个token的列表。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs java"><br><span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;str.size();i++)&#123;<br>  <span class="hljs-keyword">if</span>(str.charAt(i)==<span class="hljs-string">&#x27;i&#x27;</span>)&#123;<br>    tokenList.add(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Token</span>(<span class="hljs-string">&quot;i&quot;</span>,<span class="hljs-string">&quot;主语&quot;</span>));<br>  &#125;<br>  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(str.charAt(i)==<span class="hljs-string">&#x27;y&#x27;</span>)&#123;<br>    i=i+<span class="hljs-number">2</span>;<br>    tokenList.add(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Token</span>(<span class="hljs-string">&quot;you&quot;</span>,<span class="hljs-string">&quot;主语&quot;</span>));<br>  &#125;<br>  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(str.charAt(i)==<span class="hljs-string">&#x27;s&#x27;</span>)&#123;<br>    i=i+<span class="hljs-number">4</span>;<br>    tokenList.add(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Token</span>(<span class="hljs-string">&quot;smile&quot;</span>,<span class="hljs-string">&quot;谓语&quot;</span>));<br>  &#125;<br>  <span class="hljs-keyword">else</span>&#123;<br>    i=i+<span class="hljs-number">4</span>;<br>    tokenList.add(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Token</span>(<span class="hljs-string">&quot;laugh&quot;</span>,<span class="hljs-string">&quot;谓语&quot;</span>));<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="语法分析"><a href="#语法分析" class="headerlink" title="语法分析"></a>语法分析</h3><p>现已经将字符串转化为一个一个token了，从现在开始，语法分析的对象从初始的字符串可以转化为这个 “token” 列表。</p>
 
                 
               </div>
@@ -341,7 +364,7 @@
     
       <span class="category-chain">
         
-  <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="category-chain-item">操作系统</a>
+  <a href="/categories/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1%E4%B8%8E%E6%9E%84%E9%80%A0/" class="category-chain-item">面向对象设计与构造</a>
   
   
 
@@ -368,8 +391,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>OS假期预习（二）——MIPS知识补充</div>
-      <div>https://galaxy-jewxw.github.io/2024/02/24/OSPre2/</div>
+      <div>递归下降法——处理复杂输入</div>
+      <div>https://galaxy-jewxw.github.io/2024/02/26/OO1/</div>
     </div>
     <div class="license-meta">
       
@@ -381,7 +404,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2024年2月24日</div>
+          <div>2024年2月26日</div>
         </div>
       
       
@@ -413,18 +436,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/02/26/OO1/" title="递归下降法——处理复杂输入">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">递归下降法——处理复杂输入</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/02/23/OSPre1/" title="OS假期预习（一）——Linux，Git与Shell脚本">
-                        <span class="hidden-mobile">OS假期预习（一）——Linux，Git与Shell脚本</span>
+                      <a href="/2024/02/24/OSPre2/" title="OS假期预习（二）——MIPS知识补充">
+                        <span class="hidden-mobile">OS假期预习（二）——MIPS知识补充</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
