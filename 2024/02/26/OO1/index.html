@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://galaxy-jewxw.github.io/img/oo1.png">
 <meta property="article:published_time" content="2024-02-26T08:07:28.000Z">
-<meta property="article:modified_time" content="2024-02-26T08:48:11.038Z">
+<meta property="article:modified_time" content="2024-02-26T12:17:15.658Z">
 <meta property="article:author" content="Traumtänzer aka &#39;Jew1!5!&#39;">
 <meta property="article:tag" content="总结">
 <meta name="twitter:card" content="summary_large_image">
@@ -242,7 +242,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.9k 字
+          8.2k 字
         
       </span>
     
@@ -253,7 +253,7 @@
         
         
         
-          11 分钟
+          46 分钟
         
       </span>
     
@@ -303,7 +303,7 @@
               <p class="note note-info">
                 
                   
-                    本文最后更新于：2024年2月26日 下午
+                    本文最后更新于：2024年2月26日 晚上
                   
                 
               </p>
@@ -346,6 +346,109 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs java"><br><span class="hljs-keyword">for</span>(<span class="hljs-type">int</span> i=<span class="hljs-number">0</span>;i&lt;str.size();i++)&#123;<br>  <span class="hljs-keyword">if</span>(str.charAt(i)==<span class="hljs-string">&#x27;i&#x27;</span>)&#123;<br>    tokenList.add(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Token</span>(<span class="hljs-string">&quot;i&quot;</span>,<span class="hljs-string">&quot;主语&quot;</span>));<br>  &#125;<br>  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(str.charAt(i)==<span class="hljs-string">&#x27;y&#x27;</span>)&#123;<br>    i=i+<span class="hljs-number">2</span>;<br>    tokenList.add(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Token</span>(<span class="hljs-string">&quot;you&quot;</span>,<span class="hljs-string">&quot;主语&quot;</span>));<br>  &#125;<br>  <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span>(str.charAt(i)==<span class="hljs-string">&#x27;s&#x27;</span>)&#123;<br>    i=i+<span class="hljs-number">4</span>;<br>    tokenList.add(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Token</span>(<span class="hljs-string">&quot;smile&quot;</span>,<span class="hljs-string">&quot;谓语&quot;</span>));<br>  &#125;<br>  <span class="hljs-keyword">else</span>&#123;<br>    i=i+<span class="hljs-number">4</span>;<br>    tokenList.add(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Token</span>(<span class="hljs-string">&quot;laugh&quot;</span>,<span class="hljs-string">&quot;谓语&quot;</span>));<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <h3 id="语法分析"><a href="#语法分析" class="headerlink" title="语法分析"></a>语法分析</h3><p>现已经将字符串转化为一个一个token了，从现在开始，语法分析的对象从初始的字符串可以转化为这个 “token” 列表。</p>
+<p> 从代码设计的角度上来看，通过将字符串经过词法分析转化为 “token” 列表，词法分析这一道工序将半成品<strong>tokenList</strong>传入到下一道工序：语法分析，而不是直接在语法分析阶段调用词法的解析，能够很好的减少这两个不同级别处理之间的耦合。</p>
+<p>为了说明如何进行语法分析，这里引入一个稍显复杂的规则：</p>
+<p><img src="https://pic.imgdb.cn/item/65dc56da9f345e8d03330aac.png" srcset="/img/loading.gif" lazyload></p>
+<p>在这个结构中，<code>表达式 = 项 + 项 + …… + 项</code>，<code>项 = 因子 * 因子 * …… * 因子</code>；因子用一个字母<code>i</code>表示且不可再分。</p>
+<p>最外层是表达式，表达式可以被看作是几个项的和，项可以被看作是几个因子的乘积，这样，一个表达式的结构很明显的分成了三层，此时进行词法分析是个很简单的过程，我们只需要对i，*，+分别识别即可。</p>
+<p>在思考如何做语法分析的问题前，不妨考虑一下，什么样的结构能够最好的表达各个语法结构之间的关系呢？</p>
+<p>回答这个问题，不妨先回头看看前面已经建立的对该规则的认识：表达式的“三层”，用图像来表示的话应当是下面的样子。</p>
+<p><img src="https://pic.imgdb.cn/item/65dc58039f345e8d0335d73e.png" srcset="/img/loading.gif" lazyload alt="表达式的“三层”"></p>
+<p>语法分析的目的，就是生成一个这样的树，它用节点之间的联系来表达原本表达式的语法结构。这种树一般被称为<strong>语法树</strong>（Syntax Tree）或<strong>抽象语法树</strong>（Abstract Syntax Tree，AST）。</p>
+<p>可以构建语法树的几个节点类，其中表达式用<strong>Expr</strong>表示，项用<strong>Term</strong>表示，因子用<strong>Factor</strong>表示：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Expr</span>&#123;<br>  <span class="hljs-keyword">private</span> ArrayList&lt;Term&gt;terms;<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Term</span>&#123;<br>  <span class="hljs-keyword">private</span> ArrayList&lt;Factor&gt;factors;<br>&#125;<br><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Factor</span>&#123;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>语法分析就是建立由这几个类构成的节点的语法树的过程。</p>
+<h3 id="自顶向下建树"><a href="#自顶向下建树" class="headerlink" title="自顶向下建树"></a>自顶向下建树</h3><p>对字符串进行分析时，默认这个字符串代表一个<code>表达式</code>。因此，无论这个字符串的内容是什么，它转化成的语法树的树根都是<code>表达式</code>。</p>
+<p>做法步骤如下：</p>
+<ol>
+<li>对<code>表达式</code>按照规则进行拆分；</li>
+<li>识别出构成<code>表达式</code>的一个一个<code>项</code>；</li>
+<li>对<code>项</code>按照规则进行拆分；</li>
+<li>识别出构成<code>项</code>的一个一个<code>因子</code>；</li>
+<li>构建一颗自顶向下的逻辑树。</li>
+</ol>
+<h4 id="下降"><a href="#下降" class="headerlink" title="下降"></a>下降</h4><p>对于规则</p>
+<p><img src="https://pic.imgdb.cn/item/65dc7bd99f345e8d03934de3.png" srcset="/img/loading.gif" lazyload></p>
+<p>可以对其进行一定的变化，假设将其翻译为</p>
+<p><img src="https://pic.imgdb.cn/item/65dc7c099f345e8d0393e560.png" srcset="/img/loading.gif" lazyload></p>
+<p>那么，对于这一条翻译过的规则，它的视角从<code>表达式</code>层到了<code>顶</code>层。也就是说，每一条语法规则，事实上都说明了一个语法单元作为树节点时，它的子节点是如何构成的。而分析这个构成的过程，我们就<strong>在语法树上下降了一层</strong>。</p>
+<h4 id="从全局到局部"><a href="#从全局到局部" class="headerlink" title="从全局到局部"></a>从全局到局部</h4><p>如果从全局的视角来看，综合考虑所有的规则，就会得到上面图中的语法树。它的大小，宽度和深度随着规则的扩张而不断增加，规则条数越多，树越复杂，我们要从全局的视角来处理也就越困难，可以想象一下添加若干将因子再拆成更低层的组成部分的情况：</p>
+<p><img src="https://pic.imgdb.cn/item/65dc7cbc9f345e8d0395f71f.png" srcset="/img/loading.gif" lazyload></p>
+<p>那么从全局来看，我们的语法树将会变得十分的庞大和复杂，解析它的程序也会变得复杂起来。</p>
+<p>但是实际上，一个节点有关的语法结构，是不随其所在的位置变化的：某个Term无论是Expr的第几个Term，它的构成规则也不会改变，都是由若干个因子和若干个”*”按次序排布构成。<strong>这个局部的性质，不随其在全局的位置和周围的状态改变。</strong>所以，不妨把全局的视角，”短视地”移动到局部：</p>
+<p><img src="https://pic.imgdb.cn/item/65dc7cff9f345e8d0396afea.png" srcset="/img/loading.gif" lazyload></p>
+<p>那么就能从语法树中提取出这样的的一个结构。它揭示了这样一个事实：<strong>不用管项从哪里来，只需要知道项往哪里去，就能够处理好项的解析。</strong>如果仅仅将这一部分的逻辑抽象出来写一段程序，想必比之前写整个树的程序轻松不少。再往上的另一条规则，也可以被单独抽象出来：</p>
+<p><img src="https://pic.imgdb.cn/item/65dc7d1b9f345e8d03970105.png" srcset="/img/loading.gif" lazyload></p>
+<p>一个表达式，就是几个项而已。<strong>如果我们能够在这里屏蔽项的解析过程，而直接返回项的解析结果，那么就可以将表达式的解析过程化简为一次简单的下降。</strong></p>
+<div class="note note-danger">
+            <p><strong>Notice</strong></p><p>以往的代码编写中，可能习惯将解决一个局部问题的具体过程嵌入到更高层次代码的编写中（例如在这俩将解析项的具体过程直接写到解析表达式的过程中）。但事实上，让逻辑变简单的一个方法是，在高层次的代码编写中<strong>忽视局部问题的解决过程</strong>，假设其已经被某个方法解决，从而直接调用该方法即可。</p><p>选择合适的局部视角，合理的屏蔽细节，将具体的实现封装，是让代码高效且清晰的重要手段。</p>
+          </div>
+
+<p>如果parseExpr()，parseTerm()分别用来表示解析表达式和项的过程，可以得到下面这种实现：</p>
+<figure class="highlight excel"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs excel">parserEx<span class="hljs-symbol">pr:</span><br>  新建一个Term的容器<span class="hljs-built_in">T</span><br>  调用parserTerm获得一个项<span class="hljs-built_in">t</span><br>  <span class="hljs-built_in">T</span>中加上parserTerm返回的项<span class="hljs-built_in">t</span><br>  while 当前token是+<span class="hljs-symbol">:</span><br>    跳过当前token(+)<br>    调用parserTerm获得一个项<span class="hljs-built_in">t</span><br>    <span class="hljs-built_in">T</span>中加上parserTerm返回的项<span class="hljs-built_in">t</span><br>  利用<span class="hljs-built_in">T</span>生成一个新的Expr e<br>  返回e<br></code></pre></td></tr></table></figure>
+
+<p>可以看到，有了parseTerm()的封装，我们解析Expr的过程(parseExpr)，就变成了对语法规则的简单叙述。parseTerm的过程也如法炮制。</p>
+<p>当然，factor在当前的题目背景下仅是一个i ，因此我们解析factor的过程就是读入一个i ，然后包装成一个factor对象再返回，它不需要调用其他的子过程。</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs stata">parserTerm:<br>  新建一个<span class="hljs-keyword">Factor</span>的容器F<br>  调用parserFactor获得一个因子f<br>  F中加上parserFactor返回的因子f<br>  <span class="hljs-keyword">while</span> 当前<span class="hljs-keyword">token</span>是*:<br>    跳过当前<span class="hljs-keyword">token</span>(*)<br>    调用parserFactor获得一个因子f<br>    F中加上parserFactor返回的因子f<br>  利用F生成一个新的Term t<br>  返回t<br><br>parserFactor:<br>  检查当前的<span class="hljs-keyword">token</span>是否是i<br>  跳过当前的<span class="hljs-keyword">token</span>(i)<br>  利用i生成一个新的<span class="hljs-keyword">Factor</span> f<br>  返回f<br></code></pre></td></tr></table></figure>
+
+<p>这样就按每一条规则，生成了解析表达式语法结构的代码。</p>
+<h4 id="递归"><a href="#递归" class="headerlink" title="递归"></a>递归</h4><p>必须指出的是，如果我们不曾听说过或者学习过类似的观点，也可以用一个多层的循环来简单地解决这个问题。这是因为我们上面题面给出的语法结构所形成的树，具有固定的层数，我们可以清楚的知道这个树的终结就在子节点的factor处。</p>
+<p>为了更好地说明递归下降法的意义，我们来修改一下上述因子的语法规则:</p>
+<p><img src="https://pic.imgdb.cn/item/65dc7e969f345e8d039c3208.png" srcset="/img/loading.gif" lazyload></p>
+<p>这么做的话，我们的语法树就不是简单的三层了。甚至说我们并不知道它的层数，因为任何一个因子都可以通过解析为表达式的方式来不断的向下扩张，这无疑给了我们很大的复杂性。我们的解析流程，可能会呈现&lt;表达式&gt;-&lt;项&gt;-&lt;因子&gt;-&lt;表达式&gt;\的递归调用过程。如果再从全局的视角来看，这个语法树的宽度和深度等性质不再可知，它已经变得不可捉摸了。</p>
+<p>但是我们从局部的视角来看，会发现表达式的语法规则没有变，项的也没有变，唯一变的是因子，所以我们只需要修改上面的parseFactor过程就好。</p>
+<figure class="highlight isbl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs isbl"><span class="hljs-variable">parserFactor</span>:<br>  检查当前的<span class="hljs-variable">token</span>是否是<span class="hljs-variable">i</span><br>  <span class="hljs-variable"><span class="hljs-keyword">if</span></span> 真:<br>    跳过当前的<span class="hljs-function"><span class="hljs-title">token</span>(<span class="hljs-variable">i</span>)</span><br>    利用<span class="hljs-variable">i</span>生成一个新的<span class="hljs-variable">Factor</span> <span class="hljs-variable">f</span><br>    返回<span class="hljs-variable">f</span><br>  <span class="hljs-variable"><span class="hljs-keyword">if</span></span> 假，说明是(表达式):<br>    跳过当前<span class="hljs-function"><span class="hljs-title">token</span>(()</span><br>    调用<span class="hljs-function"><span class="hljs-title">parserExpr</span>()获得一个表达式<span class="hljs-variable">e</span></span><br><span class="hljs-function">    利用<span class="hljs-variable">e</span>生成因子<span class="hljs-variable">f</span></span><br><span class="hljs-function">    跳过当前<span class="hljs-title">token</span>())</span><br>    返回<span class="hljs-variable">f</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="具体实现"><a href="#具体实现" class="headerlink" title="具体实现"></a>具体实现</h2><p>这里我们需要总结一下：</p>
+<ol>
+<li>递归下降分析方法的主要做法是，对文法每条规则的左部符号（ ‘→’ 左侧的符号），建立一个解析子程序，用以完成该符号所代表成分的分析和识别。</li>
+<li>对于每个符号的分析子程序的功能则是，用该符号对应文法中的规则来匹配输入的token流。</li>
+</ol>
+<p>根据我们上面的例子可以看到，递归下降算法的思想严格依照文法来编写，甚至可以理解为文法的一种“<strong>翻译</strong>”，递归下降正是依托于文法保证了该算法的正确性。</p>
+<p>递归下降分析法作为自顶向下的分析过程，其一级一级的向下分配任务，通过检测当前符号和预期符号 （文法中的规则） 的相符性来选择”分支”进行解析，进而建立结构。</p>
+<p>下面我们进一步真正实现该算法：</p>
+<h3 id="题目背景"><a href="#题目背景" class="headerlink" title="题目背景"></a>题目背景</h3><blockquote>
+<p>为了方便举例，我们仍然使用表达式解析作为背景，不过对其中的一些规则进行修改。给一个表达式，解析它的结构，并用输出来检验解析的正确性。表达式规则如下：</p>
+</blockquote>
+<p><img src="https://pic.imgdb.cn/item/65dc7f6d9f345e8d039ecb0b.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="解法步骤"><a href="#解法步骤" class="headerlink" title="解法步骤"></a>解法步骤</h3><h4 id="建类"><a href="#建类" class="headerlink" title="建类"></a>建类</h4><p>观察上面在→左面的部分，他们都是我们需要进行分析的语法成分，因此我们需要对他们进行建类，并且构造解析方法。</p>
+<ol>
+<li><p>表达式类 → Expr</p>
+</li>
+<li><p>项类 → Term</p>
+</li>
+<li><p>因子类 → Factor ← Number &amp; Expr</p>
+</li>
+</ol>
+<p>这里考虑到有两种因子，我们应当分开来处理。</p>
+<p><strong>表达式因子</strong>实质就是表达式加括号，而括号本质上是为了区分优先级，但优先级可以由我们的语法树结构来体现，因此为了减少类，可以将这二者统一，都使用表达式Expr来存储信息。</p>
+<p><strong>常数因子</strong>则可以单独用Number来存。</p>
+<p>Expr和Number都属于因子，因此我们可以利用面向对象的知识，创造一个Factor接口(Interface)，然后让Expr和Number实现这个接口。</p>
+<h4 id="实现Lexer"><a href="#实现Lexer" class="headerlink" title="实现Lexer"></a>实现Lexer</h4><p>我们通常将词法分析部分所用的类叫做Lexer，它实现了词法分析功能，并且将分析得到的信息存储到token流中。</p>
+<p>首先梳理一下我们需要的token类型：**+ - * ( ) 数**。</p>
+<p>可以分别对这几个类型的词法单元建立token的标识符，可以建立一个token类来实现这个操作：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">Token</span> &#123;<br>  <span class="hljs-keyword">public</span> <span class="hljs-keyword">enum</span> <span class="hljs-title class_">Type</span> &#123;<br>  ADD, SUB, MUL, LPAREN, RPAREN, NUM<br>  &#125;<br>  <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> Type type;<br>  <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> String content;<br>  <span class="hljs-comment">//....</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>同时，在词法分析部分，lexer需要识别不同的token，注意到，这几个类型的词法单元的开头字符必然不同，因此我们利用这一点来实现词法分析。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-title function_">Lexer</span><span class="hljs-params">(String input)</span> &#123;<br>    <span class="hljs-type">int</span> <span class="hljs-variable">pos</span> <span class="hljs-operator">=</span> <span class="hljs-number">0</span>;<br>    <span class="hljs-keyword">while</span> (pos &lt; input.length()) &#123;<br>        <span class="hljs-keyword">if</span> (input.charAt(pos) == <span class="hljs-string">&#x27;(&#x27;</span>) &#123;<br>            tokens.add(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Token</span>(Token.Type.LPAREN, <span class="hljs-string">&quot;(&quot;</span>));<br>            pos++;<br>        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (input.charAt(pos) == <span class="hljs-string">&#x27;)&#x27;</span>) &#123;<br>            tokens.add(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Token</span>(Token.Type.RPAREN, <span class="hljs-string">&quot;)&quot;</span>));<br>            pos++;<br>        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (input.charAt(pos) == <span class="hljs-string">&#x27;+&#x27;</span>) &#123;<br>            tokens.add(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Token</span>(Token.Type.ADD, <span class="hljs-string">&quot;+&quot;</span>));<br>            pos++;<br>        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (input.charAt(pos) == <span class="hljs-string">&#x27;-&#x27;</span>) &#123;<br>            tokens.add(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Token</span>(Token.Type.SUB, <span class="hljs-string">&quot;-&quot;</span>));<br>            pos++;<br>        &#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (input.charAt(pos) == <span class="hljs-string">&#x27;*&#x27;</span>) &#123;<br>            tokens.add(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Token</span>(Token.Type.MUL, <span class="hljs-string">&quot;*&quot;</span>));<br>            pos++;<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-type">char</span> <span class="hljs-variable">now</span> <span class="hljs-operator">=</span> input.charAt(pos);<br>            <span class="hljs-type">StringBuilder</span> <span class="hljs-variable">sb</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">StringBuilder</span>();<br>            <span class="hljs-keyword">while</span> (now &gt;= <span class="hljs-string">&#x27;0&#x27;</span> &amp;&amp; now &lt;= <span class="hljs-string">&#x27;9&#x27;</span>) &#123;<br>                sb.append(now);<br>                pos++;<br>                <span class="hljs-keyword">if</span> (pos &gt;= input.length()) &#123;<br>                    <span class="hljs-keyword">break</span>;<br>                &#125;<br>                now = input.charAt(pos);<br>            &#125;<br>            tokens.add(<span class="hljs-keyword">new</span> <span class="hljs-title class_">Token</span>(Token.Type.NUM, sb.toString()));<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>这样，我们就获得了一个经过了词法分析的token流，便可以从中逐一地拿出token方便我们进行语法分析了。</p>
+<h4 id="实现Parser"><a href="#实现Parser" class="headerlink" title="实现Parser"></a>实现Parser</h4><p>这一步我需要进入到递归下降法的真正实现了。但是首先我们需要先看看题目中的文法，它并不能直接的使用递归下降法：</p>
+<p><img src="https://pic.imgdb.cn/item/65dc805a9f345e8d03a17f09.png" srcset="/img/loading.gif" lazyload></p>
+<p>怎么判断箭头右边走哪一个路线呢？甚至说，就算去掉一个路线：</p>
+<p><img src="https://pic.imgdb.cn/item/65dc80779f345e8d03a1d2a4.png" srcset="/img/loading.gif" lazyload></p>
+<p>难道是要在表达式的解析开始就再次调用表达式的解析吗？具体的情况就是：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java">parserExpr() &#123;<br>  parserExpr();<br>  <span class="hljs-comment">//.....</span><br>  &#125;<br></code></pre></td></tr></table></figure>
+
+<p>这样的代码会陷入无限的递归中，不是我们想要的结果。事实上，在编译原理中，有类似规则的文法叫做左递归文法，它是不能用递归下降法解决的。幸运的是，我们可以通过<strong>改写文法</strong>来消除左递归：</p>
+<p><img src="https://pic.imgdb.cn/item/65dc805a9f345e8d03a17f09.png" srcset="/img/loading.gif" lazyload></p>
+<p>这里，花括号代表可以有0个或多个该部分，这样的改写与我们对原本规则的理解一致，因此是<strong>等价</strong>的。类似的，我们对其他的规则也进行改写。</p>
+<p><img src="https://pic.imgdb.cn/item/65dc81019f345e8d03a371a4.png" srcset="/img/loading.gif" lazyload></p>
+<p>parser部分的关键则是如何用获得的token判断应当如何调用解析的方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> Expr <span class="hljs-title function_">parserExpr</span><span class="hljs-params">()</span> &#123;<br>  ArrayList&lt;Term&gt; terms = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;&gt;();<br>  ArrayList&lt;Token&gt; ops = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;&gt;();<br>  terms.add(parserTerm());<br>  <span class="hljs-keyword">while</span> (lexer.notEnd()&amp;&amp;(lexer.now().getType() ==<br>  Token.Type.ADD<br>  || lexer.now().getType() == Token.Type.SUB)) &#123;<br>    ops.add(lexer.now());<br>    lexer.move();<br>    terms.add(parserTerm());<br>  &#125;<br>  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Expr</span>(terms, ops);<br>&#125;<br><br><span class="hljs-keyword">public</span> Term <span class="hljs-title function_">parserTerm</span><span class="hljs-params">()</span> &#123;<br>  ArrayList&lt;Factor&gt; factors = <span class="hljs-keyword">new</span> <span class="hljs-title class_">ArrayList</span>&lt;&gt;();<br>  factors.add(parserFactor());<br>  <span class="hljs-keyword">while</span> (lexer.notEnd()&amp;&amp;lexer.now().getType() ==<br>        Token.Type.MUL) &#123;<br>    lexer.move();<br>    factors.add(parserFactor());<br>  &#125;<br>  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Term</span>(factors);<br>&#125;<br><br><span class="hljs-keyword">public</span> Factor <span class="hljs-title function_">parserFactor</span><span class="hljs-params">()</span> &#123;<br>  <span class="hljs-keyword">if</span> (lexer.now().getType() == Token.Type.NUM) &#123;<br>    <span class="hljs-type">Num</span> <span class="hljs-variable">num</span> <span class="hljs-operator">=</span> <span class="hljs-keyword">new</span> <span class="hljs-title class_">Num</span>(lexer.now().getContent());<br>    lexer.move();<br>    <span class="hljs-keyword">return</span> num;<br>  &#125; <span class="hljs-keyword">else</span> &#123;<br>   <span class="hljs-comment">// 这里调用move之前lexer.now()是(    </span><br>   lexer.move();    <br>   <span class="hljs-type">Expr</span> <span class="hljs-variable">expr</span> <span class="hljs-operator">=</span> parserExpr();   <br>   <span class="hljs-comment">// 这里调用move之前lexer.now()是)    </span><br>   lexer.move();   <br>   <span class="hljs-comment">// 调用上面的move之后刚好保证表达式因子的全部成分被跳过。    </span><br>   <span class="hljs-keyword">return</span> expr;  <br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>其中，lexer.now()获取当前分析的token，lexer.move()则可以移动到下一个token。</p>
 
                 
               </div>
