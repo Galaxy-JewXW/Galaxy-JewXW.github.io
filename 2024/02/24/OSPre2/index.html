@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://galaxy-jewxw.github.io/img/os002.jpeg">
 <meta property="article:published_time" content="2024-02-24T03:16:09.000Z">
-<meta property="article:modified_time" content="2024-02-24T03:24:04.457Z">
+<meta property="article:modified_time" content="2024-02-29T12:15:23.360Z">
 <meta property="article:author" content="Traumtänzer aka &#39;Jew1!5!&#39;">
 <meta property="article:tag" content="总结">
 <meta name="twitter:card" content="summary_large_image">
@@ -79,7 +79,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"galaxy-jewxw.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":120,"cursorChar":"_","loop":true,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"galaxy-jewxw.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":120,"cursorChar":"_","loop":true,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -242,7 +242,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          779 字
+          6.5k 字
         
       </span>
     
@@ -253,7 +253,7 @@
         
         
         
-          5 分钟
+          36 分钟
         
       </span>
     
@@ -303,7 +303,7 @@
               <p class="note note-info">
                 
                   
-                    本文最后更新于：2024年2月24日 上午
+                    本文最后更新于：2024年2月29日 晚上
                   
                 
               </p>
@@ -323,6 +323,167 @@
 <p>MIPS32 的 MMU 支持基于 <strong>TLB</strong> 的 <strong>页式地址翻译</strong>，而操作系统实验使用了 MIPS32 的这个地址翻译功能。这一部分在计组的 CPU 中并没有涉及。</p>
 <p>这将牵扯出我们OS中的两个知识点：MIPS32 具体访存流程、TLB 在 MIPS32 地址翻译中扮演的角色。具体内容将在我们 Lab2 内存管理中学到，在 pre 中我们仅介绍到此。</p>
 <p>目前，只需要大家牢记，在 MIPS32 指令集中，我们的访存指令不再直接操作物理地址，而是使用虚拟地址以及地址翻译机制，间接管理物理内存。</p>
+<h2 id="CP0协处理器"><a href="#CP0协处理器" class="headerlink" title="CP0协处理器"></a>CP0协处理器</h2><p>计组课程中 CPU 的协处理器 CP0 基本只负责中断与异常的相关处理。</p>
+<p>而 MIPS32 指令集的 CP0 更为复杂，也具有更多功能，整体上 CP0 用于对整个处理器的状态进行维护和控制，包括但不限于对于中断及异常信息的记录、特权管理、地址翻译控制等。</p>
+<p>控制地址翻译的功能将在 Lab2 的实验中具体涉及。</p>
+<h3 id="中断异常"><a href="#中断异常" class="headerlink" title="中断异常"></a>中断异常</h3><p>对于中断及异常的处理，MIPS32 比 MIPS-C 的要复杂一些。实验中使用的部分主要涉及 CP0 的一些寄存器： Cause、EPC、BadVAddr 。</p>
+<p>其中 Cause 与 EPC 寄存器在 MIPS32 与 MIPS-C 中均存在，其定义也是相似的，而 BadVAddr 则不存在于 MIPS-C 中。</p>
+<p><img src="https://pic.imgdb.cn/item/65e0716c9f345e8d033bddf6.png" srcset="/img/loading.gif" lazyload alt="异常原因寄存器"></p>
+<p>上图是 MIPS32 中定义的 Cause 寄存器，其中保存着 CPU 中哪一些中断或者异常发生了。 15-8 位指示了哪一些中断等待处理，其中 15-10 位来自硬件，9-8 位可以由软件写入。当中断请求发生时，Cause 寄存器对应位置 1。 6-2 位则记录发生的异常号，供软件进行区别。还需要特别注意的是 31位 BD，当这一位为1时，表明发生异常的指令位于延迟槽，软件在处理其异常时需要特别特殊处理。</p>
+<p>EPC 寄存器：存放异常发生的指令对应 PC 地址，软件在完成异常处理之后，可以根据此 PC 返回。</p>
+<p>BadVAddr 寄存器： 在我们前文的访存流程中有提到，若访存操作合法，具体的操作才会被执行。不合法的访存操作则会触发异常，当访存相关的异常被触发时，这个寄存器将会被用来记录触发异常的访存地址供软件进行处理。</p>
+<p>计组课程着重于实现一个简略的硬件 CP0 ，并不关注软件实现的部分，而操作系统课程更多关注配合硬件的软件部分（即操作系统本身）。</p>
+<h3 id="特权管理"><a href="#特权管理" class="headerlink" title="特权管理"></a>特权管理</h3><p>在 MIPS-C 中，处理器只有一个<strong>特权模式</strong>，对于所有指令，均一视同仁的在这个<strong>特权模式</strong>下，所有操作均被允许执行。而 MIPS32 中，则定义了多种特权模式，主要使用的两种状态被叫做<strong>用户态</strong>、<strong>内核态</strong>。</p>
+<p>在内核态下，CPU 可以执行其架构允许的任何操作；可以执行任何指令、启动任何 I&#x2F;O 操作、访问任何内存区域等等。在其他特权模式下， CPU 允许执行的操作收到硬件限制限制。通常，某些特殊指令是不被允许的（具体而言，通常是影响计算机控制或者完成 I&#x2F;O 操作的指令），某些内存区域也无法访问，等等。</p>
+<blockquote>
+<p>内核态即计组实验中所提到的特权态，用户态就是非特权态。操作系统借助 CPU 的这套硬件特权控制机制，实现对并发运行的不同用户程序的隔离，以及对计算机整体安全的保护。</p>
+</blockquote>
+<p>试想若 CPU 不存在这样一种特权控制机制，那么任意用户程序都可视为具有与操作系统同等的地位。这种情况下，用户程序可以完全脱离操作系统的管理与控制，这是不安全的。</p>
+<p>与处理器状态相关的寄存器，主要是 Status 寄存器，它控制处理器整体工作模式。在计组的 CP0 中，也存在一个 Status 寄存器，不过当时只使用了其对中断使能控制的功能。</p>
+<p><img src="https://pic.imgdb.cn/item/65e072369f345e8d033ee424.png" srcset="/img/loading.gif" lazyload alt="状态寄存器"></p>
+<p>上图是 MIPS32 中定义的 Status 寄存器，其控制整个处理器状态。其完整定义比较复杂，我们只用关注其中部分位即可。Status 寄存器的第 0 位，是全局中断使能位。只有这一位配置为 1 ，处理器才可以响应中断。第 15-8 为中断使能位，分别控制 8 个中断输入的使能。第 4 位 UM 与 第 1 位 EXL 则用于控制处理器的特权模式。当且仅当 UM 为 1 且 EXL 为 0 时，处理器运行在用户态，其它状态下，处理器均运行于内核态。</p>
+<p>计组中，我们 CPU 只能一次运行一个我们编写的 MIPS 汇编程序。而在操作系统中，我们可以通过操作系统配合硬件时钟中断给不同进程分配 CPU 时间，使得 CPU 在执行不同进程间切换，实现多个进程的并发执行。</p>
+<p>对于 MIPS 体系结构来说，实时中断产生时，就会触发中断，将 PC 指向异常处理程序入口。异常处理程序首先保存现场，此后根据 Cause 寄存器中的情况进行异常分发，转到内核的不同异常处理子程序。</p>
+<h2 id="MIPS调用约定"><a href="#MIPS调用约定" class="headerlink" title="MIPS调用约定"></a>MIPS调用约定</h2><p>精选自MIPS Calling Conventions Summary</p>
+<h3 id="通用寄存器"><a href="#通用寄存器" class="headerlink" title="通用寄存器"></a>通用寄存器</h3><table>
+<thead>
+<tr>
+<th>寄存器编号</th>
+<th>助记符</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>zero</td>
+<td>值总是为 0</td>
+</tr>
+<tr>
+<td>1</td>
+<td>at</td>
+<td>（汇编暂存寄存器）一般由汇编器作为临时寄存器使用。</td>
+</tr>
+<tr>
+<td>2-3</td>
+<td>v0-v1</td>
+<td>用于存放表达式的值或函数的整形、指针类型返回值。</td>
+</tr>
+<tr>
+<td>4-7</td>
+<td>a0-a3</td>
+<td>用于函数传参。其值在函数调用的过程中不会被保存。若函数参数较多，多出来的参数会采用栈进行传递。</td>
+</tr>
+<tr>
+<td>8-15</td>
+<td>t0-t7</td>
+<td>用于存放表达式的值的临时寄存器; 其值在函数调用的过程中不会被保存。</td>
+</tr>
+<tr>
+<td>16-23</td>
+<td>s0-s7</td>
+<td><strong>保存寄存器; 这些寄存器中的值在经过函数调用后不会被改变。</strong></td>
+</tr>
+<tr>
+<td>24-25</td>
+<td>t8-t9</td>
+<td>用于存放表达式的值的临时寄存器; 其值在函数调用的过程中不会被保存。</td>
+</tr>
+<tr>
+<td>26-27</td>
+<td>k0-k1</td>
+<td>仅在内核态下使用。</td>
+</tr>
+<tr>
+<td>28</td>
+<td>gp</td>
+<td><strong>全局指针和内容指针。</strong></td>
+</tr>
+<tr>
+<td>29</td>
+<td>sp</td>
+<td><strong>栈指针。</strong></td>
+</tr>
+<tr>
+<td>30</td>
+<td>fp或s8</td>
+<td><strong>保存寄存器（同 s0-s7）。也可用作帧指针。</strong></td>
+</tr>
+<tr>
+<td>31</td>
+<td>ra</td>
+<td><strong>函数返回地址。</strong></td>
+</tr>
+</tbody></table>
+<h3 id="栈帧"><a href="#栈帧" class="headerlink" title="栈帧"></a>栈帧</h3><p>每次调用一个函数时，都会为该函数创建一个唯一的栈帧。</p>
+<p>栈帧的结构很重要。它在调用者和被调用者之间形成了一个契约，它定义了参数在调用者和被调用者之间如何传递，一个函数调用的返回值如何从被调用者传递给调用者，并定义了如何共享寄存器。</p>
+<p>通常，函数的栈帧可能包含以下几个部分：</p>
+<ul>
+<li>用于存储传递给此调用的函数参数的空间。</li>
+<li>存储已保存寄存器值的位置（s0 到 s7）。</li>
+<li>一个存储子程序返回地址的地方（ra）。</li>
+<li>一个用于本地数据存储的地方。</li>
+</ul>
+<p><img src="https://pic.imgdb.cn/item/65e073fa9f345e8d0344e178.png" srcset="/img/loading.gif" lazyload alt="栈帧的结构"></p>
+<p><strong>栈帧的黄色部分，即参数部分</strong>。当前函数 A 调用当前函数的子函数 B 时，会将 B 的参数压入当前函数 A 的栈帧中的参数部分，以实现对函数调用时的传参。此外，还需注意，由于 a0-a3 寄存器也将被用作传参，所以参数部分中的淡黄色部分（arg 0 至 arg 3）只需要保留栈帧空间，并不填入具体参数值。至于参数个数超过的 4 个的子函数，当前函数 A 就需要将多出来的第 4 至第 n-1 个参数压入栈中（arg 4 至 arg n-1），实现对子函数 B 的调用。</p>
+<p><strong>栈帧的浅绿部分，即保留寄存器部分</strong>，前面提到我们会在当前函数被调用后，在当前函数最开始，复制当前函数要使用的任何规定需要保存的寄存器（s0 到 s7）的值压入栈帧的保留寄存器部分。此后，由于我们已经在栈帧中保存了当前函数被调用时寄存器的最初样貌，在函数执行中，函数可以随意读写已保存寄存器。当函数执行完毕，返回前，我们会复原栈中保留寄存器部分到寄存器中，使得函数的调用者（父函数），可以认为在整个调用过程中，保存的寄存器没有发生变化。</p>
+<p><strong>栈帧的深绿部分，即返回地址部分</strong>。返回地址部分用于存储 ra 的值。该值在执行当前函数开始时被复制到栈中，并在当前函数返回之前被复制回 ra 寄存器中。</p>
+<p><strong>栈帧的灰色部分，即填充部分</strong>，其作用在于确保栈帧的总大小总是 8 的倍数。在这里插入它，以确保其上方的局部数据存储部分首地址是双字对齐的。这是为了与 MIPS 64 位体系结构的双字读取指令兼容。</p>
+<p><strong>栈帧的蓝色部分，即局部数据存储部分</strong>。它用来存储函数的局部变量。函数必须为此区域的所有局部变量保留足够的存储空间，包括需要在函数调用前后保留的任何临时寄存器（t0 到 t9）值的空间。</p>
+<h3 id="Leaf-Nonleaf-Subroutine"><a href="#Leaf-Nonleaf-Subroutine" class="headerlink" title="Leaf &amp; Nonleaf Subroutine"></a>Leaf &amp; Nonleaf Subroutine</h3><p>并不是每个函数都需要其栈帧中描述的每个部分。一般的规则是，如果程序不需要其中的一个部分，那么它可以从其栈帧中省略该部分。为了明确这一点，可以区分 3 个不同类别的函数：</p>
+<h4 id="简单叶函数（Simple-Leaf）"><a href="#简单叶函数（Simple-Leaf）" class="headerlink" title="简单叶函数（Simple Leaf）"></a>简单叶函数（Simple Leaf）</h4><p>不调用任何其他子例程，不使用栈上的任何内存空间（因为其不需要内存来保存局部变量或寄存器的值）。这样的函数不需要栈帧，也不需要更改 sp。</p>
+<h4 id="有局部数据的叶函数（Leaf-with-Data）"><a href="#有局部数据的叶函数（Leaf-with-Data）" class="headerlink" title="有局部数据的叶函数（Leaf with Data）"></a>有局部数据的叶函数（Leaf with Data）</h4><p>需要栈空间的叶函数（但不需要、不调用任何其他子例程），其栈帧可用于本地变量或寄存器的值的保存。这样的函数被调用后应当压栈（栈帧大小应该是 8 的倍数）。但是，ra 并不用保存在栈帧中。</p>
+<h4 id="非叶函数（Nonleaf）"><a href="#非叶函数（Nonleaf）" class="headerlink" title="非叶函数（Nonleaf）"></a>非叶函数（Nonleaf）</h4><p>函数内调用了其他函数。一个非叶函数的栈帧包含了上一节所述的大部分结构。</p>
+<h2 id="MIPS-Directives-Macro"><a href="#MIPS-Directives-Macro" class="headerlink" title="MIPS Directives &amp; Macro"></a>MIPS Directives &amp; Macro</h2><h3 id="byte、-half、-word、-ascii、-asciiz"><a href="#byte、-half、-word、-ascii、-asciiz" class="headerlink" title=".byte、.half、.word、.ascii、.asciiz"></a><code>.byte</code>、<code>.half</code>、<code>.word</code>、<code>.ascii</code>、<code>.asciiz</code></h3><p>这类在计组中常见的 directives，别对应着不同数据的类型。</p>
+<h3 id="align"><a href="#align" class="headerlink" title=".align"></a><code>.align</code></h3><p><code>.align</code> 的作用是“使下面的数据进行地址对齐”，下面这段代码使得下面大小为一个字的变量 <code>var</code> 按 4 字节进行对齐（参数 �<em>x</em> 代表以 2�2<em>x</em> 字节对齐）</p>
+<figure class="highlight d"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs d">.<span class="hljs-keyword">align</span> <span class="hljs-number">2</span> # <span class="hljs-keyword">align</span> to <span class="hljs-number">4</span>-<span class="hljs-keyword">byte</span> boundary (<span class="hljs-number">2</span>^<span class="hljs-number">2</span>)<br>var: .word <span class="hljs-number">0</span><br></code></pre></td></tr></table></figure>
+
+<p>该指令允许程序员通过指定一个零对齐，来覆盖<code>.half</code>、<code>.word</code>等的自动对齐特性。</p>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs jboss-cli"><span class="hljs-string">.half</span> 3<br><span class="hljs-string">.align</span> 0 <span class="hljs-comment"># 关闭自动对齐</span><br><span class="hljs-string">.word</span> 100 <span class="hljs-comment"># 使得 word 紧贴着 half</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="globl、-extern"><a href="#globl、-extern" class="headerlink" title=".globl、.extern"></a><code>.globl</code>、<code>.extern</code></h3><p>在计组中的写的汇编程序往往只有一个文件。但在操作系统课中，存在跨文件的情况，例如跨文件调用函数。</p>
+<ul>
+<li><code>.globl</code>：将符号定义为具有对其他模块可见的全局符号</li>
+<li><code>.extern</code>：要对另一个模块中的全局符号的引用（即外部符号），需要注意的是所有对标签引用都会自动被认为是在引用全局符号，所以我们在对另一模块中的全局标签引用时，没有必要添加 <code>.extern</code>（但对另一模块中的全局变量引用时，需要添加<code>.extern</code>）</li>
+</ul>
+<p>此后在链接时，链接器要将各个目标文件的内容“合为一体”，通过上述方式标记的符号就可以被跨文件引用。</p>
+<p>例如，在未来课程设计的 <code>asm.h</code> 头文件中，我们定义了如下宏：</p>
+<figure class="highlight livescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs livescript"><span class="hljs-comment">#define FEXPORT(symbol)         \   # 使symbol代指的函数对其他模块可见</span><br>    .globl symbol;              <span class="hljs-string">\</span>   <span class="hljs-comment"># 使标签对链接器可见，使得其它文件中可以调用我们使用宏定义声明的函数。</span><br>    .type symbol, @function;    <span class="hljs-string">\</span><br>    symbol:<br></code></pre></td></tr></table></figure>
+
+<p>在未来内核实验的 <code>genex.S</code> 汇编文件中，我们通过该宏声明了一个全局函数 <code>ret_from_exception</code>（你可以忽略函数中的内容）</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-function"><span class="hljs-title">FEXPORT</span><span class="hljs-params">(ret_from_exception)</span></span><br>    <span class="hljs-comment">/* Do Something */</span><br></code></pre></td></tr></table></figure>
+
+<p>此时我们可以在未来内核实验的另一文件 <code>env_asm.S</code> 中，直接调用该函数</p>
+<figure class="highlight reasonml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs reasonml">.text<br><span class="hljs-constructor">LEAF(<span class="hljs-params">env_pop_tf</span>)</span><br>    <span class="hljs-comment">/* Do Something */</span><br>    j       ret_from_exception # 直接调用该函数，默认ret_from_exception为全局标签，无需.extern<br><span class="hljs-constructor">END(<span class="hljs-params">env_pop_tf</span>)</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="set"><a href="#set" class="headerlink" title=".set"></a><code>.set</code></h3><p>设置汇编器的工作方式。默认情况下，汇编器会尝试通过重新排列指令，来填充分支指令和存取指令造成的空闲时间。了解即可。</p>
+<ul>
+<li><code>.set noreorder</code> 和 <code>.set reorder</code>：告知汇编器是否重新对指令进行顺序进行排序。reorder 模式下汇编器会自动调度指令至延迟槽，noreorder 模式下需要手动填充延迟槽。</li>
+<li><code>.set at</code> 和 <code>.set noat</code>：at 模式下，1 号寄存器（$at）为汇编器保留用于实现扩展指令；noat 模式下，汇编器不会使用 1 号寄存器。</li>
+</ul>
+<h3 id="LEAF、NESTED、END-三个宏"><a href="#LEAF、NESTED、END-三个宏" class="headerlink" title="LEAF、NESTED、END 三个宏"></a><code>LEAF</code>、<code>NESTED</code>、<code>END</code> 三个宏</h3><p>在操作系统实验中，我们将常常会遇到三个和函数有关的宏，是我们人为定义的。</p>
+<h4 id="LEAF"><a href="#LEAF" class="headerlink" title="LEAF"></a><code>LEAF</code></h4><figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs llvm">#<span class="hljs-keyword">define</span> LEAF(symbol)                        \<br>    .globl  symbol<span class="hljs-comment">;                         \</span><br>    .<span class="hljs-keyword">align</span>  <span class="hljs-number">2</span><span class="hljs-comment">;                              \</span><br>    .<span class="hljs-keyword">type</span>   symbol<span class="hljs-punctuation">,</span><span class="hljs-title">@function</span><span class="hljs-comment">;               \</span><br>    .ent    symbol<span class="hljs-comment">;                         \</span><br><span class="hljs-symbol">    symbol:</span>                                 \<br>    .frame  sp<span class="hljs-punctuation">,</span><span class="hljs-number">0</span><span class="hljs-punctuation">,</span>ra<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>第一行是对 <code>LEAF</code> 宏的定义，后面括号中的 <code>symbol</code> 类似于函数的参数，在宏定义 中的作用类似，编译时在宏中会将 <code>symbol</code> 替换为实际传入的文本，也即我们的函数名。</li>
+<li>第二行中，<code>.globl</code> 的作用是“使标签对链接器可见”，这样即使在其它文件中也可以引用到 <code>symbol</code> 标签，<strong>从而使得其它文件中可以调用我们使用宏定义声明的函数</strong>。</li>
+<li>第三行中，<code>.align 2</code> 的作用是“使下面的数据进行地址对齐”，这一行语句使得下面的 <code>symbol</code> 标签按 4 Byte 进行对齐，<strong>从而使得我们可以使用 <code>jal</code> 指令跳转到这个函数</strong>（末尾拼接两位 0）。</li>
+<li>第四行中，<code>.type</code> 的作用是设置 <code>symbol</code> 标签的类别，在这里我们设置了 <code>symbol</code> 标签为函数标签。</li>
+<li>第五行中，<code>.ent</code> 的作用是标记每个函数的开头，需要与 <code>.end</code> 配对使用。这些标记使得可以在 Debug 时查看调用链</li>
+</ul>
+<p><code>LEAF</code>宏在使用时, 我们可以这样用，例如：</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs stylus"><span class="hljs-function"><span class="hljs-title">LEAF</span><span class="hljs-params">(msyscall)</span></span><br>    <span class="hljs-comment">// Just use &#x27;syscall&#x27; instruction and return.</span><br>    syscall<br>    jr      ra<br><span class="hljs-function"><span class="hljs-title">END</span><span class="hljs-params">(msyscall)</span></span><br></code></pre></td></tr></table></figure>
+
+<h4 id="NESTED"><a href="#NESTED" class="headerlink" title="NESTED"></a><code>NESTED</code></h4><figure class="highlight llvm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs llvm">#<span class="hljs-keyword">define</span> NESTED(symbol<span class="hljs-punctuation">,</span> framesize<span class="hljs-punctuation">,</span> rpc)      \<br>    .globl  symbol<span class="hljs-comment">;                         \</span><br>    .<span class="hljs-keyword">align</span>  <span class="hljs-number">2</span><span class="hljs-comment">;                              \</span><br>    .<span class="hljs-keyword">type</span>   symbol<span class="hljs-punctuation">,</span><span class="hljs-title">@function</span><span class="hljs-comment">;               \</span><br>    .ent    symbol<span class="hljs-punctuation">,</span><span class="hljs-number">0</span><span class="hljs-comment">;                       \</span><br><span class="hljs-symbol">    symbol:</span>                                 \<br>    .frame  sp<span class="hljs-punctuation">,</span> framesize<span class="hljs-punctuation">,</span> rpc<br></code></pre></td></tr></table></figure>
+
+<p>通过对比，我们可以发现 <code>LEAF</code> 宏和 <code>NESTED</code> 宏的区别就在于 <strong><code>LEAF</code> 宏定义的函数在被调用时没有分配栈帧的空间记录自己的“运行状态”，<code>NESTED</code> 宏在被调用时分配了栈帧的空间用于记录自己的“运行状态”</strong>。</p>
+<p><code>NESTED</code> 宏在使用时, 我们可以这样用，例如：</p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs mipsasm">NESTED(handle_int, TF_SIZE, <span class="hljs-built_in">zero</span>)<br>    <span class="hljs-keyword">mfc0 </span>   <span class="hljs-built_in">t0</span>, CP0_CAUSE<br>    <span class="hljs-keyword">mfc0 </span>   <span class="hljs-built_in">t2</span>, CP0_STATUS<br>    <span class="hljs-keyword">and </span>    <span class="hljs-built_in">t0</span>, <span class="hljs-built_in">t2</span><br>    <span class="hljs-keyword">andi </span>   <span class="hljs-built_in">t1</span>, <span class="hljs-built_in">t0</span>, STATUS_IM7<br>    <span class="hljs-keyword">bnez </span>   <span class="hljs-built_in">t1</span>, timer_irq<br><span class="hljs-symbol">timer_irq:</span><br>    li      <span class="hljs-built_in">a0</span>, <span class="hljs-number">0</span><br>    <span class="hljs-keyword">j </span>      <span class="hljs-keyword">schedule</span><br><span class="hljs-keyword"></span>END(handle_int)<br></code></pre></td></tr></table></figure>
+
+<h4 id="END"><a href="#END" class="headerlink" title="END"></a><code>END</code></h4><figure class="highlight fortran"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs fortran">#define <span class="hljs-keyword">END</span>(<span class="hljs-function"><span class="hljs-keyword">function</span></span>)                       \<br>    .<span class="hljs-keyword">end</span>    <span class="hljs-function"><span class="hljs-keyword">function</span></span>;                       \<br>    .<span class="hljs-built_in">size</span>   <span class="hljs-function"><span class="hljs-keyword">function</span></span>,.-<span class="hljs-function"><span class="hljs-keyword">function</span></span><br></code></pre></td></tr></table></figure>
+
+<p>第一行是对 <code>END</code> 宏的定义，与上面 <code>LEAF</code> 与 <code>NESTED</code> 类似。</p>
+<p>第二行的 <code>.end</code> 是为了与先前 <code>LEAF</code> 或 <code>NESTED</code> 声明中的 <code>.ent</code> 配对，标记了 <code>symbol</code> 函数的结束。</p>
+<p>第三行的 <code>.size</code> 是标记了 <code>function</code> 符号占用的存储空间大小，将 <code>function</code> 符号占用的空间大小设置为 <code>.-function</code>，<code>.</code> 代表了当前地址，当前位置的地址减去 <code>function</code> 标签处的地址即可计算出符号占用的空间大小。</p>
 
                 
               </div>
