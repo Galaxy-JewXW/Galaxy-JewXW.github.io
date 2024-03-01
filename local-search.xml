@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>操作系统理论——引论（1）</title>
+    <link href="/2024/03/01/OS1/"/>
+    <url>/2024/03/01/OS1/</url>
+    
+    <content type="html"><![CDATA[<h1 id="操作系统理论——引论（1）"><a href="#操作系统理论——引论（1）" class="headerlink" title="操作系统理论——引论（1）"></a>操作系统理论——引论（1）</h1><p>该分类主要将ppt上的内容结合教材与补充资料进行总结<del>复制</del>。</p><blockquote><p>教材：任爱华等，操作系统实用教程（第三版），清华大学出版社， 2010</p><p>参考书：Andrew S. Tanenbaum. 现代操作系统 （第三版），机械工业出版社</p></blockquote><h2 id="从Hello-World开始"><a href="#从Hello-World开始" class="headerlink" title="从Hello World开始"></a>从Hello World开始</h2><p>我们可以先从计算机执行hello world程序开始看起，这个程序的源文件长这样：</p><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;stdio.h&gt;</span></span><br>main() &#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;hello world\n&quot;</span>);<br>&#125;<br></code></pre></td></tr></table></figure><p>计算机处理源文件并执行的流程如下：</p><ol><li><p>编译成可执行文件</p></li><li><p>用户告诉shell执行该可执行程序</p><blockquote><p>由于安全、复杂、繁琐等原因，用户不能直接接触内核（也没有必要），需要另外再开发一个程序，让用户直接使用这个程序；该程序的作用就是接收用户的操作（点击图标、输入命令），并进行简单的处理，然后再传递给内核，这样用户就能间接地使用操作系统内核了。在用户和内核之间增加一层<code>“代理”</code>，既能简化用户的操作，又能保障内核的安全，何乐不为呢？用户界面和命令行就是这个另外开发的程序，就是这层<code>“代理”</code>。在Linux下，这个命令行程序叫做 <code>Shell</code>。</p><p><code>Shell</code> 是一个应用程序，它连接了<code>用户</code>和<code>Linux 内核</code>，让用户能够更加高效、安全、低成本地使用 Linux 内核，这就是 <code>Shell</code> 的本质。<code>Shell</code> 本身并不是内核的一部分，它只是站在内核的基础上编写的一个应用程序，它和 <code>QQ</code>、<code>迅雷</code>、<code>Firefox</code> 等其它软件没有什么区别。然而 <code>Shell</code>也有着它的特殊性，就是开机立马启动，并呈现在用户面前；用户通过 <code>Shell</code>来使用 Linux，不启动 <code>Shell</code>的话，用户就没办法使用 Linux。</p></blockquote></li><li><p>创建一个新的子进程</p><ul><li>创建进程控制块</li></ul></li><li><p>装入helloworld程序</p><ul><li>操作系统找到该程序，检查其类型</li><li>检查程序首部，找出代码段和数据段的地址</li><li>可执行文件映射到进程结构</li><li>设置CPU上下文环境与程序开始处</li><li>调度helloworld程序</li></ul></li><li><p>执行程序的第一条命令</p><ul><li>执行失败，缺页中断发生</li><li>分配一页内存，并将代码从磁盘读入，继续执行</li><li>更多的缺页中断，读入更多的页面</li></ul></li><li><p>printf</p><ul><li>操作系统检查字符串位置是否正确</li><li>操作系统找到字符串被送往的设备</li><li>设备是一个伪终端，由一个进程控制</li><li>操作系统将字符串送给该进程</li><li>该进程告诉窗口系统他要显示字符串</li><li>窗口系统确定操作合法，将字符串转换为像素</li><li>窗口系统将像素写入存储映像区</li></ul></li><li><p>视频硬件将像素表示转换成一组模拟信号控制显示器（重画屏幕）</p></li><li><p>显示器发射电子束，你在屏幕上看到hello world！</p></li></ol><h3 id="操作系统的工作"><a href="#操作系统的工作" class="headerlink" title="操作系统的工作"></a>操作系统的工作</h3><p>从上面的例子中，大概能了解到操作系统的工作有以下方面：</p><ul><li>程序的执行：负责启动每个程序及结束程序的工作</li><li>完成与硬件有关的工作</li><li>完成与应用无关的工作<ul><li>易于使用，基本服务，统一性</li></ul></li><li>计算机系统的效率与安全问题</li></ul><blockquote><p>假如没有操作系统，该如何操作硬件？</p><p>例子：软盘I&#x2F;O操作</p><ul><li><p>控制芯片NEC PD765有16条命令</p></li><li><p>每一条命令向一个设备寄存器装入长度从1到9字节的特定数据（读写数据、移动磁头臂、格式化磁道，及初始化、检测状态、复位、校准控制器及设备等）</p></li><li><p>以READ为例：13个参数</p></li><li><p>要读取的磁盘块地址、磁道的扇区数、物理介质的记录格式、扇区间隙、对已删除数据地址标识的处理方法</p></li><li><p>操作结束时，控制器芯片在7个字节中返回23个状态及出错字段</p></li><li><p>软盘程序员还要保持注意步进电机的开关状态</p></li></ul></blockquote><p>操作系统在这个例子中，起到了管理硬件、方便使用、提供保护的作用。</p><h2 id="操作系统的概念"><a href="#操作系统的概念" class="headerlink" title="操作系统的概念"></a>操作系统的概念</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>操作系统是一组管理计算机硬件资源的软件集合，它向计算机程序提供共性的服务。</p><ul><li>对使用者而言，操作系统提供一个计算机用户与计算机硬件系统之间的接口，使得计算机系统更易于使用；</li><li>对资源管理者而言，操作系统可以有效地控制和管理计算机系统中的各种硬件和软件资源，使之得到更有效的利用；</li><li>合理地组织计算机系统的工作流程，以改善系统性能，如相应时间、系统吞吐量等。</li></ul><h3 id="自顶向下看"><a href="#自顶向下看" class="headerlink" title="自顶向下看"></a>自顶向下看</h3><p>操作系统通过<strong>隐藏硬件</strong>的细节来屏蔽复杂性，呈现给程序良好，清晰，一致，优雅(?)的抽象（创建、实现和管理抽象）。</p><p><img src="https://pic.imgdb.cn/item/65e13df99f345e8d03e4da38.png" alt="操作系统将丑陋的硬件转化成美丽的抽象"></p><h3 id="自底向上看"><a href="#自底向上看" class="headerlink" title="自底向上看"></a>自底向上看</h3><ul><li>向上层用户提供服务<ul><li>支持多个用户、多个程序</li><li>资源竞争</li></ul></li><li>资源的复用（共享）<ul><li>时间维度</li><li>空间维度</li></ul></li></ul><h2 id="操作系统简史"><a href="#操作系统简史" class="headerlink" title="操作系统简史"></a>操作系统简史</h2><h3 id="第一代：真空管和穿孔卡片"><a href="#第一代：真空管和穿孔卡片" class="headerlink" title="第一代：真空管和穿孔卡片"></a>第一代：真空管和穿孔卡片</h3><p>第一台数字计算机ENIAC，未采用二进制操作和存储程序控制，未具备现代电子计算机的主要特征。</p><p>所有的程序设计均用纯粹的硬件语言编写，需要手动修改逻辑单元的连接来运行软件，控制机器的基本功能。甚至没有操作系统的概念。</p><h3 id="第二代：晶体管和批处理系统"><a href="#第二代：晶体管和批处理系统" class="headerlink" title="第二代：晶体管和批处理系统"></a>第二代：晶体管和批处理系统</h3><p>计算机变得更加可靠，可长时间运行。随着计算机速度的提高，速度层面上的人机矛盾已不可容忍。</p><p>同时，当时的计算机非常昂贵，因此很自然的想办法较少机时的浪费。为了实现作业的自动过度，出现了成批处理。</p><p>典型的操作系统：FMS（the Fortran Monitor System），批处理系统。</p><p>批处理技术：计算机系统对一批作业进行处理的系统。通过卫星机与主机的联机解决运算与IO之间的冲突。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>操作系统</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>总结</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>递归下降法——处理复杂输入</title>
     <link href="/2024/02/26/OO1/"/>
     <url>/2024/02/26/OO1/</url>
@@ -380,7 +405,7 @@
     
     <tags>
       
-      <tag>知识点总结</tag>
+      <tag>总结</tag>
       
     </tags>
     
