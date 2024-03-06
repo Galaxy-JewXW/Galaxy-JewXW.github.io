@@ -25,7 +25,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://galaxy-jewxw.github.io/img/os2.png">
 <meta property="article:published_time" content="2024-03-06T14:40:17.000Z">
-<meta property="article:modified_time" content="2024-03-06T15:02:51.598Z">
+<meta property="article:modified_time" content="2024-03-06T15:22:58.413Z">
 <meta property="article:author" content="Traumtänzer aka &#39;Jew1!5!&#39;">
 <meta property="article:tag" content="总结">
 <meta property="article:tag" content="实验">
@@ -244,7 +244,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.4k 字
+          3k 字
         
       </span>
     
@@ -255,7 +255,7 @@
         
         
         
-          8 分钟
+          17 分钟
         
       </span>
     
@@ -397,6 +397,84 @@
 <td>在全文中寻找 &lt;word1&gt;字符串，并将该字符串取代为 &lt;word2&gt;</td>
 </tr>
 </tbody></table>
+<h3 id="剪切、复制、粘贴"><a href="#剪切、复制、粘贴" class="headerlink" title="剪切、复制、粘贴"></a>剪切、复制、粘贴</h3><p><strong>命令模式下</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>[n]dd</td>
+<td>删除（delete）游标所在的一行或 n 行，用 p&#x2F;P 可以粘贴（实际更类似于剪切）</td>
+</tr>
+<tr>
+<td>[n]yy</td>
+<td>复制（yank）游标所在的一行或 n 行，用 p&#x2F;P 可以粘贴</td>
+</tr>
+<tr>
+<td>p&#x2F;P</td>
+<td>p 将已复制的数据粘贴（paste）在光标下一行，P 则为粘贴在光标上一行</td>
+</tr>
+<tr>
+<td>u</td>
+<td>复原（undo）前一个动作</td>
+</tr>
+</tbody></table>
+<p><strong>可视模式下</strong>（命令模式输入 操作 v&#x2F;V ），可以通过鼠标或光标批量选择文本段：</p>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>d</td>
+<td>剪切选择文本</td>
+</tr>
+<tr>
+<td>y</td>
+<td>复制选择文本</td>
+</tr>
+<tr>
+<td>p</td>
+<td>粘贴选择文本</td>
+</tr>
+<tr>
+<td>u</td>
+<td>复原（undo）前一个动作</td>
+</tr>
+</tbody></table>
+<h2 id="GCC编译器的使用"><a href="#GCC编译器的使用" class="headerlink" title="GCC编译器的使用"></a>GCC编译器的使用</h2><p><img src="https://pic.imgdb.cn/item/65e887999f345e8d03c7d916.png" srcset="/img/loading.gif" lazyload alt="C 语言程序从源代码到可执行文件"></p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs diff">语法:gcc [选项]... [参数]...<br>选项（常用）：<br><span class="hljs-deletion">-o 指定生成的输出文件</span><br><span class="hljs-deletion">-S 将 C 代码转换为汇编代码</span><br><span class="hljs-deletion">-Wall 显示一些警告信息</span><br><span class="hljs-deletion">-c 仅执行编译操作，不进行链接操作，生成可重定位的目标文件</span><br><span class="hljs-deletion">-M 列出依赖</span><br><span class="hljs-deletion">-Ipath 编译时指定头文件目录，使用标准库时不需要指定目</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>gcc test.c 默认生成名为 a.out 的可执行文件 </li>
+<li>gcc test.c -o test 使用 -o 选项编译链接生成 test 的可执行文件 </li>
+<li>gcc -c test.c -o test.o 使用 -o -c 选项仅编译生成名为 test.o 的目标文件</li>
+</ul>
+<h2 id="Makefile编写"><a href="#Makefile编写" class="headerlink" title="Makefile编写"></a>Makefile编写</h2><p>target、dependencies、command 是 Makefile 的基础。</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs cmake"><span class="hljs-keyword">target</span>: dependencies<br>        <span class="hljs-keyword">command</span> <span class="hljs-number">1</span><br>        <span class="hljs-keyword">command</span> <span class="hljs-number">2</span><br>        ...<br>        <span class="hljs-keyword">command</span> n<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>target 是构建 (build) 的目标，可以是目标文件、可执行文件，也可以是一个标签。</li>
+<li>dependencies 是构建该目标所需的其他文件或其他目标。</li>
+<li>command 是构建该目标所需执行的指令。每一个指令 (command) 之前必须按一次制表符键来控制间隔，而不能是空格，否则 make 会报错。</li>
+</ul>
+<p>如果想要构建 target，那么首先要准备好 dependencies，接着执行 command 中的命令，最终完成构建 target。</p>
+<h2 id="Git使用方法"><a href="#Git使用方法" class="headerlink" title="Git使用方法"></a>Git使用方法</h2><p>见“OS假期预习（一）——Linux，Git与Shell脚本”，此处略。</p>
+<h2 id="grep、sed、awk"><a href="#grep、sed、awk" class="headerlink" title="grep、sed、awk"></a>grep、sed、awk</h2><p>sed 是一个文件处理工具，可以将数据行进行替换、删除、新增、选取等特定工作。</p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs stylus">sed<br>sed <span class="hljs-selector-attr">[选项]</span> <span class="hljs-string">&#x27;命令&#x27;</span> 输入文本<br>选项（常用）：<br>-n：安静模式，只显示经过sed处理的内容。否则显示输入文本的所有内容。<br>-i：直接修改读取的档案内容，而不是输出到屏幕。否则，只输出不编辑。<br>命令（常用）：<br><span class="hljs-selector-attr">[行号]</span><span class="hljs-selector-tag">a</span><span class="hljs-selector-attr">[内容]</span>：新增，在行号后新增一行相应内容。行号可以是“数字”，在这一行之后新增，也可以是“起始行，终止行”，在其中的每一行后新增。当不写行号时，在每一行之后新增。使用$表示最后一行。后面的命令同理。<br><span class="hljs-selector-attr">[行号]</span>c<span class="hljs-selector-attr">[内容]</span>：取代。用内容取代相应行的文本。<br><span class="hljs-selector-attr">[行号]</span><span class="hljs-selector-tag">i</span><span class="hljs-selector-attr">[内容]</span>：插入。在当前行的上面插入一行文本。<br><span class="hljs-selector-attr">[行号]</span>d：删除当前行的内容。<br><span class="hljs-selector-attr">[行号]</span>p：输出选择的内容。通常与选项-n一起使用。<br>s/re（正则表达式）/string/：将re匹配的内容替换为string。<br></code></pre></td></tr></table></figure>
+
+<p>awk 是一种处理文本文件的语言，是一个强大的文本分析工具。</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">awk</span> &#x27;\$<span class="hljs-number">1</span>&gt;<span class="hljs-number">2</span> &#123;print $<span class="hljs-number">1</span>,$<span class="hljs-number">3</span>&#125;&#x27; my.txt<br></code></pre></td></tr></table></figure>
+
+<p> 这个命令的格式为  awk ‘pattern action’ file ，pattern 为条件，action 为命令，le 为文件。命令中出现的 $n 代表每一行中用空格分隔后的第 n 项。所以该命令的意义是文件 my.txt 中所有第一项大于 2 的行，输出第一项和第三项。</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs nginx"><span class="hljs-attribute">awk</span> -F, <span class="hljs-string">&#x27;&#123;print \$2&#125;&#x27;</span> my.txt<br></code></pre></td></tr></table></figure>
+
+<p>-F选项用来指定用于分隔的字符，默认是空格。所以该命令的 $n 就是用 <code>, </code>分隔的第 n 项了。</p>
 
                 
               </div>
