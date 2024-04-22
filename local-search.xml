@@ -13,18 +13,14 @@
     
     <categories>
       
-      <category>操作系统</category>
+      <category>课内学习</category>
       
     </categories>
     
     
     <tags>
       
-      <tag>总结</tag>
-      
-      <tag>实验</tag>
-      
-      <tag>解析</tag>
+      <tag>操作系统</tag>
       
     </tags>
     
@@ -42,14 +38,14 @@
     
     <categories>
       
-      <category>操作系统</category>
+      <category>课内学习</category>
       
     </categories>
     
     
     <tags>
       
-      <tag>总结</tag>
+      <tag>操作系统</tag>
       
     </tags>
     
@@ -67,14 +63,14 @@
     
     <categories>
       
-      <category>面向对象设计与构造</category>
+      <category>课内学习</category>
       
     </categories>
     
     
     <tags>
       
-      <tag>总结</tag>
+      <tag>面向对象设计与构造</tag>
       
     </tags>
     
@@ -92,14 +88,14 @@
     
     <categories>
       
-      <category>操作系统</category>
+      <category>课内学习</category>
       
     </categories>
     
     
     <tags>
       
-      <tag>总结</tag>
+      <tag>操作系统</tag>
       
     </tags>
     
@@ -117,14 +113,14 @@
     
     <categories>
       
-      <category>操作系统</category>
+      <category>课内学习</category>
       
     </categories>
     
     
     <tags>
       
-      <tag>总结</tag>
+      <tag>操作系统</tag>
       
     </tags>
     
@@ -142,14 +138,14 @@
     
     <categories>
       
-      <category>算法</category>
+      <category>课外拓展</category>
       
     </categories>
     
     
     <tags>
       
-      <tag>刷题</tag>
+      <tag>算法</tag>
       
     </tags>
     
@@ -167,14 +163,14 @@
     
     <categories>
       
-      <category>算法</category>
+      <category>课外拓展</category>
       
     </categories>
     
     
     <tags>
       
-      <tag>刷题</tag>
+      <tag>算法</tag>
       
     </tags>
     
@@ -192,14 +188,14 @@
     
     <categories>
       
-      <category>算法</category>
+      <category>课外拓展</category>
       
     </categories>
     
     
     <tags>
       
-      <tag>总结</tag>
+      <tag>算法</tag>
       
     </tags>
     
@@ -217,7 +213,7 @@
     
     <categories>
       
-      <category>体系结构</category>
+      <category>课外拓展</category>
       
     </categories>
     
@@ -225,6 +221,8 @@
     <tags>
       
       <tag>读书笔记</tag>
+      
+      <tag>体系结构</tag>
       
     </tags>
     
@@ -242,16 +240,14 @@
     
     <categories>
       
-      <category>计算机组成</category>
+      <category>课内学习</category>
       
     </categories>
     
     
     <tags>
       
-      <tag>实验</tag>
-      
-      <tag>解析</tag>
+      <tag>计算机组成</tag>
       
     </tags>
     
@@ -269,16 +265,14 @@
     
     <categories>
       
-      <category>计算机组成</category>
+      <category>课内学习</category>
       
     </categories>
     
     
     <tags>
       
-      <tag>实验</tag>
-      
-      <tag>解析</tag>
+      <tag>计算机组成</tag>
       
     </tags>
     
@@ -296,16 +290,14 @@
     
     <categories>
       
-      <category>计算机组成</category>
+      <category>课内学习</category>
       
     </categories>
     
     
     <tags>
       
-      <tag>实验</tag>
-      
-      <tag>解析</tag>
+      <tag>计算机组成</tag>
       
     </tags>
     
@@ -323,14 +315,16 @@
     
     <categories>
       
-      <category>计算机组成</category>
+      <category>课内学习</category>
       
     </categories>
     
     
     <tags>
       
-      <tag>分享</tag>
+      <tag>小工具</tag>
+      
+      <tag>计算机组成</tag>
       
     </tags>
     
@@ -348,16 +342,14 @@
     
     <categories>
       
-      <category>计算机组成</category>
+      <category>课内学习</category>
       
     </categories>
     
     
     <tags>
       
-      <tag>实验</tag>
-      
-      <tag>解析</tag>
+      <tag>计算机组成</tag>
       
     </tags>
     
@@ -375,16 +367,14 @@
     
     <categories>
       
-      <category>计算机组成</category>
+      <category>课内学习</category>
       
     </categories>
     
     
     <tags>
       
-      <tag>实验</tag>
-      
-      <tag>解析</tag>
+      <tag>计算机组成</tag>
       
     </tags>
     
@@ -402,14 +392,14 @@
     
     <categories>
       
-      <category>计算机组成</category>
+      <category>课内学习</category>
       
     </categories>
     
     
     <tags>
       
-      <tag>总结</tag>
+      <tag>计算机组成</tag>
       
     </tags>
     
@@ -427,14 +417,14 @@
     
     <categories>
       
-      <category>面向对象设计与构造</category>
+      <category>课内学习</category>
       
     </categories>
     
     
     <tags>
       
-      <tag>总结</tag>
+      <tag>面向对象设计与构造</tag>
       
     </tags>
     
@@ -452,16 +442,14 @@
     
     <categories>
       
-      <category>计算机组成</category>
+      <category>课内学习</category>
       
     </categories>
     
     
     <tags>
       
-      <tag>实验</tag>
-      
-      <tag>解析</tag>
+      <tag>计算机组成</tag>
       
     </tags>
     
