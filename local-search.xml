@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>6.S081 - Lecture 1 Introduciton</title>
+    <link href="/2024/04/23/6-S081-Lecture-1-Introduciton/"/>
+    <url>/2024/04/23/6-S081-Lecture-1-Introduciton/</url>
+    
+    <content type="html"><![CDATA[<blockquote><p>感觉学校的OS课程写的过于草率，加上最近似乎没有什么事情做，那就开一个新坑吧！</p></blockquote><h1 id="Lecture-1-Introduction"><a href="#Lecture-1-Introduction" class="headerlink" title="Lecture 1: Introduction"></a>Lecture 1: Introduction</h1><p>操作系统应该提供的功能：1. 多进程支持 2. 进程间隔离 3. 受控制的进程间通信</p><ul><li><p><em>xv6</em>：一种在本课程中使用的类UNIX的教学操作系统，运行在RISC-V指令集处理器上，本课程中将使用<em>QEMU</em>模拟器代替</p></li><li><p><em>kernel</em>(内核)：为运行的程序提供服务的一种特殊程序。每个运行着的程序叫做进程，每个进程的内存中存储指令、数据和堆栈。一个计算机可以拥有多个进程，但是只能有一个内核</p><p>每当进程需要调用内核时，它会触发一个<em>system call</em>（系统调用），system call进入内核执行相应的服务然后返回。</p></li></ul>]]></content>
+    
+    
+    <categories>
+      
+      <category>课外扩展</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>操作系统</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>OS实验——Lab0串讲</title>
     <link href="/2024/03/06/OS2/"/>
     <url>/2024/03/06/OS2/</url>
