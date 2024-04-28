@@ -1,0 +1,868 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/icon-main.png">
+  <link rel="icon" href="/img/icon-main.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Traumtänzer aka &#39;Jew1!5!&#39;">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="MIT 6.S081 学习">
+<meta property="og:type" content="article">
+<meta property="og:title" content="6.S081 - Lecture 2 Operating System Organization">
+<meta property="og:url" content="https://galaxy-jewxw.github.io/2024/04/28/6-S081-Lecture-2-Operating-System-Organization/index.html">
+<meta property="og:site_name" content="Jew&#39;s Blog">
+<meta property="og:description" content="MIT 6.S081 学习">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://pic.imgdb.cn/item/662df33d0ea9cb1403f60e21.png">
+<meta property="og:image" content="https://pic.imgdb.cn/item/662df33d0ea9cb1403f60d92.png">
+<meta property="og:image" content="https://pic.imgdb.cn/item/662df3fe0ea9cb1403f9e36e.png">
+<meta property="article:published_time" content="2024-04-28T10:00:37.000Z">
+<meta property="article:modified_time" content="2024-04-28T08:15:52.538Z">
+<meta property="article:author" content="Traumtänzer aka &#39;Jew1!5!&#39;">
+<meta property="article:tag" content="操作系统">
+<meta property="article:tag" content="cs自学指南">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://pic.imgdb.cn/item/662df33d0ea9cb1403f60e21.png">
+  
+  
+    <meta name="referrer" content="no-referrer-when-downgrade">
+  
+  
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC&display=swap" rel="stylesheet">
+  
+  <title>6.S081 - Lecture 2 Operating System Organization | Jew&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_hj8rtnfg7um.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+  
+<link rel="stylesheet" href="/css/font.css">
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"galaxy-jewxw.github.io","root":"/","version":"1.9.5","typing":{"enable":true,"typeSpeed":120,"cursorChar":"_","loop":true,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Jew的博客</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/links/">
+                <i class="iconfont icon-link-fill"></i>
+                <span>友链</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/banner_xv6.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="6.S081 - Lecture 2 Operating System Organization"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-04-28 18:00" pubdate>
+          星期日, 四月 28日 2024, 6:00 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          10k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          56 分钟
+        
+      </span>
+    
+
+    
+    
+      
+        <span id="busuanzi_container_page_pv" style="display: none">
+          <i class="iconfont icon-eye" aria-hidden="true"></i>
+          <span id="busuanzi_value_page_pv"></span> 次
+        </span>
+        
+      
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">6.S081 - Lecture 2 Operating System Organization</h1>
+            
+              <p class="note note-info">
+                
+                  
+                    本文最后更新于：2024年4月28日 下午
+                  
+                
+              </p>
+            
+            
+              <div class="markdown-body">
+                
+                <h1 id="Lecture-2-Operating-System-Organization"><a href="#Lecture-2-Operating-System-Organization" class="headerlink" title="Lecture 2: Operating System Organization"></a>Lecture 2: Operating System Organization</h1><h2 id="预备知识：C-pointer"><a href="#预备知识：C-pointer" class="headerlink" title="预备知识：C pointer"></a>预备知识：C pointer</h2><p>指针是一个特殊的变量，它里面存储的数值被解释成为内存里的一个地址。</p>
+<p>要搞清一个指针，需要搞清四方面的内容：</p>
+<ol>
+<li>指针的类型</li>
+<li>指针所指向的类型</li>
+<li>指针的值、或者叫指针所指向的内存区</li>
+<li>指针本身所占据的内存区</li>
+</ol>
+<p>具体分析可以看看<a target="_blank" rel="noopener" href="https://blog.csdn.net/soonfly/article/details/51131141">这篇文章</a>。</p>
+<p>C程序的内存分配：</p>
+<ol>
+<li>堆(heap)：由程序员通过<code>malloc()</code>和<code>free()</code>使用和释放，如果忘记释放可能造成内存泄漏。地址从低到高增长</li>
+<li>栈(stack)：编译器自动分配释放，存放函数的参数值、局部变量的值等。在退出函数后自动释放销毁。地址从高到低增长</li>
+<li>全局区(static)：通过<code>static</code>声明，全局都可以访问，不会在函数退出后释放</li>
+</ol>
+<h2 id="用户模式与管理员模式"><a href="#用户模式与管理员模式" class="headerlink" title="用户模式与管理员模式"></a>用户模式与管理员模式</h2><p>为了实现进程隔离，RISC-V CPU在硬件上提供3种执行命令的模式：<em>machine mode</em>（机器模式）, <em>supervisor mode</em>（管理员模式）, <em>user mode</em>（用户模式）。</p>
+<ol>
+<li>machine mode的权限最高，CPU以machine mode启动，machine mode的主要目的是为了配置电脑，之后立即切换到supervisor mode。</li>
+<li>supervisor mode运行CPU执行<em>privileged instructions</em>，比如中断管理、对存储页表地址的寄存器进行读写操作、执行system call。运行在supervisor mode也称为在<em>kernel space</em>中运行。运行在内核空间（或管理模式）的软件称为<em>kernel</em>。</li>
+<li>应用程序只能执行user mode指令，比如改变变量、执行util function（工具函数）。运行在user mode也称为在<em>user space</em>中运行。要想让CPU从user mode切换到supervisor mode，RISC-V提供了一个特殊的<code>ecall</code>指令，要想从supervisor mode切换到user mode，调用<code>sret</code>指令。</li>
+</ol>
+<p>想要调用内核函数的应用程序（例如xv6中的read系统调用）必须转换到内核；应用程 序不能直接调用内核函数。CPU提供了一种特殊的指令，可以将CPU从U态切换到S态，并在内核指定的入口点进入内核。</p>
+<p>一旦CPU切换到管理S态，内核就可以验证系统调用的参数（例如，检查传递给系统调用的 地址是否是应用程序内存的一部分），决定应用程序是否允许执行请求的操作（例如，检查应用程序是否允许写入指定的文件），然后拒绝或执行它。</p>
+<p>内核控制转换到管理模式的入口点非常重要；例如，如果应用程序可以决定内核入口点，则恶意应用程序可以在跳过参数验证的点进入内核。</p>
+<h2 id="内核组织"><a href="#内核组织" class="headerlink" title="内核组织"></a>内核组织</h2><p><em>monolithic kernel</em>（宏内核）：整个操作系统在kernel中，所有system call都在supervisor mode下运行。xv6是一个monolithic kernel。</p>
+<ul>
+<li>操作系统设计者不必决定操作系统的哪一部分不需要完整的硬件权限。</li>
+<li>操作系统的不同部分更容易协作。例如，操作系统可能具有可由文件系统和虚拟内存系统共享的缓冲区高速缓存。</li>
+<li>操作系统不同部分之间的接口通常很复杂，因此操作系统开发人员很容易犯错误。在单片内核中，错误是致命的， 因为管理模式下的错误通常会导致内核失败。如果内核出现故障，计算机就会停止工作， 因此所有应用程序也会失败。计算机必须重新启动才能重新启动。</li>
+</ul>
+<p><em>micro kernel</em>（微内核）：将需要运行在supervisor mode下的操作系统代码压到最小，保证kernel内系统的安全性，将大部分的操作系统代码执行在user mode下。</p>
+<p><img src="https://pic.imgdb.cn/item/662df33d0ea9cb1403f60e21.png" srcset="/img/loading.gif" lazyload></p>
+<p>如2.1所示，文件系统是一个user-level的进程，为其他进程提供服务，因此也叫做server。</p>
+<p>xv6 kernel source file如下所示。</p>
+<p><img src="https://pic.imgdb.cn/item/662df33d0ea9cb1403f60d92.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h2><p>隔离的单元叫做进程，一个进程不能够破坏或者监听另外一个进程的内存、CPU、文件描述符，也不能破坏kernel本身。</p>
+<p>为了实现进程隔离，xv6提供了一种机制让程序认为自己拥有一个独立的机器。一个进程为一个程序提供了一个私有的内存系统，或<em>address space</em>，其他的进程不能够读&#x2F;写这个内存。xv6使用<em>page table</em>(页表)来给每个进程分配自己的address space，页表再将这些address space，也就是进程自己认为的虚拟地址(<em>virtual address</em>)映射到RISC-V实际操作的物理地址(<em>physical address</em>)。</p>
+<p><img src="https://pic.imgdb.cn/item/662df3fe0ea9cb1403f9e36e.png" srcset="/img/loading.gif" lazyload></p>
+<p>虚拟地址从0开始，往上依次是指令、全局变量、栈、堆。RISC-V上的指针是64位的，xv6使用低38位，因此最大的地址是238−1238−1&#x3D;0x3fffffffff&#x3D;MAXVA。</p>
+<p>进程最重要的内核状态：1. 页表 <code>p-&gt;pagetable</code> 2. 内核堆栈<code>p-&gt;kstack</code> 3. 运行状态<code>p-&gt;state</code>，显示进程是否已经被分配、准备运行&#x2F;正在运行&#x2F;等待IO或退出。</p>
+<p>每个进程中都有线程(<em>thread</em>)，是执行进程命令的最小单元，可以被暂停和继续。</p>
+<p>每个进程有两个堆栈：用户堆栈(<em>user stack</em>)和内核堆栈(<em>kernel stack</em>)。当进程在user space中进行时只使用用户堆栈，当进程进入了内核(比如进行了system call)使用内核堆栈。</p>
+<h2 id="启动第一个进程"><a href="#启动第一个进程" class="headerlink" title="启动第一个进程"></a>启动第一个进程</h2><p>RISC-V启动时，先运行一个存储于ROM中的bootloader程序<code>kernel.ld</code>来加载xv6 kernel到内存中，然后在machine模式下从<code>_entry</code>开始运行xv6。bootloader将xv6 kernel加载到0x80000000的物理地址中，因为前面的地址中有I&#x2F;O设备。</p>
+<p>在<code>_entry</code>中设置了一个初始stack，<code>stack0</code>来让xv6执行<code>kernel/start.c</code>。在<code>start</code>函数先在machine模式下做一些配置，然后通过RISC-V提供的<code>mret</code>指令切换到supervisor mode，使program counter切换到<code>kernel/main.c</code>。</p>
+<p><code>main</code>先对一些设备和子系统进行初始化，然后调用<code>kernel/proc.c</code>中定义的<code>userinit</code>来创建第一个用户进程。这个进程执行了一个<code>initcode.S</code>的汇编程序，这个汇编程序调用了<code>exec</code>这个system call来执行<code>/init</code>，重新进入kernel。<code>exec</code>将当前进程的内存和寄存器替换为一个新的程序(<code>/init</code>)，当kernel执行完毕<code>exec</code>指定的程序后，回到<code>/init</code>进程。<code>/init</code>(<code>user/init.c</code>)创建了一个新的console device以文件描述符0,1,2打开，然后在console device中开启了一个shell进程，至此整个系统启动了。</p>
+<h2 id="Lab-2-System-Calls"><a href="#Lab-2-System-Calls" class="headerlink" title="Lab 2: System Calls"></a>Lab 2: System Calls</h2><blockquote>
+<p>阅读 xv6 文档的第 2 章和第 4 章的 4.3 节和 4.4 节以及相关源文件：</p>
+<ul>
+<li>系统调用的用户空间代码在 user&#x2F;user.h 和 user&#x2F;usys.pl 中。</li>
+<li>内核空间代码在 kernel&#x2F;syscall.h 和 kernel&#x2F;syscall.c 中。</li>
+<li>与进程相关的代码在 kernel&#x2F;proc.h 和 kernel&#x2F;proc.c 中。</li>
+</ul>
+<p>建议同时阅读kernel&#x2F;kalloc.c。</p>
+</blockquote>
+<h3 id="System-Call-tracing（moderate）"><a href="#System-Call-tracing（moderate）" class="headerlink" title="System Call tracing（moderate）"></a>System Call tracing（moderate）</h3><p>在这个实验里，我们需要让内核输出每个mask变量指定的系统函数的调用情况，格式为：<code>&lt;pid&gt;: syscall &lt;syscall_name&gt; -&gt; &lt;return_value&gt;</code>。pid是进程序号， syscall_name是函数名称，return_value是该系统调用返回值，并且要求各个进程的输出是独立的，不相互干扰。</p>
+<p>作为一个系统调用，我们先要定义一个系统调用的序号。系统调用序号的宏定义在 <strong>kernel&#x2F;syscall.h</strong> 文件中。我们在 <strong>kernel&#x2F;syscall.h</strong> 添加宏定义，模仿已经存在的系统调用序号的宏定义。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// kernel/syscall.h</span><br><br><span class="hljs-meta">#<span class="hljs-keyword">define</span> SYS_trace  22</span><br></code></pre></td></tr></table></figure>
+
+<p>已给出用户态的 trace 函数( user&#x2F;trace.c )，所以我们直接在 user&#x2F;user.h 文件中声明用户态可以调用 trace 系统调用就好了。</p>
+<p>但有一个问题，该系统调用的参数和返回值分别是什么类型呢？</p>
+<p>接下来我们还是得看一看 trace.c 文件，可以看到 trace(atoi(argv[1])) &lt; 0 ，即 trace 函数传入的是一个数字，并和 0 进行比较。</p>
+<p>结合实验提示，我们知道传入的参数类型是 int ，并且由此可以猜测到返回值类型应该是 int 。</p>
+<p>这样就可以把 trace 这个系统调用加入到kernel中声明了：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// user/user.h</span><br><br><span class="hljs-comment">// system calls</span><br><span class="hljs-type">int</span> <span class="hljs-title function_">trace</span><span class="hljs-params">(<span class="hljs-type">int</span>)</span>;<br></code></pre></td></tr></table></figure>
+
+<p>接下来我们查看 <strong>user&#x2F;usys.pl</strong> 文件，这里 perl 语言会自动生成汇编语言 <strong>usys.S</strong> ，是用户态系统调用接口。所以在 <strong>user&#x2F;usys.pl</strong> 文件加入下面的语句来注册<code>trace</code>：</p>
+<figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs perl">entry(<span class="hljs-string">&quot;trace&quot;</span>);<br></code></pre></td></tr></table></figure>
+
+<p>可以看到首先把系统调用号压入a7寄存器，然后就直接ecall进入系统内核。而我们刚才syscall那个函数就把a7寄存器的数字读出来调用对应的函数，所以这里就是系统调用用户态和内核态的切换接口。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs assembly"># usys.S<br>.global trace<br>trace:<br> li a7, SYS_trace<br> ecall<br> ret<br></code></pre></td></tr></table></figure>
+
+<p>执行 <code>ecall</code> 指令会跳转到哪里呢？答案是跳转到 <strong>kernel&#x2F;syscall.c</strong> 中 <code>syscall</code> 那个函数处，执行此函数。下面是 <code>syscall</code> 函数的源码：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">void</span><br><span class="hljs-title function_">syscall</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>  <span class="hljs-type">int</span> num;<br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">proc</span> *<span class="hljs-title">p</span> =</span> myproc();<br><br>  num = p-&gt;trapframe-&gt;a7;<br>  <span class="hljs-keyword">if</span>(num &gt; <span class="hljs-number">0</span> &amp;&amp; num &lt; NELEM(syscalls) &amp;&amp; syscalls[num]) &#123;<br>    p-&gt;trapframe-&gt;a0 = syscalls[num]();<br>  &#125; <span class="hljs-keyword">else</span> &#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d %s: unknown sys call %d\n&quot;</span>,<br>            p-&gt;pid, p-&gt;name, num);<br>    p-&gt;trapframe-&gt;a0 = <span class="hljs-number">-1</span>;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p> num &#x3D; p-&gt;trapframe-&gt;a7; 从寄存器 a7 中读取系统调用号，所以上面的 usys.S 文件就是系统调用用户态和内核态的切换接口。接下来是 p-&gt;trapframe-&gt;a0 &#x3D; syscalls[num](); 语句，通过调用 syscalls[num](); 函数，把返回值保存在了 a0 寄存器中。</p>
+<p>我们看看 syscalls[num](); 函数，这个函数在当前文件中，调用了系统调用命令。所以我们把新增的 <code>trace</code> 系统调用添加到函数指针数组 <code>*syscalls[]</code> 上：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">static</span> <span class="hljs-title function_">uint64</span> <span class="hljs-params">(*syscalls[])</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span> = &#123;<br>  ...<br>  [SYS_trace]   sys_trace,<br>&#125;;<br><br></code></pre></td></tr></table></figure>
+
+<p>接下来在文件开头给内核态的系统调用 <code>trace</code> 加上声明，在 <strong>kernel&#x2F;syscall.c</strong> 加上<code>extern uint64 sys_trace(void);</code>。</p>
+<p>我们的 <code>trace</code> 系统调用应该有一个参数，一个整数“mask(掩码)”，其指定要跟踪的系统调用。</p>
+<p>所以，我们在 <strong>kernel&#x2F;proc.h</strong> 文件的 <code>proc</code> 结构体中，新添加一个变量 <code>mask</code> ，使得每一个进程都有自己的 <code>mask</code> ，即要跟踪的系统调用。</p>
+<p>然后我们就可以在 <strong>kernel&#x2F;sysproc.c</strong> 给出 <code>sys_trace</code> 函数的具体实现了，只要把传进来的参数给到现有进程的 <code>mask</code> 就好了。</p>
+<p>接下来我们就要把输出功能实现，因为 RISCV 的 C 规范是把返回值放在 a0 中，所以我们只要在调用系统调用时判断是不是 mask 规定的输出函数，如果是就输出。</p>
+<p>因为 proc 结构体(见 kernel&#x2F;proc.h )里的 name 是整个线程的名字，不是函数调用的函数名称，所以我们不能用 p-&gt;name ，而要自己定义一个数组，我这里直接在 kernel&#x2F;syscall.c 中定义了。</p>
+<p>这里注意系统调用名字一定要按顺序，第一个为空，当然你也可以去掉第一个空字符串，但要记得取值的时候索引要减一，因为这里的系统调用号是从 1 开始的。</p>
+<p>然后我们就可以在 kernel&#x2F;syscall.c 中的 syscall 函数中添加打印调用情况语句。 mask 是按位判断的，所以判断使用的是按位运算。进程序号直接通过 p-&gt;pid 就可以取到，函数名称需要从我们刚刚定义的数组中获取，即 syscall_names[num] ，其中 num 是从寄存器 a7 中读取的系统调用号，系统调用的返回值就是寄存器 a0 的值了，直接通过 p-&gt;trapframe-&gt;a0 语句获取即可。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-type">static</span> <span class="hljs-type">char</span> *syscall_names[] = &#123;<br>  <span class="hljs-string">&quot;&quot;</span>, <span class="hljs-string">&quot;fork&quot;</span>, <span class="hljs-string">&quot;exit&quot;</span>, <span class="hljs-string">&quot;wait&quot;</span>, <span class="hljs-string">&quot;pipe&quot;</span>, <br>  <span class="hljs-string">&quot;read&quot;</span>, <span class="hljs-string">&quot;kill&quot;</span>, <span class="hljs-string">&quot;exec&quot;</span>, <span class="hljs-string">&quot;fstat&quot;</span>, <span class="hljs-string">&quot;chdir&quot;</span>, <br>  <span class="hljs-string">&quot;dup&quot;</span>, <span class="hljs-string">&quot;getpid&quot;</span>, <span class="hljs-string">&quot;sbrk&quot;</span>, <span class="hljs-string">&quot;sleep&quot;</span>, <span class="hljs-string">&quot;uptime&quot;</span>, <br>  <span class="hljs-string">&quot;open&quot;</span>, <span class="hljs-string">&quot;write&quot;</span>, <span class="hljs-string">&quot;mknod&quot;</span>, <span class="hljs-string">&quot;unlink&quot;</span>, <span class="hljs-string">&quot;link&quot;</span>, <br>  <span class="hljs-string">&quot;mkdir&quot;</span>, <span class="hljs-string">&quot;close&quot;</span>, <span class="hljs-string">&quot;trace&quot;</span>&#125;;<br><br><br><span class="hljs-type">void</span><br><span class="hljs-title function_">syscall</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>  <span class="hljs-type">int</span> num;<br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">proc</span> *<span class="hljs-title">p</span> =</span> myproc();<br><br>  num = p-&gt;trapframe-&gt;a7;<br>  <span class="hljs-keyword">if</span>(num &gt; <span class="hljs-number">0</span> &amp;&amp; num &lt; NELEM(syscalls) &amp;&amp; syscalls[num]) &#123;<br>    p-&gt;trapframe-&gt;a0 = syscalls[num]();<br>    <span class="hljs-keyword">if</span>((<span class="hljs-number">1</span> &lt;&lt; num) &amp; p-&gt;mask) &#123;<br>      <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d: syscall %s -&gt; %d\n&quot;</span>, p-&gt;pid, syscall_names[num], p-&gt;trapframe-&gt;a0);<br>    &#125;<br>  &#125; <span class="hljs-keyword">else</span> &#123;<br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;%d %s: unknown sys call %d\n&quot;</span>,<br>            p-&gt;pid, p-&gt;name, num);<br>    p-&gt;trapframe-&gt;a0 = <span class="hljs-number">-1</span>;<br>  &#125;<br>&#125;<br><br></code></pre></td></tr></table></figure>
+
+<p>然后在 <strong>kernel&#x2F;proc.c</strong> 中 <code>fork</code> 函数调用时，添加子进程复制父进程的 <code>mask</code> 的代码，这样就可以了。</p>
+<h3 id="System-Call-sysinfo（moderate）"><a href="#System-Call-sysinfo（moderate）" class="headerlink" title="System Call sysinfo（moderate）"></a>System Call sysinfo（moderate）</h3><p>跟上个实验一样，首先定义一个系统调用的序号，同时修改 <strong>user&#x2F;usys.pl</strong> 来注册<code>sysinfo</code>。</p>
+<p>然后在 user&#x2F;user.h 中添加 sysinfo 结构体以及 sysinfo 函数的声明。在 kernel&#x2F;syscall.c 中新增 sys_sysinfo 函数的定义，函数指针数组新增 sys_sysinfo，在system_names新增”sysinfo”。接下来我们就要开始写相应的函数实现了。</p>
+<p>首先我们写获取可用进程数目的函数实现。通过阅读 <strong>kernel&#x2F;proc.c</strong> 文件可以看到<code>struct proc proc[NPROC];</code>。我们可以再看看<code>struct proc</code>的定义：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-class"><span class="hljs-keyword">enum</span> <span class="hljs-title">procstate</span> &#123;</span> UNUSED, SLEEPING, RUNNABLE, RUNNING, ZOMBIE &#125;;<br><br><span class="hljs-comment">// Per-process state</span><br><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">proc</span> &#123;</span><br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">spinlock</span> <span class="hljs-title">lock</span>;</span><br><br>  <span class="hljs-comment">// p-&gt;lock must be held when using these:</span><br>  <span class="hljs-class"><span class="hljs-keyword">enum</span> <span class="hljs-title">procstate</span> <span class="hljs-title">state</span>;</span>        <span class="hljs-comment">// Process state</span><br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">proc</span> *<span class="hljs-title">parent</span>;</span>         <span class="hljs-comment">// Parent process</span><br>  <span class="hljs-type">void</span> *chan;                  <span class="hljs-comment">// If non-zero, sleeping on chan</span><br>  <span class="hljs-type">int</span> killed;                  <span class="hljs-comment">// If non-zero, have been killed</span><br>  <span class="hljs-type">int</span> xstate;                  <span class="hljs-comment">// Exit status to be returned to parent&#x27;s wait</span><br>  <span class="hljs-type">int</span> pid;                     <span class="hljs-comment">// Process ID</span><br><br>  <span class="hljs-comment">// these are private to the process, so p-&gt;lock need not be held.</span><br>  uint64 kstack;               <span class="hljs-comment">// Virtual address of kernel stack</span><br>  uint64 sz;                   <span class="hljs-comment">// Size of process memory (bytes)</span><br>  <span class="hljs-type">pagetable_t</span> pagetable;       <span class="hljs-comment">// User page table</span><br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">trapframe</span> *<span class="hljs-title">trapframe</span>;</span> <span class="hljs-comment">// data page for trampoline.S</span><br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">context</span> <span class="hljs-title">context</span>;</span>      <span class="hljs-comment">// swtch() here to run process</span><br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">file</span> *<span class="hljs-title">ofile</span>[<span class="hljs-title">NOFILE</span>];</span>  <span class="hljs-comment">// Open files</span><br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">inode</span> *<span class="hljs-title">cwd</span>;</span>           <span class="hljs-comment">// Current directory</span><br>  <span class="hljs-type">char</span> name[<span class="hljs-number">16</span>];               <span class="hljs-comment">// Process name (debugging)</span><br>  <span class="hljs-type">int</span> mask;                    <span class="hljs-comment">// Mask</span><br>&#125;;<br><br></code></pre></td></tr></table></figure>
+
+<p>进程里已保存当前进程的状态，所以我们可以直接遍历所有进程，获取其状态判断当前进程的状态是不是为 UNUSED 并统计数目就行了。</p>
+<p>当然，通过 proc 结构体的定义，我们知道使用进程状态时必须加锁，我们在 kernel&#x2F;proc.c 中新增函数 nproc 如下，通过该函数以获取可用进程数目：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// Return the number of processes whose state is not UNUSED</span><br>uint64<br><span class="hljs-title function_">nproc</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">proc</span> *<span class="hljs-title">p</span>;</span><br>  <span class="hljs-comment">// counting the number of processes</span><br>  uint64 num = <span class="hljs-number">0</span>;<br>  <span class="hljs-comment">// traverse all processes</span><br>  <span class="hljs-keyword">for</span> (p = proc; p &lt; &amp;proc[NPROC]; p++)<br>  &#123;<br>    <span class="hljs-comment">// add lock</span><br>    acquire(&amp;p-&gt;lock);<br>    <span class="hljs-comment">// if the processes&#x27;s state is not UNUSED</span><br>    <span class="hljs-keyword">if</span> (p-&gt;state != UNUSED)<br>    &#123;<br>      <span class="hljs-comment">// the num add one</span><br>      num++;<br>    &#125;<br>    <span class="hljs-comment">// release lock</span><br>    release(&amp;p-&gt;lock);<br>  &#125;<br>  <span class="hljs-keyword">return</span> num;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>接下来实现获取空闲内存数量的函数。可用空间的判断在 <strong>kernel&#x2F;kalloc.c</strong> 文件中。</p>
+<p>这里定义了一个链表，每个链表都指向上一个可用空间，这里的 <code>kmem</code> 就是一个保存最后链表的变量。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">run</span> &#123;</span><br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">run</span> *<span class="hljs-title">next</span>;</span><br>&#125;;<br><br><span class="hljs-class"><span class="hljs-keyword">struct</span> &#123;</span><br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">spinlock</span> <span class="hljs-title">lock</span>;</span><br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">run</span> *<span class="hljs-title">freelist</span>;</span><br>&#125; kmem;<br><br></code></pre></td></tr></table></figure>
+
+<p><code>kmem.freelist</code> 永远指向最后一个可用页，那我们只要顺着这个链表往前走，直到 <code>NULL</code> 为止。所以我们就可以在 <strong>kernel&#x2F;kalloc.c</strong> 中新增函数 <code>free_mem</code> ，以获取空闲内存数量：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// Return the number of bytes of free memory</span><br>uint64<br><span class="hljs-title function_">free_mem</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">run</span> *<span class="hljs-title">r</span>;</span><br>  <span class="hljs-comment">// counting the number of free page</span><br>  uint64 num = <span class="hljs-number">0</span>;<br>  <span class="hljs-comment">// add lock</span><br>  acquire(&amp;kmem.lock);<br>  <span class="hljs-comment">// r points to freelist</span><br>  r = kmem.freelist;<br>  <span class="hljs-comment">// while r not null</span><br>  <span class="hljs-keyword">while</span> (r)<br>  &#123;<br>    <span class="hljs-comment">// the num add one</span><br>    num++;<br>    <span class="hljs-comment">// r points to the next</span><br>    r = r-&gt;next;<br>  &#125;<br>  <span class="hljs-comment">// release lock</span><br>  release(&amp;kmem.lock);<br>  <span class="hljs-comment">// page multiplicated 4096-byte page</span><br>  <span class="hljs-keyword">return</span> num * PGSIZE;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>最后的难点就在这个copyout：<code>copyout(pagetable_t pagetable, uint64 dstva, char *src, uint64 len)</code>。它其实就是把在内核地址src开始的len大小的数据拷贝到用户进程pagetable的虚地址dstva处，所以sysinfo实现里先用argaddr读进来我们要保存的在用户态的数据sysinfo的指针地址，然后再把从内核里得到的sysinfo开始的内容以sizeof(sysinfo)大小的的数据复制到这个指针上，其实就是同一个数据结构，所以这样直接复制过去就可以了。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-comment">// add header</span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;sysinfo.h&quot;</span></span><br><br>uint64<br><span class="hljs-title function_">sys_sysinfo</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>  <span class="hljs-comment">// addr is a user virtual address, pointing to a struct sysinfo</span><br>  uint64 addr;<br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">sysinfo</span> <span class="hljs-title">info</span>;</span><br>  <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">proc</span> *<span class="hljs-title">p</span> =</span> myproc();<br>  <br>  <span class="hljs-keyword">if</span> (argaddr(<span class="hljs-number">0</span>, &amp;addr) &lt; <span class="hljs-number">0</span>)<br>	  <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>  <span class="hljs-comment">// get the number of bytes of free memory</span><br>  info.freemem = free_mem();<br>  <span class="hljs-comment">// get the number of processes whose state is not UNUSED</span><br>  info.nproc = nproc();<br><br>  <span class="hljs-keyword">if</span> (copyout(p-&gt;pagetable, addr, (<span class="hljs-type">char</span> *)&amp;info, <span class="hljs-keyword">sizeof</span>(info)) &lt; <span class="hljs-number">0</span>)<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">-1</span>;<br>  <br>  <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>最后添加一个用户程序：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;kernel/param.h&quot;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;kernel/types.h&quot;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;kernel/sysinfo.h&quot;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&quot;user/user.h&quot;</span></span><br><br><span class="hljs-type">int</span><br><span class="hljs-title function_">main</span><span class="hljs-params">(<span class="hljs-type">int</span> argc, <span class="hljs-type">char</span> *argv[])</span><br>&#123;<br>    <span class="hljs-comment">// param error</span><br>    <span class="hljs-keyword">if</span> (argc != <span class="hljs-number">1</span>)<br>    &#123;<br>        <span class="hljs-built_in">fprintf</span>(<span class="hljs-number">2</span>, <span class="hljs-string">&quot;Usage: %s need not param\n&quot;</span>, argv[<span class="hljs-number">0</span>]);<br>        <span class="hljs-built_in">exit</span>(<span class="hljs-number">1</span>);<br>    &#125;<br><br>    <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">sysinfo</span> <span class="hljs-title">info</span>;</span><br>    sysinfo(&amp;info);<br>    <span class="hljs-comment">// print the sysinfo</span><br>    <span class="hljs-built_in">printf</span>(<span class="hljs-string">&quot;free space: %d\nused process: %d\n&quot;</span>, info.freemem, info.nproc);<br>    <span class="hljs-built_in">exit</span>(<span class="hljs-number">0</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E8%AF%BE%E5%A4%96%E6%8B%93%E5%B1%95/" class="category-chain-item">课外拓展</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="print-no-link">#操作系统</a>
+      
+        <a href="/tags/cs%E8%87%AA%E5%AD%A6%E6%8C%87%E5%8D%97/" class="print-no-link">#cs自学指南</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>6.S081 - Lecture 2 Operating System Organization</div>
+      <div>https://galaxy-jewxw.github.io/2024/04/28/6-S081-Lecture-2-Operating-System-Organization/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>Traumtänzer aka 'Jew1!5!'</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年4月28日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/04/23/6-S081-Lecture-1-Introduciton/" title="6.S081 - Lecture 1 Introduciton">
+                        <span class="hidden-mobile">6.S081 - Lecture 1 Introduciton</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+      Powered by <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> | <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+    <div class="statistics">
+  
+  
+
+  
+    
+      <span id="busuanzi_container_site_pv" style="display: none">
+        总访问量 
+        <span id="busuanzi_value_site_pv"></span>
+         次
+      </span>
+    
+    
+      <span id="busuanzi_container_site_uv" style="display: none">
+        总访客数 
+        <span id="busuanzi_value_site_uv"></span>
+         人
+      </span>
+    
+    
+  
+</div>
+
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/4.3.1/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  
+      <script>
+        if (!window.MathJax) {
+          window.MathJax = {
+            tex    : {
+              inlineMath: { '[+]': [['$', '$']] }
+            },
+            loader : {
+              load: ['ui/lazy']
+            },
+            options: {
+              renderActions: {
+                insertedScript: [200, () => {
+                  document.querySelectorAll('mjx-container').forEach(node => {
+                    let target = node.parentNode;
+                    if (target.nodeName.toLowerCase() === 'li') {
+                      target.parentNode.classList.add('has-jax');
+                    }
+                  });
+                }, '', false]
+              }
+            }
+          };
+        } else {
+          MathJax.startup.document.state(0);
+          MathJax.texReset();
+          MathJax.typeset();
+          MathJax.typesetPromise();
+        }
+
+        Fluid.events.registerRefreshCallback(function() {
+          if ('MathJax' in window && MathJax.startup.document && typeof MathJax.startup.document.state === 'function') {
+            MathJax.startup.document.state(0);
+            MathJax.texReset();
+            MathJax.typeset();
+            MathJax.typesetPromise();
+          }
+        });
+      </script>
+    
+
+  <script  src="https://lib.baomitu.com/mathjax/3.2.2/es5/tex-mml-chtml.js" ></script>
+
+  <script  src="/js/local-search.js" ></script>
+
+  <script defer src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
